@@ -1,0 +1,76 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>da5bbe0d-71fe-42dc-8707-36a9d4a36408</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <StartupFile>
+    </StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <Name>unreal_scripts</Name>
+    <RootNamespace>unreal_scripts</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="asset\" />
+    <Folder Include="tasks\" />
+    <Folder Include="src\" />
+    <Folder Include="service\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="asset\material_node.py" />
+    <Compile Include="asset\texture.py" />
+    <Compile Include="asset\__init__.py" />
+    <Compile Include="service\error_handle.py" />
+    <Compile Include="service\file.py" />
+    <Compile Include="service\general.py" />
+    <Compile Include="service\ini.py" />
+    <Compile Include="service\log.py" />
+    <Compile Include="service\__init__.py" />
+    <Compile Include="src\asset_library.py" />
+    <Compile Include="src\collision.py" />
+    <Compile Include="src\duplicates.py" />
+    <Compile Include="src\get_asset.py" />
+    <Compile Include="src\get_material.py" />
+    <Compile Include="src\get_static_mesh.py" />
+    <Compile Include="src\import_pipeline.py" />
+    <Compile Include="src\lod.py" />
+    <Compile Include="src\material_library.py" />
+    <Compile Include="src\naming_convention.py" />
+    <Compile Include="src\prefix_suffix.py" />
+    <Compile Include="src\set_asset.py" />
+    <Compile Include="src\set_material.py" />
+    <Compile Include="src\__init__.py" />
+    <Compile Include="tasks\admin_tasks.py" />
+    <Compile Include="tasks\admin_tasks_ini.py" />
+    <Compile Include="tasks\auto_connect.py" />
+    <Compile Include="tasks\auto_connect_ini.py" />
+    <Compile Include="tasks\import_pipeline_tasks.py" />
+    <Compile Include="tasks\import_pipeline_tasks_ini.py" />
+    <Compile Include="tasks\prefix_suffix_tasks.py" />
+    <Compile Include="tasks\prefix_suffix_tasks_ini.py" />
+    <Compile Include="tasks\__init__.py" />
+    <Compile Include="__init__.py" />
+    <Compile Include="config.py" />
+    <Compile Include="init_unreal.py" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
+  <!-- Uncomment the CoreCompile target to enable the Build command in
+       Visual Studio and specify your pre- and post-build commands in
+       the BeforeBuild and AfterBuild targets below. -->
+  <!--<Target Name="CoreCompile" />-->
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+</Project>

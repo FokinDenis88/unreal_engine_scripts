@@ -1,0 +1,36 @@
+https://forums.unrealengine.com/t/better-way-to-check-for-duplicate-textures/270396/4
+
+import unreal
+
+lib = unreal.EditorAssetLibrary
+editor = unreal.EditorLevelLibrary
+
+asset_reg = unreal.AssetRegistryHelpers.get_asset_registry()
+record = {}
+
+
+helper_class = unreal.load_class(None, '/Script/Test.PythonHelper')
+helper = unreal.new_object(helper_class, editor.get_editor_world())
+
+filter = unreal.ARFilter(class_names=['Texture2D'], recursive_paths=True,
+                         package_paths=['/Game/GameAssets/'])
+
+assets = asset_reg.get_assets(filter)
+
+with unreal.ScopedSlowTask(len(assets), "Processing Textures") as slow_task:
+    for asset in assets:
+        if slow_task.should_cancel():  # True if the user has pressed Cancel in the UI
+            break
+	
+	slow_task.enter_progress_frame(1)
+
+        name = asset.asset_name
+        texture = asset.get_asset()
+        hashNum = helper.get_texture_hash(texture)
+
+        if hashNum not in record:
+            record[hashNum] = asset
+
+        else:
+            print(f'Duplicate found. {asset.object_path} is the same as {record[hashNum].object_path}')
+            lib.consolidate_assets(record[hashNum].get_asset(), [texture])

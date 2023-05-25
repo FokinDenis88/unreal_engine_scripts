@@ -1,0 +1,1 @@
+C:\Development\Unreal Engine\UE_4.27\Engine\Plugins\Editor\GLTFImporter

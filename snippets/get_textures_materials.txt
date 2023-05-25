@@ -1,0 +1,12 @@
+https://forums.unrealengine.com/t/python-property-finding-or-listing/149717/5
+
+def get_textures_and_materials():
+"""
+Return lists for all available Texture2D and Material assets.
+"""
+    all_assets = unreal.AssetRegistryHelpers.get_asset_registry().get_all_assets()
+    textures = [x for x in all_assets if x.asset_class == 'Texture2D' and x.object_path.__str__().startswith('/Game/')]
+    materials = [x for x in all_assets if x.asset_class == 'Material' and x.object_path.__str__().startswith('/Game/')]
+    return textures, materials
+
+textures, materials = get_textures_and_materials()
