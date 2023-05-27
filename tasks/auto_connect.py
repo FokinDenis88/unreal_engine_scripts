@@ -28,7 +28,10 @@ importlib.reload(auto_connect_ini)
 
 from unreal_scripts.tasks.auto_connect_ini import *
 
-
+## Can call one of functions: material_library.connect_by_association_texture_file_dirs,
+# material_library.connect_texture_files_packs, material_library.connect_textures_files_to_materials
+# material_library.connect_free_texture_nodes_in_materials_by_dirs, material_library.auto_align_material_nodes_path
+# material_library.replace_texture_sample_to_parameters_by_dirs
 def main():
     material_library.bump_texture_link_version = LINK_VERSION_BUMP_TEXTURE
     if COMMAND == 'ConnectByAssociation':

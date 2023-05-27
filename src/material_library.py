@@ -17,13 +17,13 @@ importlib.reload(get_material)
 importlib.reload(set_material)
 importlib.reload(prefix_suffix)
 
-# @param bump_texture_link_version there are two versions of linking bump texture to material output
+## @param bump_texture_link_version there are two versions of linking bump texture to material output
 bump_texture_link_version = 1
 
 # There are 3 input parameter nodes types: Scalar, Vector, Texture, StaticSwitch
 
 
-# Change coordinate of nodes to exclude nodes collision
+## Change coordinate of nodes to exclude nodes collision
 # Auto align only works for nodes, that have been connected to material output property
 def auto_align_material_nodes(material, has_log = True):
     if material is not None:
@@ -40,7 +40,7 @@ def auto_align_material_node_data(material_asset_data):
         auto_align_material_nodes(material_asset_data.get_asset())
     else:
         unreal.log_error(auto_align_material_node_data.__name__ + ': material_asset_data must not be None')
-# @param materials_asset_data list of asset data
+## @param materials_asset_data list of asset data
 def auto_align_materials_node_data(materials_asset_data):
     if general.is_not_none_or_empty(materials_asset_data):
         for material_asset_data in materials_asset_data:
@@ -62,7 +62,7 @@ def auto_align_materials_nodes_paths(objects_paths):
         unreal.log_error(auto_align_materials_nodes_paths.__name__ + ': objects_paths must not be None or empty')
 
 
-# Replaces all TextureSamples with TextureSamplesParameter2D
+## Replaces all TextureSamples with TextureSamplesParameter2D
 def replace_texture_sample_to_parameters_in_materials(materials, to_delete_old_node = True):
     if general.is_not_none_or_empty(materials):
         with unreal.ScopedEditorTransaction(replace_texture_sample_to_parameters_in_materials.__name__ + '()') as ue_transaction:
@@ -88,7 +88,7 @@ def replace_texture_sample_to_parameters_in_materials(materials, to_delete_old_n
     else:
         unreal.log_error(replace_texture_sample_to_parameters_in_materials.__name__ + ': materials must not be None or empty')
 
-# Replaces all TextureSamples with TextureSamplesParameter2D
+## Replaces all TextureSamples with TextureSamplesParameter2D
 def replace_texture_sample_to_parameters_in_material(material):
     replace_texture_sample_to_parameters_in_materials([material])
 def replace_texture_sample_to_parameters_by_data_list(materials_data):
@@ -122,7 +122,7 @@ def replace_texture_sample_to_parameters_by_dirs(material_dirs, is_recursive_sea
         replace_texture_sample_to_parameters_by_path(path)
 
 
-# Add default expressions/nodes to empty parts of material
+## Add default expressions/nodes to empty parts of material
 # TODO:
 def auto_fill_material():
     with unreal.ScopedEditorTransaction(auto_fill_material.__name__ + '()') as ue_transaction:
@@ -131,7 +131,7 @@ def auto_fill_material():
         a = 0
 
 
-# Generates Group of connected nodes: Texture, Texture_Factor(Scalar_Parameter), Multiply
+## Generates Group of connected nodes: Texture, Texture_Factor(Scalar_Parameter), Multiply
 # @return tuple of node_texture_factor, node_multiply
 def generate_texture_factor_multiply(material, texture_node, texture_type, connection_results, texture_node_output = 'RGB'):
     node_texture_factor = set_material.new_node_ScalarParameter_texture_factor(material, texture_type)
@@ -140,7 +140,7 @@ def generate_texture_factor_multiply(material, texture_node, texture_type, conne
     connection_results.append(unreal.MaterialEditingLibrary.connect_material_expressions(node_texture_factor, '', node_multiply, 'B'))
     return node_texture_factor, node_multiply
 
-# Generates nodes chain for: Metallic, Specular, Roughness
+## Generates nodes chain for: Metallic, Specular, Roughness
 # Chain is connected to output
 def generate_texture_factor_chain(material, texture_node, texture_type, connection_results, output_property, texture_node_output = 'RGB'):
     node_texture_factor, node_multiply = generate_texture_factor_multiply(material, texture_node, texture_type,
@@ -153,7 +153,7 @@ def generate_texture_factor_chain_plugin(material, texture_node, texture_type, c
                                                                           connection_results, texture_node_output)
     connection_results.append(unreal.PythonMaterialLib.connect_material_property(node_multiply, '', output_property))
 
-# Generates nodes chain for: Metallic, Specular, Roughness
+## Generates nodes chain for: Metallic, Specular, Roughness
 def generate_basecolor_vector_chain(material, texture_node, connection_results, texture_node_output = 'RGB'):
     node_multiply = unreal.MaterialEditingLibrary.create_material_expression(material, unreal.MaterialExpressionMultiply)
     node_base_color = set_material.new_node_BaseColorVector(material)
@@ -161,7 +161,7 @@ def generate_basecolor_vector_chain(material, texture_node, connection_results, 
     connection_results.append(unreal.MaterialEditingLibrary.connect_material_expressions(node_base_color, '', node_multiply, 'B'))
     connection_results.append(unreal.MaterialEditingLibrary.connect_material_property(node_multiply, '', unreal.MaterialProperty.MP_BASE_COLOR))
 
-# Generates nodes chain for: Metallic, Specular, Roughness
+## Generates nodes chain for: Metallic, Specular, Roughness
 def generate_gloss_texture_chain(material, texture_node, texture_type, connection_results, texture_node_output = 'RGB'):
     node_one_minus = unreal.MaterialEditingLibrary.create_material_expression(material, unreal.MaterialExpressionOneMinus)
     connection_results.append(unreal.MaterialEditingLibrary.connect_material_expressions(texture_node, texture_node_output, node_one_minus, ''))
@@ -171,7 +171,7 @@ def generate_gloss_texture_chain(material, texture_node, texture_type, connectio
     connection_results.append(unreal.MaterialEditingLibrary.connect_material_expressions(node_texture_factor, '', node_multiply, 'B'))
     connection_results.append(unreal.MaterialEditingLibrary.connect_material_property(node_multiply, '', unreal.MaterialProperty.MP_ROUGHNESS))
 
-# Basecolor map(Base V3) + Concave/Convex map(Blend V3) -> Blend_overlay node -> Basecolor
+## Basecolor map(Base V3) + Concave/Convex map(Blend V3) -> Blend_overlay node -> Basecolor
 def generate_convex_concave_chain(material, convex_concave_node, connection_results, texture_node_output = 'RGB'):
     blend_overlay_node = set_material.new_blend_overlay_node(material)
     search_nodes = get_material.find_nodes_in_material(material, nodes_types = [unreal.MaterialExpressionTextureSampleParameter2D],
@@ -189,14 +189,14 @@ def generate_convex_concave_chain(material, convex_concave_node, connection_resu
         unreal.log_error(generate_convex_concave_chain.__name__ +
                          '(): did not find any basecolor texture map for blend_overlay convex/concave texture')
 
-# First variant of realisation of linking bump map or height map
+## First variant of realisation of linking bump map or height map
 # Simple connection with World Position Offset
 def generate_bump_height_chain_v1(material, node_bump_map, texture_type, connection_results):
     node_texture_factor, node_multiply  = generate_texture_factor_multiply(material, node_bump_map, texture_type,
                                                                           connection_results, 'RGB')
     connection_results.append(unreal.PythonMaterialLib.connect_material_property(node_multiply, '', 'MP_WorldPositionOffset'))
 
-# Second variant of realisation of linking bump map or height map
+## Second variant of realisation of linking bump map or height map
 # https://docs.unrealengine.com/4.27/en-US/RenderingAndGraphics/Materials/HowTo/BumpOffset/
 def generate_bump_height_chain_v2(material, node_bump_map, texture_type, connection_results, node_output_bump_map = 'R'):
     texture_nodes_for_linking = get_material.find_nodes_in_material_by_types(material, config.TEXTURE_NODES_TYPES)
@@ -227,9 +227,8 @@ def generate_texture_displacement_chain(material, texture_node, texture_type, co
     node_tessellation_multiplier = set_material.new_node_ScalarParameter_texture_factor(material, 'TessellationMultiplier')
     connection_results.append(unreal.PythonMaterialLib.connect_material_property(node_tessellation_multiplier, '', 'MP_TessellationMultiplier'))
 
-# Generate nodes, needed for texture type, and link them to material output
+## Generate nodes, needed for texture type, and link them to material output
 # @param material is material Object. Is needed to change material properties like translucent
-
 def generate_support_nodes_n_link(material, texture_node, texture_type):
     if material is not None and texture_node is not None and general.is_not_none_or_empty(texture_type):
         connection_results = []
@@ -329,7 +328,7 @@ def generate_support_nodes_n_link(material, texture_node, texture_type):
     MP_SUBSURFACE_COLOR
     MP_TANGENT  '''
 
-# Links texture node to result node/material output node. Depends on texture type. May add more support expressions/nodes
+## Links texture node to result node/material output node. Depends on texture type. May add more support expressions/nodes
 # @param textures_types is the type of texture, f.e. Diffuse, Normal, Metallic. View in naming_convention.py
 def link_textures_nodes_to_result_node(material, textures_nodes, textures_types = None, to_align = False):
     if general.is_not_none_or_empty(textures_nodes):
@@ -352,7 +351,7 @@ def link_textures_nodes_to_result_node(material, textures_nodes, textures_types 
         unreal.log_error(link_textures_nodes_to_result_node.__name__ + ': textures_nodes must not be empty or None')
 
 
-# Links texture node to result node. Depends on texture type. May add more support expressions/nodes
+## Links texture node to result node. Depends on texture type. May add more support expressions/nodes
 def link_texture_node_to_result_node(material, texture_node, texture_type = None, to_align = False):
     if texture_type is not None:
         link_textures_nodes_to_result_node(material, [texture_node], [texture_type], to_align)
@@ -360,7 +359,7 @@ def link_texture_node_to_result_node(material, texture_node, texture_type = None
         link_textures_nodes_to_result_node(material, [texture_node], None, to_align)
 
 
-# Connect free unlinked texture_nodes in material with material output
+## Connect free unlinked texture_nodes in material with material output
 # You can add textures nodes inside material in material editor. Then autolink them all.
 def connect_free_texture_nodes_in_materials(materials):
     if general.is_not_none_or_empty(materials):
@@ -378,7 +377,7 @@ def connect_free_texture_nodes_in_materials(materials):
     else:
         unreal.log_error(connect_free_texture_nodes_in_materials.__name__ + ': materials must not be empty or None')
 
-# Connect free unlinked texture_nodes in material with material output
+## Connect free unlinked texture_nodes in material with material output
 # You can add texture node inside material in material editor. Then autolink them all. Expression = Node
 def connect_free_texture_nodes_in_material(material):
     connect_free_texture_nodes_in_materials([material])
@@ -419,7 +418,7 @@ def connect_free_texture_nodes_in_materials_by_dirs(dirs_paths):
 def connect_free_texture_nodes_in_materials_by_dir(dir_path):
     connect_free_texture_nodes_in_materials_by_dirs([dir_path])
 
-# Creates expressions/nodes inside material from textures files and links nodes to material output
+## Creates expressions/nodes inside material from textures files and links nodes to material output
 # Many textures files added to Many materials. Many - Many
 def connect_textures_files_to_materials(materials_paths, textures_paths,
                                         to_recompile_material = False, to_align = False,
@@ -444,21 +443,21 @@ def connect_textures_files_to_materials(materials_paths, textures_paths,
     else:
         unreal.log_error(connect_texture_file_to_materials.__name__ + ': texture_path and materials_paths must not be empty or None')
 
-# Creates expressions/nodes inside material from textures files and links nodes to material output
+## Creates expressions/nodes inside material from textures files and links nodes to material output
 # Many texture file added to One materials. Many - One
 def connect_textures_files_to_material(material_path, textures_paths,
                                        to_recompile_material = False, to_align = False,
                                        node_pos_x = 0, node_pos_y = 0):
     connect_textures_files_to_materials([material_path], textures_paths, to_recompile_material, to_align, node_pos_x, node_pos_y)
 
-# Creates expressions/nodes inside material from textures files and links nodes to material output
+## Creates expressions/nodes inside material from textures files and links nodes to material output
 # One texture file added to Many materials. One - Many
 def connect_texture_file_to_materials(materials_paths, texture_path,
                                       to_recompile_material = False, to_align = False,
                                       node_pos_x = 0, node_pos_y = 0):
     connect_textures_files_to_materials(materials_paths, [texture_path], to_recompile_material, to_align, node_pos_x, node_pos_y)
 
-# Creates expressions/nodes inside material from textures files and links nodes to material output
+## Creates expressions/nodes inside material from textures files and links nodes to material output
 # One texture file added to One materials. One - One
 def connect_texture_file_to_material(material_path, texture_path,
                                      to_recompile_material = False, to_align = False,
@@ -466,7 +465,7 @@ def connect_texture_file_to_material(material_path, texture_path,
     connect_textures_files_to_materials([material_path], [texture_path], to_recompile_material, to_align, node_pos_x, node_pos_y)
 
 
-# Connects textures lists in texture_pack_paths to material_paths
+## Connects textures lists in texture_pack_paths to material_paths
 # @param texture_pack_paths is list of lists of texture paths. [[texture_1, texture_2],[texture_3]]
 #        Every texture_path in texture_pack_paths[i] must be connected with material_paths[i]
 def connect_texture_files_packs(material_paths, texture_paths_packs,
@@ -483,7 +482,7 @@ def connect_texture_files_packs(material_paths, texture_paths_packs,
     else:
         unreal.log_error(connect_texture_files_packs.__name__ + ': material_paths or texture_paths_packs must not be empty')
 
-# Connects all textures from texture_paths_pack with material in material_path
+## Connects all textures from texture_paths_pack with material in material_path
 # @param texture_paths_pack is list of texture_path
 def connect_texture_files_pack(material_path, texture_paths_pack,
                                to_recompile_material = False, to_align = False,
@@ -491,7 +490,7 @@ def connect_texture_files_pack(material_path, texture_paths_pack,
     connect_texture_files_packs([material_path], [texture_paths_pack], to_recompile_material, to_align, node_pos_x, node_pos_y)
 
 
-# Find same name without prefix suffix in materials and textures
+## Find same name without prefix suffix in materials and textures
 # @return list of lists with textures. materials_data[i] is associated with associated_textures_paths[i]
 def associate_textures_with_materials(materials_data, textures_data):
     associated_textures_paths_packs = []
@@ -511,7 +510,7 @@ def associate_textures_with_materials(materials_data, textures_data):
         unreal.log_error(associate_textures_with_materials.__name__ + ': materials_data or textures_data must not be empty')
     return associated_textures_paths_packs
 
-# Connects textures from textures_dirs inside material in material editor from many directories, packs
+## Connects textures from textures_dirs inside material in material editor from many directories, packs
 # Connects textures with the same file name without prefix-suffix with material
 # Connects all unlinked texture nodes inside material
 # Using, when importing from many 3d model project
@@ -555,7 +554,7 @@ def connect_by_association_texture_file_dirs(materials_dirs, textures_dirs, to_r
         unreal.log_error(connect_by_association_texture_file_dirs.__name__ + ': textures_dir and materials_dir must not be empty or None')
     unreal.log(connect_by_association_texture_file_dirs.__name__ + ' Finished')
 
-# Connects textures from textures_dir inside material in material editor from one directory, pack.
+## Connects textures from textures_dir inside material in material editor from one directory, pack.
 # Connects textures with the same file name without prefix-suffix with material
 # Connects all unlinked texture nodes inside material
 # Using, when importing from one 3d model project

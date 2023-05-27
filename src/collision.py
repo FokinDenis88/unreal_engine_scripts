@@ -11,7 +11,7 @@ importlib.reload(general)
 importlib.reload(get_asset)
 importlib.reload(log)
 
-# There are two types of collision. Simple and Complex. Complex is often one of lods.
+## There are two types of collision. Simple and Complex. Complex is often one of lods.
 # Check if asset has simple collision
 def has_simple_collision(asset_data):
     asset = asset_data.get_asset()
@@ -31,7 +31,7 @@ def has_simple_collision(asset_data):
 
     return False
 
-# Find No Collider assets
+## Find No Collider assets
 def find_no_collision_assets(folder_paths, log_path = log.LOG_PATH_NO_COLLISION, recursive_paths = True,
                              include_only_on_disk_assets = False):
     log.log_print_n_write_file(log_path, find_no_collision_assets.__name__ + '(): ', 'w')
@@ -63,7 +63,7 @@ def get_simple_collision_count_by_data(asset_data):
         unreal.log_error(get_simple_collision_count_by_data.__name__ + '(): asset_data must not be None')
         return -1
 
-# Second Variant of finding no simple collisions assets
+## Second Variant of finding no simple collisions assets
 def find_no_collision_assets_v2(folder_paths, log_path = log.LOG_PATH_NO_COLLISION, recursive_paths = True,
                                 include_only_on_disk_assets = False):
     log.log_print_n_write_file(log_path, find_no_collision_assets.__name__ + '(): ', 'w')

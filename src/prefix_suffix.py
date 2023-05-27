@@ -59,7 +59,7 @@ def get_suffix(text):
     else:
         return ''
 
-# @return (str) name of asset without prefix and suffix, without extension.
+## @return (str) name of asset without prefix and suffix, without extension.
 def get_asset_name_without_prefix_suffix(object_path):
     if general.is_not_none_or_empty(object_path):
         file_name_no_extension = unreal.Paths.get_base_filename(object_path)
@@ -82,7 +82,7 @@ def get_asset_name_without_prefix_suffix_data(data_asset):
     else:
         return ''
 
-# @param file_name without extension: T_Texture_Diff
+## @param file_name without extension: T_Texture_Diff
 # @return tuple (prefix, suffix)
 def get_asset_prefix_suffix_by_name(file_name_no_extension):
     prefix, suffix = '', ''
@@ -104,7 +104,7 @@ def get_asset_prefix_suffix_by_name(file_name_no_extension):
 def get_asset_prefix_suffix_by_path(object_path):
     return get_asset_prefix_suffix_by_name(get_asset.get_asset_name_no_extension(object_path))
 
-# @param file_name File name without extension, without path
+## @param file_name File name without extension, without path
 def has_file_name_prefix(file_name,  prefix, has_logs = False):
     if file_name != '':
         if prefix != '':
@@ -119,7 +119,7 @@ def has_file_name_prefix(file_name,  prefix, has_logs = False):
     elif has_logs:
         unreal.log_error(has_file_name_prefix.__name__ + '(): file_name is empty. ' + file_name)
 
-# @param file_name File name without extension, without path
+## @param file_name File name without extension, without path
 def has_file_name_suffix(file_name, suffix, has_logs = False):
     if file_name != '':
         if suffix != '':
@@ -134,7 +134,7 @@ def has_file_name_suffix(file_name, suffix, has_logs = False):
     elif has_logs:
         unreal.log_error(has_file_name_suffix.__name__ + '(): file_name is empty. ' + file_name)
 
-# @param file_name File name without extension, without path
+## @param file_name File name without extension, without path
 def add_prefix_suffix_in_name(file_name,  prefix = '', suffix = ''):
     if file_name != '':
         if prefix != '' or suffix != '':
@@ -168,7 +168,7 @@ def get_path_with_prefix_suffix(object_path,  prefix = '', suffix = ''):
     else:
         unreal.log_error(get_path_with_prefix_suffix.__name__ + '(): object_path is empty')
 
-# @param file_name File name without extension, without path
+## @param file_name File name without extension, without path
 def delete_prefix_suffix_in_name(file_name,  prefix = '', suffix = ''):
     if file_name != '':
         if prefix != '' or suffix != '':
@@ -185,7 +185,7 @@ def delete_prefix_suffix_in_name(file_name,  prefix = '', suffix = ''):
     else:
         unreal.log_error(delete_prefix_suffix_in_name.__name__ + '(): file_name is empty')
 
-# Get name without prefix or suffix
+## Get name without prefix or suffix
 def get_path_without_prefix_suffix(object_path,  prefix = '', suffix = ''):
     if object_path != '':
         if prefix != '' or suffix != '':
@@ -205,7 +205,7 @@ def get_path_without_prefix_suffix(object_path,  prefix = '', suffix = ''):
 
 
 
-# Get path for replace_prefix_suffix() function
+## Get path for replace_prefix_suffix() function
 def get_path_replaced_by_prefix_suffix(object_path,  prefix = '', suffix = '',
                                        new_prefix = '', new_suffix = ''):
     if object_path != '':
@@ -223,7 +223,7 @@ def get_path_replaced_by_prefix_suffix(object_path,  prefix = '', suffix = '',
         unreal.log_error(get_path_replaced_by_prefix_suffix.__name__ + '(): object_path is empty')
 
 
-# @param is_folder_operation    indicates if it is adding prefix_suffix for many files in folder
+## @param is_folder_operation    indicates if it is adding prefix_suffix for many files in folder
 def add_prefix_suffix(object_path, prefix = '', suffix = '', is_folder_operation = False,
                       include_only_on_disk_assets = False):
     if object_path != '':
@@ -247,7 +247,7 @@ def add_prefix_suffix(object_path, prefix = '', suffix = '', is_folder_operation
     else:
         unreal.log_error(add_prefix_suffix.__name__ + '(): object_path is empty')
 
-# @param is_folder_operation    indicates if it is adding prefix_suffix for many files in folder
+## @param is_folder_operation    indicates if it is adding prefix_suffix for many files in folder
 def delete_prefix_suffix(object_path, prefix = '', suffix = '', is_folder_operation = False,
                          include_only_on_disk_assets = False):
     if object_path != '':
@@ -279,7 +279,7 @@ def delete_prefix_suffix_datas(assets_data, prefix = '', suffix = '', is_folder_
         delete_prefix_suffix(asset_data.get_editor_property('object_path'), prefix, suffix, is_folder_operation,
                              include_only_on_disk_assets)
 
-# @param is_folder_operation    indicates if it is adding prefix_suffix for many files in folder
+## @param is_folder_operation    indicates if it is adding prefix_suffix for many files in folder
 def replace_prefix_suffix(object_path, prefix = '', suffix = '', new_prefix = '', new_suffix = '',
                           is_folder_operation = False, include_only_on_disk_assets = False):
     if object_path != '':
@@ -325,7 +325,7 @@ def add_prefix_suffix_folder(folder_paths, prefix = '', suffix = '',
             slow_task.enter_progress_frame(1)
 
 
-# @param is_folder_operation    indicates if it is adding prefix_suffix for many files in folder
+## @param is_folder_operation    indicates if it is adding prefix_suffix for many files in folder
 def delete_prefix_suffix_folder(folder_paths, prefix = '', suffix = '',
                                 recursive = False, include_only_on_disk_assets = False):
     with unreal.ScopedEditorTransaction(delete_prefix_suffix_folder.__name__) as ue_transaction:
@@ -343,7 +343,7 @@ def delete_prefix_suffix_folder(folder_paths, prefix = '', suffix = '',
 
             slow_task.enter_progress_frame(1)
 
-# @param is_folder_operation    indicates if it is adding prefix_suffix for many files in folder
+## @param is_folder_operation    indicates if it is adding prefix_suffix for many files in folder
 def replace_prefix_suffix_folder(folder_paths, prefix = '', suffix = '', new_prefix = '', new_suffix = '',
                                  recursive = False, include_only_on_disk_assets = False):
     with unreal.ScopedEditorTransaction(replace_prefix_suffix_folder.__name__) as ue_transaction:
@@ -386,7 +386,7 @@ def correct_prefix_suffix(object_path, is_folder_operation = False, asset_data =
     else:
         unreal.log_error(correct_prefix_suffix.__name__ + '(): Did not find asset_data from object_path')
 
-# Add correct prefix and suffix. Depends on asset type.
+## Add correct prefix and suffix. Depends on asset type.
 def correct_prefix_suffix_dirs(dir_paths, recursive = False, include_only_on_disk_assets = False):
     with unreal.ScopedEditorTransaction(correct_prefix_suffix_dirs.__name__) as ue_transaction:
         assets_data = get_asset.get_assets_by_dirs(dir_paths, recursive, include_only_on_disk_assets)
@@ -417,7 +417,7 @@ def delete_glb_texture_prefix(object_path):
         unreal.log_error(delete_glb_texture_prefix.__name__ + '(): There is no glb texture prefix in: ' + general.Name_to_str(object_path))
         return False
 
-# delete indexes in names of imported glb textures
+## delete indexes in names of imported glb textures
 def delete_glb_texture_prefix_in_dirs(dir_paths, recursive = False, include_only_on_disk_assets = False):
     unreal.log(delete_glb_texture_prefix_in_dirs.__name__ + ' Started')
     with unreal.ScopedEditorTransaction(delete_glb_texture_prefix_in_dirs.__name__) as ue_transaction:
@@ -440,7 +440,7 @@ def delete_glb_texture_prefix_in_dirs(dir_paths, recursive = False, include_only
 def delete_glb_texture_prefix_in_dir(dir_path, recursive = False, include_only_on_disk_assets = False):
     delete_glb_texture_prefix_in_dirs([dir_path], recursive, include_only_on_disk_assets)
 
-# Reads prefix and suffix of texture asset and returns type of texture by convention
+## Reads prefix and suffix of texture asset and returns type of texture by convention
 # Converts all text to lower case
 def get_texture_type_by_prefix_suffix(object_path, include_only_on_disk_assets = False):
     prefix = get_asset_prefix_suffix_by_path(object_path)

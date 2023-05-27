@@ -35,7 +35,8 @@ importlib.reload(import_pipeline_tasks_ini)
 
 from unreal_scripts.tasks.import_pipeline_tasks_ini import *
 
-
+## Modes of import pipeline: Hybrid, glTF_Importer, Datasmith_glTF_Importer, Datasmith_glTF_Importer_Factory, Code4Game
+# It is recommend to use only Hybrid pipeline
 def main():
     if IMPORT_METHOD == 'Hybrid':
         unreal.log('import_pipeline.py: Hybrid Started.')
@@ -82,82 +83,3 @@ def main():
 
 
 main()
-
-'''
-1) Разобраться, что лучше material vs material instance
-2) Удалить суффиксы из нодов
-3) Попробовать повлиять на настройки импорта фабрики, найти другие фабрики импорта
-'''
-
-
-'''
-assets_data = get_asset.get_assets_by_dir('/Game/Import/glb/Materials/', True)
-unreal.log(assets_data)
-unreal.log(assets_data[0].get_editor_property('asset_name'))
-'''
-
-'''
-assets_data = get_asset.get_assets_by_dir('/Game/Import/Materials')
-for asset_data in assets_data:
-    asset_class = general.Name_to_str(asset_data.get_editor_property('asset_class'))
-    unreal.log(asset_class)
-'''
-
-'''
-path = '/Game/M_Staff_04'
-material = unreal.EditorAssetLibrary.load_asset(path)
-set_material.delete_nodes_trash_suffix(material)
-'''
-
-#unreal.EditorAssetLibrary.save_asset(path)
-#unreal.MaterialEditingLibrary.recompile_material(material)
-
-
-'''
-path = '/Game/Import/glb/Materials/Master'
-materials_data = get_asset.get_materials_data_by_dir(path)
-unreal.log(materials_data)
-'''
-
-'''
-path = '/Game/Import/Materials/Master'
-materials_data = get_asset.get_materials_data_by_dir(path)
-unreal.log(materials_data)
-#set_material.delete_nodes_trash_suffix_in_dir(path)
-'''
-
-'''
-asset_tools = unreal.AssetToolsHelpers.get_asset_tools()
-glb_import_options = None  # unreal.DatasmithGLTFImportOptions | unreal.GLTFImportOptions
-gltf_import_factory = unreal.GLTFImportFactory()
-glb_path = 'K:/!Development K/Projects/3D Models/!!Assets For Commercial/3D/!!3D Models For Commercial/Military/!Vehicle/Modern/Water/Ship/Samidare destroyer___sketchfab/export/glb.glb'
-destination_dir = '/Game/Import'
-glb_asset_task = new_asset_import_task(glb_path, destination_dir, automated = False, factory = gltf_import_factory,
-                                        save = False, replace_existing = False, options = glb_import_options)
-if not make_import_asset_task(glb_asset_task, asset_tools, 'did not imported glb file'):
-    unreal.log_error('import fail')
-'''
-
-
-'''
-static_mesh_path = '/Game/Test/SM_SamidareDestroyer'
-static_mesh = get_asset.load_asset(static_mesh_path)
-
-#unreal.log(get_static_mesh.get_static_mesh_triangles_count(static_mesh))
-lod_index = 0
-#sections_count = static_mesh.get_num_sections(lod_index)
-sections_count = 1
-unreal.log(sections_count)
-triangles_count = 0
-for section_index in range(sections_count):
-    triangles = unreal.ProceduralMeshLibrary.get_section_from_static_mesh(static_mesh, lod_index, section_index)[1]
-    triangles_count += len(triangles)
-
-unreal.log(triangles_count)
-'''
-
-'''
-# Check Two Sided
-assets_path = '/Game/ThirdPerson/Military/Weapon'
-get_asset.get_materials_data_two_sided_console([assets_path], True)
-'''

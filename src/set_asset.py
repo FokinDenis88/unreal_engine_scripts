@@ -11,6 +11,7 @@ importlib.reload(general)
 importlib.reload(get_asset)
 importlib.reload(log)
 
+## Set asset properties by values.
 def set_assets_properties_in_folder(target_paths, is_recursive_search = True, only_on_disk_assets = False, class_names = [],
                                     search_properties_values = [], new_properties_values = [], is_disjunction = True):
     unreal.log('set_assets_properties_in_folder() Started')
@@ -39,6 +40,7 @@ def set_assets_properties_in_folder(target_paths, is_recursive_search = True, on
     unreal.log('set_assets_properties_in_folder() Finished')
     return assets_data
 
+## Set asset properties by values. Write log of operation to file and console
 def set_assets_properties_in_folder_log(log_path, log_title, target_paths, is_recursive_search = True,
                                         only_on_disk_assets = False, class_names = [],
                                         search_properties_values = [], new_properties_values = [], is_disjunction = True):
@@ -55,7 +57,7 @@ def set_assets_properties_in_folder_log(log_path, log_title, target_paths, is_re
         unreal.log_error('set_assets_properties_in_folder_log: assets_data ' + config.IS_EMPTY_OR_NONE_TEXT)
 
 
-# Consolidate assets with the same name, stored in different dirs
+## Consolidate assets with the same name, stored in different dirs
 # @param dir_path_assets_to_consolidate_to  - target
 # @param dir_path_assets_to_consolidate     - source
 def consolidate_assets_by_dir(dir_path_assets_to_consolidate_to, dir_path_assets_to_consolidate):
@@ -68,7 +70,7 @@ def consolidate_assets_by_dir(dir_path_assets_to_consolidate_to, dir_path_assets
         objects_assets_to_consolidate = [unreal.EditorAssetLibrary.load_asset(path_asset_to_consolidate)]
         unreal.EditorAssetLibrary.consolidate_assets(object_asset_to_consolidate_to, objects_assets_to_consolidate)
 
-# Deletes all Everything in directory
+## Deletes all Everything in directory
 def delete_all_in_dir(dir_path):
     if general.is_not_none_or_empty(dir_path):
         unreal.EditorAssetLibrary.delete_directory(dir_path)

@@ -10,6 +10,7 @@ class ImportSizeMode(Enum):
     Y = 1
     XY = 3
 
+## Get texture imported size
 # if is_axis_x = True return import texture size of x axis
 def get_texture_imported_size(object_path, include_only_on_disk_assets=False, mode = ImportSizeMode.X):
     imported_size_x, imported_size_y = 0.0, 0.0

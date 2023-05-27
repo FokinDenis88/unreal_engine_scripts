@@ -29,7 +29,7 @@ def get_asset_data_str_property(asset_data, property_name):
         unreal.log_error(get_asset_data_str_property.__name__ + '(): asset_data and property_name must not be None or Empty')
         return None
 
-# @return full path to object
+## @return full path to object
 def get_path_from_object(object):
     if object is not None:
         if issubclass(type(object), unreal.Object):
@@ -85,7 +85,7 @@ def get_asset_name_no_extension_n(object_path):
         unreal.log_error(get_asset_name_no_extension_n.__name__ + ': object_path is empty')
         return ''
 
-# @return object path to asset, from asset_data.
+## @return object path to asset, from asset_data.
 def get_asset_data_object_path(asset_data):
     if asset_data is not None:
         return general.Name_to_str(asset_data.get_editor_property('object_path'))
@@ -101,7 +101,7 @@ def get_assets_data_object_paths(assets_data):
         unreal.log_error(get_assets_data_object_paths.__name__ + ': assets_data must not be Empty or None')
     return paths
 
-# @param object_path    type = Name
+## @param object_path    type = Name
 # @param new_name       type = str
 # @return_type Name
 def get_asset_path_with_new_name(object_path, new_name):
@@ -119,7 +119,7 @@ def get_asset_path_with_new_name(object_path, new_name):
 def get_asset_class_name_str(asset):
     return str(asset.get_editor_property('asset_class'))
 
-# Getting asset data by object path
+## Getting asset data by object path
 def get_asset_data_by_object_path(object_path, include_only_on_disk_assets = False):
     if general.is_not_none_or_empty(object_path):
         if unreal.EditorAssetLibrary.does_asset_exist(object_path):
@@ -133,7 +133,7 @@ def get_asset_data_by_object_path(object_path, include_only_on_disk_assets = Fal
         unreal.log_error(get_asset_data_by_object_path.__name__ + ': object_path must not be empty or None')
         return
 
-# Getting asset data by object
+## Getting asset data by object
 def get_asset_data_by_object(object):
     if object is not None:
         object_path = object.get_path_name()
@@ -142,7 +142,7 @@ def get_asset_data_by_object(object):
         unreal.log_error(get_asset_data_by_object.__name__ + ': object must not be None')
         return
 
-# Getting asset UObject by object path
+## Getting asset UObject by object path
 def get_asset_by_object_path(object_path, include_only_on_disk_assets = False):
     asset_data = get_asset_data_by_object_path(object_path, include_only_on_disk_assets)
     if asset_data is not None:
@@ -173,7 +173,7 @@ def get_assets_by_dir(package_path, is_recursive = False, include_only_on_disk_a
     assets_data = asset_registry.get_assets_by_path(package_path, is_recursive, include_only_on_disk_assets)
     return assets_data
 
-# Getting assets data by folder path
+## Getting assets data by folder path
 def get_assets_by_dirs(package_paths, is_recursive = False, include_only_on_disk_assets = False):
     asset_registry = unreal.AssetRegistryHelpers.get_asset_registry()
     ue_filter = unreal.ARFilter(package_paths = package_paths, recursive_paths = is_recursive,
@@ -181,21 +181,21 @@ def get_assets_by_dirs(package_paths, is_recursive = False, include_only_on_disk
     assets_data = asset_registry.get_assets(ue_filter)
     return assets_data
 
-# Stay only assets of specified class name
+## Stay only assets of specified class name
 # No return value
 def assets_filter_by_class(assets_data, class_name):
     for asset_data in assets_data:
         if get_asset_class_name_str(asset_data) != str(class_name):
             assets_data.remove(asset_data)
 
-# Stay only assets of specified class name
+## Stay only assets of specified class name
 # Has return value
 def assets_filter_by_class_r(assets_data, class_name):
     filtered_assets_data = assets_data.copy()
     assets_filter_by_class(filtered_assets_data, class_name)
     return filtered_assets_data
 
-# @return assets data of specified type in path folder using ARFilter
+## @return assets data of specified type in path folder using ARFilter
 def get_assets_data_by_dirs_n_classes(dir_paths, class_names, is_recursive_search = False,
                                        only_on_disk_assets = False, has_log = False):
     if has_log: unreal.log(dir_paths); unreal.log(class_names)
@@ -238,7 +238,7 @@ def get_assets_by_dir_n_classes(dir_path, class_names, is_recursive_search = Fal
     return get_assets_by_dirs_n_classes([dir_path], class_names, is_recursive_search, only_on_disk_assets, has_log)
 
 
-# Trim asset from list if not all of property_value pairs are True
+## Trim asset from list if not all of property_value pairs are True
 # No return value
 # Logical AND
 def filter_assets_by_properties_conj(assets_data, properties_values, asset_data_index):
@@ -261,7 +261,7 @@ def filter_assets_by_properties_conj(assets_data, properties_values, asset_data_
 
     return asset_data_index
 
-# Trim asset from list if not all of property_value pairs are True
+## Trim asset from list if not all of property_value pairs are True
 # No return value
 # Logical OR
 def filter_assets_by_properties_disj(assets_data, properties_values, asset_data_index):
@@ -284,14 +284,14 @@ def filter_assets_by_properties_disj(assets_data, properties_values, asset_data_
 
     return asset_data_index
 
-# Trim asset from list if not all of property_value pairs are True
+## Trim asset from list if not all of property_value pairs are True
 # Has return value
 def filter_assets_by_properties_conj_r(assets_data, properties_values):
     new_assets_data = assets_data.copy()
     filter_assets_by_properties_conj(new_assets_data, properties_values)
     return new_assets_data
 
-# Trim asset from list if not all of property_value pairs are True
+## Trim asset from list if not all of property_value pairs are True
 # Has return value
 def filter_assets_by_properties_disj_r(assets_data, properties_values):
     new_assets_data = assets_data.copy()
@@ -299,7 +299,7 @@ def filter_assets_by_properties_disj_r(assets_data, properties_values):
     return new_assets_data
 
 
-# Trim asset from list if not all of property_value pairs are True
+## Trim asset from list if not all of property_value pairs are True
 # No return value
 def filter_assets_by_properties(assets_data, properties_values, is_disjunction):
     if general.is_not_none_or_empty(assets_data) and general.is_not_none_or_empty(properties_values):
@@ -317,7 +317,7 @@ def filter_assets_by_properties(assets_data, properties_values, is_disjunction):
                 slow_task.enter_progress_frame(1)
 
 
-# Return assets of specified type in path folder
+## Return assets of specified type in path folder
 # properties_values is list of tuple [('property', value)]
 # is_disjunction_p (^) = True will find asset,  if one of the property_value pair has been found. Disjunction is OR.
 # is_disjunction_p (v) = False will find asset, if all of the property_value pair has been found. Conjunction is AND.
@@ -352,7 +352,7 @@ def find_assets(package_paths = [], package_names = [], object_paths = [], class
                                    recursive_paths, recursive_classes, include_only_on_disk_assets, properties_values, is_disjunction)
     return get_assets_from_assets_data(assets_data)
 
-# Find all filtered assets and write log about found results
+## Find all filtered assets and write log about found results
 # If old value is None, all values will be valid and included in find results
 def find_assets_data_log(log_path, log_title = '', package_names = [], package_paths = [], object_paths = [],
                          class_names = [], recursive_classes_exclusion_set = [],

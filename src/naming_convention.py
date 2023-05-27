@@ -1,7 +1,7 @@
 # TODO: Correct all class names
 
 AssetsPrefixConventionTable = {
-    #General
+    ##General
     'HDRI' :                    'HDR_',
     'Material' :	            'M_',
     'MaterialInstanceConstant':	'MI_',
@@ -14,7 +14,7 @@ AssetsPrefixConventionTable = {
     'Texture2D':	            'T_',
     'OCIOProfile':	            'OCIO_',
 
-    #Blueprints
+    ##Blueprints
     'ActorComponent':	    'AC_',
     'AnimationBlueprint':   'ABP_',
     'BlueprintInterface':	'BI_',
@@ -25,39 +25,39 @@ AssetsPrefixConventionTable = {
     'Structure':	        'F_',
     'WidgetBlueprint':	    'WBP_',
 
-    #Particle Effects
+    ##Particle Effects
     'ParticleSystem':   'PS_',
     'NiagaraEmitter':	'FXE_',
     'NiagaraSystem':	'FXS_',
     'NiagaraFunction':	'FXF_',
 
-    #Skeletal Mesh Animations
+    ##Skeletal Mesh Animations
     'Rig':	                'Rig_',
     'Skeleton':	            'SKEL_',
     'Montages':	            'AM_',
     'Animation Sequence':   'AS_',
     'Blend Space':	        'BS_',
 
-    #ICVFX
+    ##ICVFX
     'NDisplayConfiguration':    'NDC_',
 
-    #Animation
+    ##Animation
     'LevelSequence':	'LS_',
     'SequencerEdits':	'EDIT_',
 
-    #Media
+    ##Media
     'MediaSource':	    'MS_',
     'MediaOutput':	    'MO_',
     'MediaPlayer':	    'MP_',
     'MediaProfile':	    'MPR_',
 
-    #Other
+    ##Other
     'LevelSnapshots':	    'SNAP_',
     'RemoteControlPreset':  'RCP_'
 }
 
 TextureTypesConvention = {
-    # Convention Unreal Engine Types
+    ## Convention Unreal Engine Types
     'General':              ('T_', ''),
     'BaseColor':	        ('T_', '_BC'),
     'AmbientOcclusion':    ('T_', '_AO'),
@@ -86,10 +86,10 @@ TextureTypesConvention = {
 # https://www.unrealdirective.com/resource/asset-naming-conventions
 # https://substance3d.adobe.com/tutorials/courses/the-pbr-guide-part-2
 
-# Maybe Upper case is not important in prefix search
+## Maybe Upper case is not important in prefix search
 # May Differ from Convention variant. Added more types.
 TextureTypesCustom = {
-    # General Simple Types
+    ## General Simple Types
     #'General':              ('T_', ['']),
     'BaseColor':	        ('T_', ['', '_BC', '_BaseColor', '_Diff', '_Diffuse', '_Base_Color', '_Color', '_Base']),
     'Albedo':	            ('T_', ['_ALB', '_Albedo']),
@@ -107,17 +107,17 @@ TextureTypesCustom = {
     'OpacityMask':	        ('T_', ['_Mask', '_OpacMask', '_OpacityMask']),
     'LightMap':	            ('T_', ['_L', '_LightMap', '_Light']),
 
-    # Combo, Mix Types
+    ## Combo, Mix Types
     'OcclusionRoughnessMetallic':     ('T_', ['_ORM', '_RoughnessMetallic', '_RoughnMetal', '_RoughMetal',
                                                '_MetallicRoughness', '_MetalRoughn', '_MetalRough', '_MetalRoughness'
                                                '_occlusionRoughnessMetallic', '_occlusionRoughnessMetal', '_occlRoughnMetal']),
     'SpecularGlossiness':              ('T_', ['_SpecularGlossiness', '_SpecularGloss', '_SpecGloss', '_SpecGlossiness']),
 
-    # Unique Types
+    ## Unique Types
     'Convex/Concave':	    ('T_', ['_ConvexConcave', '_ConvConc', '_Convex', '_Conv', '_Concave', '_Conc']),
     'FUZZ':                 ('T_', ['_Fuzz']),
 
-    # Rare Types
+    ## Rare Types
     'FlowMap':	            ('T_', ['_F']),
     'Packed':	            ('T_', ['_*']),
     'TextureCube':	        ('TC_', ['']),
@@ -126,5 +126,5 @@ TextureTypesCustom = {
     'CubeRenderTarget':	    ('RTC_', ['']),
     'TextureLightProfile':	('TLP_', [''])
 
-    # By Channel
+    ## By Channel
 }

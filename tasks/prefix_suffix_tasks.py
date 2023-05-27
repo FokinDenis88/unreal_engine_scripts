@@ -17,7 +17,9 @@ importlib.reload(prefix_suffix_tasks_ini)
 
 from unreal_scripts.tasks.prefix_suffix_tasks_ini import *
 
-
+## Can call one of functions: prefix_suffix.add_prefix_suffix_folder,
+# prefix_suffix.delete_prefix_suffix_folder, prefix_suffix.replace_prefix_suffix_folder
+# prefix_suffix.correct_prefix_suffix_folder, prefix_suffix.delete_glb_texture_prefix_folder
 def main():
     if COMMAND == 'Add':
         prefix_suffix.add_prefix_suffix_folder(TARGET_PATHS, PREFIX, SUFFIX, IS_RECURSIVE_SEARCH, ONLY_ON_DISK_ASSETS)

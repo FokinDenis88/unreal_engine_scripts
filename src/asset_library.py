@@ -11,7 +11,7 @@ importlib.reload(general)
 importlib.reload(get_asset)
 importlib.reload(log)
 
-# Moves assets by there asset_data to destination folder
+## Moves assets by there asset_data to destination folder
 # Will compile unsaved material
 def move_assets(assets_data, destination_dir, is_save_dir_structure = False, source_dir = ''):
     if general.is_not_none_or_empty(assets_data):
@@ -52,7 +52,7 @@ def move_assets_in_dirs(source_dirs, destination_dirs, is_recursive = False,
     else:
         unreal.log_error(move_assets_in_dirs.__name__ + ': source_dirs, destination_dirs must not be None or Empty')
 
-# Moves assets by there asset_data to destination folder
+## Deletes assets by assets_data
 def delete_assets(assets_data):
     if general.is_not_none_or_empty(assets_data):
         for asset_data in assets_data:

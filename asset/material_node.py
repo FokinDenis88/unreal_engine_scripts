@@ -11,20 +11,20 @@ import importlib
 importlib.reload(get_asset)
 importlib.reload(prefix_suffix)
 
-# Meta data is duplicate of data real node of material
-''' automatic_view_mip_bias (bool): [Read-Write] Whether the texture should be sampled with per view mip biasing for sharper output with Temporal AA.
-    channel_names (ParameterChannelNames): [Read-Write] Channel Names
-    const_coordinate (uint8): [Read-Write] only used if Coordinates is not hooked up
-    const_mip_value (int32): [Read-Write] only used if MipValue is not hooked up
-    desc (str): [Read-Write] A description that level designers can add (shows in the material editor UI).
-    group (Name): [Read-Write] The name of the parameter Group to display in MaterialInstance Editor. Default is None group
-    is_default_meshpaint_texture (bool): [Read-Write] Is default selected texture when using mesh paint mode texture painting
-    mip_value_mode (TextureMipValueMode): [Read-Write] Defines how the MipValue property is applied to the texture lookup
-    parameter_name (Name): [Read-Write] Parameter Name
-    sampler_source (SamplerSourceMode): [Read-Write] Controls where the sampler for this texture lookup will come from. Choose ‘from texture asset’ to make use of the UTexture addressing settings, Otherwise use one of the global samplers, which will not consume a sampler slot. This allows materials to use more than 16 unique textures on SM5 platforms.
-    sampler_type (MaterialSamplerType): [Read-Write] Sampler Type
-    sort_priority (int32): [Read-Write] Controls where the this parameter is displayed in a material instance parameter list. The lower the number the higher up in the parameter list.
-    texture (Texture): [Read-Write] Texture '''
+## Meta data is duplicate of data real node of material
+# automatic_view_mip_bias (bool): [Read-Write] Whether the texture should be sampled with per view mip biasing for sharper output with Temporal AA.
+#    channel_names (ParameterChannelNames): [Read-Write] Channel Names
+#    const_coordinate (uint8): [Read-Write] only used if Coordinates is not hooked up
+#    const_mip_value (int32): [Read-Write] only used if MipValue is not hooked up
+#    desc (str): [Read-Write] A description that level designers can add (shows in the material editor UI).
+#    group (Name): [Read-Write] The name of the parameter Group to display in MaterialInstance Editor. Default is None group
+#    is_default_meshpaint_texture (bool): [Read-Write] Is default selected texture when using mesh paint mode texture painting
+#    mip_value_mode (TextureMipValueMode): [Read-Write] Defines how the MipValue property is applied to the texture lookup
+#    parameter_name (Name): [Read-Write] Parameter Name
+#    sampler_source (SamplerSourceMode): [Read-Write] Controls where the sampler for this texture lookup will come from. Choose ‘from texture asset’ to make use of the UTexture addressing settings, Otherwise use one of the global samplers, which will not consume a sampler slot. This allows materials to use more than 16 unique textures on SM5 platforms.
+#    sampler_type (MaterialSamplerType): [Read-Write] Sampler Type
+#    sort_priority (int32): [Read-Write] Controls where the this parameter is displayed in a material instance parameter list. The lower the number the higher up in the parameter list.
+#    texture (Texture): [Read-Write] Texture '''
 class MetaDataTextureSampleParameter2D:
     def __init__(self, parameter_name = '', texture = None, desc = '', group = '', automatic_view_mip_bias = False,
                  channel_names = unreal.ParameterChannelNames(),
@@ -46,7 +46,7 @@ class MetaDataTextureSampleParameter2D:
         self.sort_priority = sort_priority
         self.texture = texture
 
-    # Set data DataTextureSampleParameter2D, recieved from loaded node
+    ## Set data DataTextureSampleParameter2D, recieved from loaded node
     # Gets Nodes Data from real node
     def set_meta_data(self, node):
         if node is not None:
@@ -70,7 +70,7 @@ class MetaDataTextureSampleParameter2D:
         else:
             unreal.log_error(MetaDataTextureSampleParameter2D.__name__ + ' set_meta_data(): node must not be None')
 
-    # Set data DataTextureSampleParameter2D, recieved from loaded node
+    ## Set data DataTextureSampleParameter2D, recieved from loaded node
     def set_node_by_meta_data(self, node):
         if node is not None:
             if isinstance(node, unreal.MaterialExpressionTextureSampleParameter2D):
@@ -94,7 +94,7 @@ class MetaDataTextureSampleParameter2D:
         else:
             unreal.log_error(MetaDataTextureSampleParameter2D.__name__ + ' set_node_by_meta_data(): node must not be None')
 
-# Extension of MetaDataTextureSampleParameter2D class
+## Extension of MetaDataTextureSampleParameter2D class
 class MetaDataTextureSampleParameter2DExt(MetaDataTextureSampleParameter2D):
     def __init__(self, meta_data = MetaDataTextureSampleParameter2D()):
         super().__init__(meta_data.parameter_name, meta_data.texture, meta_data.desc, meta_data.group, meta_data.automatic_view_mip_bias,

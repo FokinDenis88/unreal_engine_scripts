@@ -31,9 +31,11 @@ importlib.reload(log)
 
 from unreal_scripts.tasks.admin_tasks_ini import *
 
-
-# TODO: Find No Collision assets
-
+## Can call one of functions: lod.find_no_mipmap_textures_log, lod.find_no_lods_meshes_log,
+# get_asset.find_assets_data_log, set_asset.set_assets_properties_in_folder_log,
+# lod.activate_textures_gen_mipmaps_log, lod.activate_meshes_gen_lods_log,
+# collision.find_no_collision_assets, set_material.set_materials_two_sided
+# get_asset.get_materials_data_two_sided_console, material_library.auto_align_materials_nodes_paths
 def main():
     if COMMAND == 'NoMipMap':
         lod.find_no_mipmap_textures_log(TARGET_PATHS, IS_RECURSIVE_SEARCH, ONLY_ON_DISK_ASSETS)

@@ -21,18 +21,18 @@ class ClassName:
     STATIC_MESH = 'StaticMesh'
     SKELETAL_MESH = 'SkeletalMesh'
 
-#class alias
+##class alias
 TextureNode = unreal.MaterialExpressionTextureSampleParameter2D
 TextureBase = unreal.MaterialExpressionTextureBase
 
 PARAMETER_NODE_TYPES = [unreal.MaterialExpressionScalarParameter, unreal.MaterialExpressionVectorParameter,
                         unreal.MaterialExpressionTextureSampleParameter2D, unreal.MaterialExpressionStaticSwitchParameter]
 
-# All texture node/expression not abstract types
+## All texture node/expression not abstract types
 TEXTURE_NODES_TYPES = [unreal.MaterialExpressionTextureSample, unreal.MaterialExpressionTextureSampleParameter2D]
 #=======================================================================
 
-# Property names and values
+## Property names and values
 class PropertyTexture:
     MIPMAP_GEN = 'mip_gen_settings'
     LOD_GROUP = 'lod_group'

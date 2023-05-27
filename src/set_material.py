@@ -17,7 +17,7 @@ importlib.reload(set_asset)
 importlib.reload(get_material)
 
 
-# Transfers data From TextureBase To TextureSampleParameter2D
+## Transfers data From TextureBase To TextureSampleParameter2D
 def from_TextureBase_to_TextureParameter2D(texture_base_node, texture_parameter_node):
     texture_parameter_node.set_editor_property('desc', texture_base_node.get_editor_property('desc'))
     texture_parameter_node.set_editor_property('is_default_meshpaint_texture',
@@ -25,7 +25,7 @@ def from_TextureBase_to_TextureParameter2D(texture_base_node, texture_parameter_
     texture_parameter_node.set_editor_property('sampler_type', texture_base_node.get_editor_property('sampler_type'))
     texture_parameter_node.set_editor_property('texture', texture_base_node.get_editor_property('texture'))
 
-# Transfers data From TextureSample To TextureSampleParameter2D
+## Transfers data From TextureSample To TextureSampleParameter2D
 def from_TextureSample_to_TextureParameter2D(texture_sample_node, texture_parameter_node):
     from_TextureBase_to_TextureParameter2D(texture_sample_node, texture_parameter_node)
     texture_parameter_node.set_editor_property('automatic_view_mip_bias',
@@ -35,7 +35,7 @@ def from_TextureSample_to_TextureParameter2D(texture_sample_node, texture_parame
     texture_parameter_node.set_editor_property('mip_value_mode', texture_sample_node.get_editor_property('mip_value_mode'))
     texture_parameter_node.set_editor_property('sampler_source', texture_sample_node.get_editor_property('sampler_source'))
 
-# Transfers data From TextureSampleParameter To TextureSampleParameter2D
+## Transfers data From TextureSampleParameter To TextureSampleParameter2D
 def from_TextureParameter_to_TextureParameter2D(texture_parameter_node, texture_parameter2d_node):
     from_TextureSample_to_TextureParameter2D(texture_parameter_node, texture_parameter2d_node)
     texture_parameter2d_node.set_editor_property('channel_names', texture_parameter_node.get_editor_property('channel_names'))
@@ -62,7 +62,7 @@ def transfer_texture_node(texture_source_node, texture_target_node):
     else:
         unreal.log_error(transfer_texture_node.__name__ + '(): nodes are not texture type')
 
-# Transfers connection between two nodes. Transfer all inputs and outputs of node_source to node_target.
+## Transfers connection between two nodes. Transfer all inputs and outputs of node_source to node_target.
 # node_target will be connected the same as node_source.
 def transfer_connections(material, node_source, node_target, all_nodes = None):
     if general.are_list_objects_not_None([material, node_source, node_target]):
@@ -93,7 +93,7 @@ def transfer_connections(material, node_source, node_target, all_nodes = None):
     else:
         unreal.log_error(transfer_connections.__name__ + ': material, node_source, node_target must not be None')
 
-# Sets correct texture parameter name by texture type
+## Sets correct texture parameter name by texture type
 def set_texture_parameter_name(node):
     if node is not None:
         parameter_name = get_material.get_texture_parameter_name_node(node)
@@ -103,7 +103,7 @@ def set_texture_parameter_name(node):
         unreal.log_error(set_texture_parameter_name.__name__ + ': node must not be None')
         return ''
 
-# Creates TextureSampleParameter2D node with data from node_data
+## Creates TextureSampleParameter2D node with data from node_data
 # @node_data (DataTextureSampleParameter2D) wrapper object for node
 def new_node_TextureSampleParameter2D(material, node_meta_data = None, node_pos_x = 0, node_pos_y = 0):
     if material is not None:
@@ -138,7 +138,7 @@ def new_node_TextureSampleParameter2D_node(material, node = None, node_pos_x = 0
         unreal.log_error(new_node_TextureSampleParameter2D_node.__name__ + ': material must not be None')
         return None
 
-# Creates Vector node
+## Creates Vector node
 # TODO: Add more editor_properties
 def new_node_Vector(material, parameter_name, default_color):
     if material is not None:
@@ -151,11 +151,11 @@ def new_node_Vector(material, parameter_name, default_color):
         unreal.log_error(new_node_BaseColorVector.__name__ + ': material must not be None')
         return None
 
-# Creates Base color vector useful for multiplying with diffuse map or albedo
+## Creates Base color vector useful for multiplying with diffuse map or albedo
 def new_node_BaseColorVector(material):
     return new_node_Vector(material, 'BaseColor', unreal.LinearColor.WHITE)
 
-# Creates Base color vector useful for multiplying with diffuse map or albedo
+## Creates Base color vector useful for multiplying with diffuse map or albedo
 def new_node_ScalarParameter_texture_factor(material, texture_type):
     if material is not None and general.is_not_none_or_empty(texture_type):
         node_scalar_texture_factor = unreal.MaterialEditingLibrary.create_material_expression(material, unreal.MaterialExpressionScalarParameter)
@@ -167,7 +167,7 @@ def new_node_ScalarParameter_texture_factor(material, texture_type):
         unreal.log_error(new_node_ScalarParameter_texture_factor.__name__ + ': material and texture_typ must not be None or empty')
         return None
 
-# Creates material expression/node of blend_overlay material function call
+## Creates material expression/node of blend_overlay material function call
 def new_blend_overlay_node(material):
     # MaterialFunction'/Engine/Functions/Engine_MaterialFunctions03/Blends/Blend_Overlay.Blend_Overlay'
     blend_overlay_function = get_asset.load_asset('/Engine/Functions/Engine_MaterialFunctions03/Blends/Blend_Overlay.Blend_Overlay')
@@ -226,7 +226,7 @@ def replace_space_to_underscore(parameter_name):
 
     return clean_parameter_name
 
-# Replace all white space chars in parameter names in material
+## Replace all white space chars in parameter names in material
 def replace_parameters_space_to_underscore(material):
     if material is not None:
         with unreal.ScopedEditorTransaction(replace_parameters_space_to_underscore.__name__ + '()') as ue_transaction:
@@ -252,7 +252,7 @@ def replace_parameters_space_to_underscore_in_dir(dir_path):
         unreal.log_error(replace_parameters_space_to_underscore_in_dir.__name__ + ': dir_path must not be None or Empty')
 
 
-# Replace all white space chars in parameter names in material
+## Replace all white space chars in parameter names in material
 def correct_normal_map_map(material):
     if material is not None:
         with unreal.ScopedEditorTransaction(replace_parameters_space_to_underscore.__name__ + '()') as ue_transaction:
@@ -287,7 +287,7 @@ def set_materials_two_sided(target_paths, new_value = False, is_recursive_search
                                                     search_properties_values, [('two_sided', new_value)], is_disjunction)
 
 
-# Recompile all materials in dir_paths after changes in material
+## Recompile all materials in dir_paths after changes in material
 def recompile_material_in_dirs(dirs_paths):
     if general.is_not_none_or_empty_lists(dirs_paths):
         materials_data = get_asset.get_materials_data_by_dirs(dirs_paths)

@@ -13,7 +13,7 @@ importlib.reload(log)
 
 NO_MIPMAP_HEADER = 'Textures without mipmaps: '
 
-# Find all textures not in Power of two mode. If texture is not standart, lod can't be generated
+## Find all textures not in Power of two mode. If texture is not standart, lod can't be generated
 def find_no_mipmap_textures_log(target_paths, is_recursive_search, only_on_disk_assets):
     return get_asset.find_assets_data_log(log.LOG_PATH_NO_MIPMAPS, 'No Mipmap Textures', package_paths = target_paths,
                                            class_names = [config.CLASS_NAME_TEXTURE],
@@ -21,7 +21,7 @@ def find_no_mipmap_textures_log(target_paths, is_recursive_search, only_on_disk_
                                            include_only_on_disk_assets = only_on_disk_assets,
                                            properties_values = [(config.PROPERTY_MIPMAP_GEN, config.SETTING_NO_MIPMAPS)])
 
-# Find all meshes without lod groups
+## Find all meshes without lod groups
 def find_no_lods_meshes_log(target_paths, is_recursive_search, only_on_disk_assets):
     return get_asset.find_assets_data_log(log.LOG_PATH_NO_LODS, 'No Lods Static Meshes', package_paths = target_paths,
                                            class_names = [config.CLASS_NAME_STATIC_MESH],

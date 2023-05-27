@@ -11,7 +11,7 @@ importlib.reload(general)
 importlib.reload(get_asset)
 importlib.reload(prefix_suffix)
 
-# @return Texture type object
+## @return Texture type object
 def get_texture_asset_from_node(node):
     if node is not None:
         return node.get_editor_property('texture')
@@ -19,14 +19,14 @@ def get_texture_asset_from_node(node):
         unreal.log_error(get_texture_asset_from_node.__name__ + ': node must not be None')
         return
 
-# Find texture source path by node of type inhereted by unreal.MaterialExpression
+## Find texture source path by node of type inhereted by unreal.MaterialExpression
 def get_texture_node_source_path(node):
     if node is not None:
         return get_asset.get_path_from_object(get_texture_asset_from_node(node))
     else:
         unreal.log_error(get_texture_node_source_path.__name__ + ': node must not be None')
 
-# Reads prefix and suffix of texture asset and returns type of texture by convention
+## Reads prefix and suffix of texture asset and returns type of texture by convention
 def get_texture_type_by_prefix_suffix_node(node):
     texture_path = get_texture_node_source_path(node)
     if general.is_not_none_or_empty(texture_path):
@@ -35,7 +35,7 @@ def get_texture_type_by_prefix_suffix_node(node):
         unreal.log(get_texture_type_by_prefix_suffix_node.__name__ + '(): did not find any texture source in node')
         return
 
-# Standardize Texture Parameter Name
+## Standardize Texture Parameter Name
 def get_texture_parameter_name(texture_type):
     return texture_type + '_Map'
 
@@ -57,7 +57,7 @@ def get_texture_parameter_name_node(node):
         unreal.log_error(get_texture_parameter_name_node.__name__ + ': node must not be None')
         return ''
 
-# @return gets all nodes/expressions of input material
+## @return gets all nodes/expressions of input material
 # If you delete some nodes, they will be saved in memory. And get_material_all_nodes will show ghosty results. You need to relaunch Unreal Engine.
 def get_material_all_nodes_python(material):
     if material is not None:
@@ -72,7 +72,7 @@ def get_material_all_nodes_python(material):
         unreal.log_error(get_material_all_nodes_python.__name__ + ': node must not be None')
         return
 
-# Getting all material nodes using TAPython plugin
+## Getting all material nodes using TAPython plugin
 # https://github.com/cgerchenhp/UE_TAPython_Plugin_Release
 def get_material_all_nodes_tapython(material):
     if material is not None:
@@ -82,7 +82,7 @@ def get_material_all_nodes_tapython(material):
         unreal.log_error(get_material_all_nodes_tapython.__name__ + ': material must not be None')
         return
 
-# Wrapper for more correct function
+## Wrapper for more correct function
 def get_material_all_nodes(material):
     return get_material_all_nodes_tapython(material)
 
@@ -101,7 +101,7 @@ def get_material_all_nodes_by_path(material_object_path):
     right_expression_input_index
     right_expression_input_name
     Index are indexes of unreal.PythonMaterialLib.get_material_expressions(material) list'''
-# return list of all connections in material
+## return list of all connections in material
 def get_material_connections(material):
     if material is not None:
         return unreal.unreal.PythonMaterialLib.get_material_connections(material)
@@ -109,7 +109,7 @@ def get_material_connections(material):
         unreal.log_error(get_material_connections.__name__ + ': material must not be None')
         return
 
-# Find connections of node
+## Find connections of node
 # @return tuple of connections.
 def find_connections_of_node(material, node, all_nodes = None, all_connections = None):
     if all_nodes is None:
@@ -140,7 +140,7 @@ def use_nodes_types_filter(filtered_nodes, nodes_types, is_nodes_types_subclasse
         else:
             i += 1
 
-# Compares Unreal Engine object(nodes in material f.e.)
+## Compares Unreal Engine object(nodes in material f.e.)
 def compare_properites_values(ue_object, properties_values):
     comparation_results = []
     for property_value in properties_values:
@@ -169,7 +169,7 @@ def use_properties_values_filter(filtered_nodes, properties_values, is_disjuncti
         else:
             i += 1
 
-# Use filter if node has subclass of MaterialExpressionTextureBase. And if node linked to material output property by nodes chain or direct
+## Use filter if node has subclass of MaterialExpressionTextureBase. And if node linked to material output property by nodes chain or direct
 # Doesn't pop nodes any class except MaterialExpressionTextureBase and its subclasses. Using filter only on Textures nodes.
 def use_linked_textures_to_output_filter(material, filtered_nodes, is_linked_to_output):
     # all nodes with baseclass linked to material output property
@@ -193,14 +193,14 @@ def use_linked_textures_to_output_filter(material, filtered_nodes, is_linked_to_
         else:
             i += 1
 
-''' Filters input nodes list by some specific conditions
-    @param nodes is list of node
-    @param nodes_types is filter list of node types, like unreal.MaterialExpression
-    @param nodes_types is filter list of node types, like unreal.MaterialExpression
-    @param nodes_types is filter list of node types, like unreal.MaterialExpression
-    @param is_disjunction is trigger means if comparation of properties_values must be disjunction
-    Disjunction = OR; Conjunction = AND
-    You can not to use any of Filters: nodes_types, properties_values, is_linked_to_output '''
+## Filters input nodes list by some specific conditions
+#    @param nodes is list of node
+#    @param nodes_types is filter list of node types, like unreal.MaterialExpression
+#    @param nodes_types is filter list of node types, like unreal.MaterialExpression
+#    @param nodes_types is filter list of node types, like unreal.MaterialExpression
+#    @param is_disjunction is trigger means if comparation of properties_values must be disjunction
+#    Disjunction = OR; Conjunction = AND
+#    You can not to use any of Filters: nodes_types, properties_values, is_linked_to_output
 def filter_nodes_of_material(material, nodes,
                              nodes_types = None, properties_values = None, is_linked_to_output = None,      # filters
                              is_disjunction = True, is_nodes_types_subclasses = False):                     # triggers
@@ -223,6 +223,7 @@ def filter_nodes_of_material(material, nodes,
         unreal.log_error(filter_nodes_of_material.__name__ + ': nodes must not be None')
         return
 
+## Find nodes in material by nodes type, properties_values, is linked flag
 # @param nodes list of node
 # @param nodes_types list of node types, like unreal.MaterialExpression
 # @param all_nodes if you already search for all nodes then input them to function
@@ -239,7 +240,7 @@ def find_nodes_in_material(material,
         unreal.log_error('material path: ' + get_asset.get_path_from_object(material))
         return
 
-# @param nodes list of node
+## @param nodes list of node
 # @param nodes_types list of node types, like unreal.MaterialExpression
 # @param all_nodes if you already search for all nodes input them to function
 # @return tuple of (material, found_nodes)
@@ -258,7 +259,7 @@ def find_nodes_in_material_by_path(material_object_path,
 def find_nodes_in_material_by_types(material, nodes_types = None):
     return find_nodes_in_material(material, nodes_types, is_nodes_types_subclasses = False)
 
-# Search free texture node
+## Search free texture node
 # If proper material output for free node has already been connected, doesn't link or relink.
 def find_unlinked_texture_nodes(material):
     return find_nodes_in_material(material, [unreal.MaterialExpressionTextureSample, unreal.MaterialExpressionTextureSampleParameter2D],

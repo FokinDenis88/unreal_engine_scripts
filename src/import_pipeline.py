@@ -26,18 +26,18 @@ importlib.reload(prefix_suffix)
 importlib.reload(set_material)
 
 
-# Plugins set used for importing pipeline
+## Plugins set used for importing pipeline
 IMPORT_PIPELINE_VARIANTS = {'glTF_Importer', 'Datasmith_glTF_Importer', 'Code4Game'}
 
 
-''' @param bake_pivot_in_vertex (bool): [Read-Write] - Experimental - If this option is true the inverse node pivot will be apply to the mesh vertices. The pivot from the DCC will then be the origin of the mesh. This option only work with static meshes.
-@param create_content_folder_hierarchy (bool): [Read-Write] If checked, a folder’s hierarchy will be created under the import asset path. All the created folders will match the actor hierarchy. In case there is more than one actor that links to an asset, the shared asset will be placed at the first actor’s place.
-@param force_front_x_axis (bool): [Read-Write] Whether to force the front axis to be align with X instead of -Y.
-@param hierarchy_type (FBXSceneOptionsCreateHierarchyType): [Read-Write] Choose if you want to generate the scene hierarchy with normal level actors, one actor with multiple components, or one blueprint asset with multiple components.
-@param import_as_dynamic (bool): [Read-Write] If checked, the mobility of all actors or components will be dynamic. If unchecked, they will be static.
-@param import_skeletal_mesh_lo_ds (bool): [Read-Write] If enabled, creates LOD models for Unreal skeletal meshes from LODs in the import file; If not enabled, only the base skeletal mesh from the LOD group is imported.
-@param import_static_mesh_lo_ds (bool): [Read-Write] If enabled, creates LOD models for Unreal static meshes from LODs in the import file; If not enabled, only the base static mesh from the LOD group is imported.
-@param invert_normal_maps'''
+## @param bake_pivot_in_vertex (bool): [Read-Write] - Experimental - If this option is true the inverse node pivot will be apply to the mesh vertices. The pivot from the DCC will then be the origin of the mesh. This option only work with static meshes.
+# @param create_content_folder_hierarchy (bool): [Read-Write] If checked, a folder’s hierarchy will be created under the import asset path. All the created folders will match the actor hierarchy. In case there is more than one actor that links to an asset, the shared asset will be placed at the first actor’s place.
+# @param force_front_x_axis (bool): [Read-Write] Whether to force the front axis to be align with X instead of -Y.
+# @param hierarchy_type (FBXSceneOptionsCreateHierarchyType): [Read-Write] Choose if you want to generate the scene hierarchy with normal level actors, one actor with multiple components, or one blueprint asset with multiple components.
+# @param import_as_dynamic (bool): [Read-Write] If checked, the mobility of all actors or components will be dynamic. If unchecked, they will be static.
+# @param import_skeletal_mesh_lo_ds (bool): [Read-Write] If enabled, creates LOD models for Unreal skeletal meshes from LODs in the import file; If not enabled, only the base skeletal mesh from the LOD group is imported.
+# @param import_static_mesh_lo_ds (bool): [Read-Write] If enabled, creates LOD models for Unreal static meshes from LODs in the import file; If not enabled, only the base static mesh from the LOD group is imported.
+# @param invert_normal_maps
 def new_fbx_scene_import_options(bake_pivot_in_vertex = False, create_content_folder_hierarchy = False,
                                  force_front_x_axis = True,
                                  hierarchy_type = None, import_as_dynamic = False,
@@ -56,16 +56,16 @@ def new_fbx_scene_import_options(bake_pivot_in_vertex = False, create_content_fo
 
 
 
-'''@param auto_generate_collision (bool): [Read-Write] If checked, collision will automatically be generated (ignored if custom collision is imported or used).
-@param build_adjacency_buffer (bool): [Read-Write] Required for PNT tessellation but can be slow. Recommend disabling for larger meshes.
-@param build_reversed_index_buffer (bool): [Read-Write] Build Reversed Index Buffer
-@param generate_lightmap_u_vs (bool): [Read-Write] Generate Lightmap UVs
-@param normal_generation_method (FBXSceneNormalGenerationMethod): [Read-Write] Use the MikkTSpace tangent space generator for generating normals and tangents on the mesh
-@param normal_import_method (FBXSceneNormalImportMethod): [Read-Write] Enabling this option will read the tangents(tangent,binormal,normal) from FBX file instead of generating them automatically.
-@param one_convex_hull_per_ucx (bool): [Read-Write] If checked, one convex hull per UCX_ prefixed collision mesh will be generated instead of decomposing into multiple hulls
-@param remove_degenerates (bool): [Read-Write] Disabling this option will keep degenerate triangles found. In general you should leave this option on.
-@param vertex_color_import_option (FbxSceneVertexColorImportOption): [Read-Write] Specify how vertex colors should be imported
-@param vertex_override_color (Color): [Read-Write] Specify override color in the case that VertexColorImportOption is set to Override'''
+## @param auto_generate_collision (bool): [Read-Write] If checked, collision will automatically be generated (ignored if custom collision is imported or used).
+# @param build_adjacency_buffer (bool): [Read-Write] Required for PNT tessellation but can be slow. Recommend disabling for larger meshes.
+# @param build_reversed_index_buffer (bool): [Read-Write] Build Reversed Index Buffer
+# @param generate_lightmap_u_vs (bool): [Read-Write] Generate Lightmap UVs
+# @param normal_generation_method (FBXSceneNormalGenerationMethod): [Read-Write] Use the MikkTSpace tangent space generator for generating normals and tangents on the mesh
+# @param normal_import_method (FBXSceneNormalImportMethod): [Read-Write] Enabling this option will read the tangents(tangent,binormal,normal) from FBX file instead of generating them automatically.
+# @param one_convex_hull_per_ucx (bool): [Read-Write] If checked, one convex hull per UCX_ prefixed collision mesh will be generated instead of decomposing into multiple hulls
+# @param remove_degenerates (bool): [Read-Write] Disabling this option will keep degenerate triangles found. In general you should leave this option on.
+# @param vertex_color_import_option (FbxSceneVertexColorImportOption): [Read-Write] Specify how vertex colors should be imported
+# @param vertex_override_color (Color): [Read-Write] Specify override color in the case that VertexColorImportOption is set to Override'''
 def new_fbx_scene_import_options_static_mesh(auto_generate_collision = True, build_adjacency_buffer = False,
                                              build_reversed_index_buffer = False,
                                              generate_lightmap_u_vs = True,
@@ -89,25 +89,25 @@ def new_fbx_scene_import_options_static_mesh(auto_generate_collision = True, bui
 
 
 
-'''@param animation_length (FBXAnimationLengthImportType): [Read-Write] Type of asset to import from the FBX file
-@param create_physics_asset (bool): [Read-Write] If checked, create new PhysicsAsset if it doesn’t have it
-@param custom_sample_rate (int32): [Read-Write] Sample fbx animation data at the specified sample rate, 0 find automaticaly the best sample rate
-@param delete_existing_custom_attribute_curves (bool): [Read-Write] If true, all previous custom attribute curves will be deleted when doing a re-import.
-@param delete_existing_morph_target_curves (bool): [Read-Write] Type of asset to import from the FBX file
-@param delete_existing_non_curve_custom_attributes (bool): [Read-Write] If true, all previous non-curve custom attributes will be deleted when doing a re-import.
-@param frame_import_range (Int32Interval): [Read-Write] Frame range used when Set Range is used in Animation Length
-@param import_animations (bool): [Read-Write] True to import animations from the FBX File
-@param import_custom_attribute (bool): [Read-Write] Import if custom attribute as a curve within the animation *
-@param import_meshes_in_bone_hierarchy (bool): [Read-Write] If checked, meshes nested in bone hierarchies will be imported instead of being converted to bones.
-@param import_morph_targets (bool): [Read-Write] If enabled, creates Unreal morph objects for the imported meshes
-@param morph_threshold_position (float): [Read-Write] Threshold to compare vertex position equality when computing morph target deltas.
-@param preserve_local_transform (bool): [Read-Write] Type of asset to import from the FBX file
-@param preserve_smoothing_groups (bool): [Read-Write] If checked, triangles with non-matching smoothing groups will be physically split.
-@param threshold_position (float): [Read-Write] Threshold to compare vertex position equality.
-@param threshold_tangent_normal (float): [Read-Write] Threshold to compare normal, tangent or bi-normal equality.
-@param threshold_uv (float): [Read-Write] Threshold to compare UV equality.
-@param update_skeleton_reference_pose (bool): [Read-Write] If enabled, update the Skeleton (of the mesh being imported)’s reference pose.
-@param use_default_sample_rate (bool): [Read-Write] If enabled, samples all animation curves to 30 FPS'''
+## @param animation_length (FBXAnimationLengthImportType): [Read-Write] Type of asset to import from the FBX file
+# @param create_physics_asset (bool): [Read-Write] If checked, create new PhysicsAsset if it doesn’t have it
+# @param custom_sample_rate (int32): [Read-Write] Sample fbx animation data at the specified sample rate, 0 find automaticaly the best sample rate
+# @param delete_existing_custom_attribute_curves (bool): [Read-Write] If true, all previous custom attribute curves will be deleted when doing a re-import.
+# @param delete_existing_morph_target_curves (bool): [Read-Write] Type of asset to import from the FBX file
+# @param delete_existing_non_curve_custom_attributes (bool): [Read-Write] If true, all previous non-curve custom attributes will be deleted when doing a re-import.
+# @param frame_import_range (Int32Interval): [Read-Write] Frame range used when Set Range is used in Animation Length
+# @param import_animations (bool): [Read-Write] True to import animations from the FBX File
+# @param import_custom_attribute (bool): [Read-Write] Import if custom attribute as a curve within the animation *
+# @param import_meshes_in_bone_hierarchy (bool): [Read-Write] If checked, meshes nested in bone hierarchies will be imported instead of being converted to bones.
+# @param import_morph_targets (bool): [Read-Write] If enabled, creates Unreal morph objects for the imported meshes
+# @param morph_threshold_position (float): [Read-Write] Threshold to compare vertex position equality when computing morph target deltas.
+# @param preserve_local_transform (bool): [Read-Write] Type of asset to import from the FBX file
+# @param preserve_smoothing_groups (bool): [Read-Write] If checked, triangles with non-matching smoothing groups will be physically split.
+# @param threshold_position (float): [Read-Write] Threshold to compare vertex position equality.
+# @param threshold_tangent_normal (float): [Read-Write] Threshold to compare normal, tangent or bi-normal equality.
+# @param threshold_uv (float): [Read-Write] Threshold to compare UV equality.
+# @param update_skeleton_reference_pose (bool): [Read-Write] If enabled, update the Skeleton (of the mesh being imported)’s reference pose.
+# @param use_default_sample_rate (bool): [Read-Write] If enabled, samples all animation curves to 30 FPS'''
 def new_fbx_scene_import_options_skeletal_mesh(animation_length = None, create_physics_asset = True, custom_sample_rate = 0,
                                                delete_existing_custom_attribute_curves = True,
                                                delete_existing_morph_target_curves = True,
@@ -142,18 +142,18 @@ def new_fbx_scene_import_options_skeletal_mesh(animation_length = None, create_p
     return import_options
 
 
-''' Create new Task for import Asset.
-@param automated (bool): [Read-Write] Avoid dialogs
-@param destination_name (str): [Read-Write] Optional custom name to import as
-@param destination_path (str): [Read-Write] Path where asset will be imported to
-@param factory (Factory): [Read-Write] Optional factory to use
-@param filename (str): [Read-Write] Filename to import
-@param imported_object_paths (Array(str)): [Read-Write] Paths to objects created or updated after import
-@param options (Object): [Read-Write] Import options specific to the type of asset
-@param replace_existing (bool): [Read-Write] Overwrite existing assets
-@param replace_existing_settings (bool): [Read-Write] Replace existing settings when overwriting existing assets
-@param result (Array(Object)): [Read-Write] Imported objects
-@param save (bool): [Read-Write] Save after importing '''
+## Create new Task for import Asset.
+# @param automated (bool): [Read-Write] Avoid dialogs
+# @param destination_name (str): [Read-Write] Optional custom name to import as
+# @param destination_path (str): [Read-Write] Path where asset will be imported to
+# @param factory (Factory): [Read-Write] Optional factory to use
+# @param filename (str): [Read-Write] Filename to import
+# @param imported_object_paths (Array(str)): [Read-Write] Paths to objects created or updated after import
+# @param options (Object): [Read-Write] Import options specific to the type of asset
+# @param replace_existing (bool): [Read-Write] Overwrite existing assets
+# @param replace_existing_settings (bool): [Read-Write] Replace existing settings when overwriting existing assets
+# @param result (Array(Object)): [Read-Write] Imported objects
+# @param save (bool): [Read-Write] Save after importing '''
 def new_asset_import_task(filename, destination_path, automated = False, save = False,
                           replace_existing = False, replace_existing_settings = False, options = None,
                           factory = None, imported_object_paths = [], destination_name = '', result = []):
@@ -184,7 +184,7 @@ def new_gltf_options(generate_lightmap_u_vs = True, import_scale = 100.0):
     #unreal.DatasmithStaticMeshImportOptions
     #unreal.DatasmithGLTFImportOptions
 
-# Making import of asset executing list of import_asset_tasks
+## Making import of asset executing list of import_asset_tasks
 def exec_import_asset_tasks(import_asset_tasks, asset_tools = None):
     if (import_asset_tasks is not None) and (import_asset_tasks != []):
         if asset_tools is None: asset_tools = unreal.AssetToolsHelpers.get_asset_tools()
@@ -192,7 +192,7 @@ def exec_import_asset_tasks(import_asset_tasks, asset_tools = None):
     else:
         unreal.log_error(exec_import_asset_tasks.__name__ + ': import_asset_tasks list must not be empty')
 
-# Checks if there is some objects in import result
+## Checks if there is some objects in import result
 def are_import_tasks_succeed(import_asset_tasks, import_fail_help_info = 'did not imported file'):
     if general.is_not_none_or_empty(import_asset_tasks):
         failed_tasks = []
@@ -219,7 +219,7 @@ def are_import_tasks_succeed(import_asset_tasks, import_fail_help_info = 'did no
         unreal.log_error(are_import_tasks_succeed.__name__ + '(): import_asset_tasks must not be None or Empty')
         return False
 
-# Options: unreal.FbxSceneImportOptionsStaticMesh | unreal.DatasmithStaticMeshImportOptions | unreal.FbxSceneImportOptionsSkeletalMesh
+## Options: unreal.FbxSceneImportOptionsStaticMesh | unreal.DatasmithStaticMeshImportOptions | unreal.FbxSceneImportOptionsSkeletalMesh
 def make_import_asset_tasks(import_asset_tasks, asset_tools = None, import_fail_help_info = '(): did not imported file'):
     if asset_tools is None:
         asset_tools = unreal.AssetToolsHelpers.get_asset_tools()
@@ -230,7 +230,7 @@ def make_import_asset_task(import_asset_task, asset_tools = None, import_fail_he
     return make_import_asset_tasks([import_asset_task], asset_tools, import_fail_help_info)
 
 
-# Default variant of importing fbx file
+## Default variant of importing fbx file
 def import_fbx_default(fbx_path, destination_dir, fbx_import_options = None,
                        automated = False, save = False, replace_existing = False):
     if fbx_path != '' and destination_dir != '':
@@ -276,13 +276,13 @@ def import_fbx_subobjects_with_gltf_materials(subobjects_path, destination_dir, 
     else:
         unreal.log_error(import_fbx_subobjects_with_gltf_materials.__name__ + ': subobjects_path, destination_dir, glb_materials_dir_path must not be Empty')
 
-# @materials_dir_path directory, to which fbx files will be first import. Ditectory with proper materials(imported from glb)
+## @materials_dir_path directory, to which fbx files will be first import. Ditectory with proper materials(imported from glb)
 def import_fbx_scene_n_subobjects(fbx_path, destination_dir, subobjects_path, glb_materials_dir_path, is_automated = False):
     import_fbx_with_gltf_materials(fbx_path, destination_dir, glb_materials_dir_path, False)
     import_fbx_subobjects_with_gltf_materials(subobjects_path, destination_dir, glb_materials_dir_path, True)
 
 
-# Import asset mesh, animation from fbx file. Import materials settings and textures from gltf file. Only one path, not loop.
+## Import asset mesh, animation from fbx file. Import materials settings and textures from gltf file. Only one path, not loop.
 # @param is_loop indicates if import_one_asset_pipeline was called by import_assets_pipeline. Needs for transactions.
 # @param subobjects_paths if 3d model consists subobjects, import them separately.
 # Plugins must be on: 'Datasmith glTF Importer', 'glTF Importer'
@@ -321,7 +321,7 @@ def import_one_asset_pipeline_datasmith(fbx_path, glb_path, destination_dir, sub
             import_fbx_scene_n_subobjects(fbx_path, destination_dir, subobjects_path, materials_dest_dir_path)
 
 
-# Import asset mesh, animation from fbx file. Import materials settings and textures from gltf file. Loop call to import assets.
+## Import asset mesh, animation from fbx file. Import materials settings and textures from gltf file. Loop call to import assets.
 # @param subobjects_paths if 3d model consists subobjects, import them separately.
 # Plugins must be on: 'Datasmith glTF Importer', 'glTF Importer'
 # Window Two Options, when import: Generate Lightmap UVs, Import uniform Scale
@@ -336,7 +336,7 @@ def import_assets_pipeline_datasmith(fbx_paths, glb_paths, destination_dirs, sub
     unreal.log(import_assets_pipeline_datasmith.__name__ + '() has Finished'); unreal.log('...')
 
 
-# Import asset mesh, animation from fbx file. Import materials settings and textures from gltf file. Only one path, not loop.
+## Import asset mesh, animation from fbx file. Import materials settings and textures from gltf file. Only one path, not loop.
 # @param is_loop indicates if import_one_asset_pipeline was called by import_assets_pipeline. Needs for transactions.
 # @param subobjects_paths if 3d model consists subobjects, import them separately.
 # Plugins must be off: 'Datasmith glTF Importer', 'glTF Importer'
@@ -376,7 +376,7 @@ def import_one_asset_pipeline(fbx_path, gltf_path, destination_dir, subobjects_p
             unreal.EditorAssetLibrary.delete_directory(gltf_destination_dir_path)
             import_fbx_scene_n_subobjects(fbx_path, destination_dir, subobjects_path, materials_dir_path)
 
-# Import asset mesh, animation from fbx file. Import materials settings and textures from gltf file. Loop call to import assets.
+## Import asset mesh, animation from fbx file. Import materials settings and textures from gltf file. Loop call to import assets.
 # @param subobjects_paths if 3d model consists subobjects, import them separately.
 # Plugins must be off: 'Datasmith glTF Importer', 'glTF Importer'
 # Window 4 Options, when import: Merge Meshes, Apply World Transform, Import Materials, Import in New Folder
@@ -391,7 +391,7 @@ def import_assets_pipeline(fbx_paths, gltf_paths, destination_dirs, subobjects_p
     unreal.log(import_assets_pipeline.__name__ + '() has Finished'); unreal.log('...')
 
 
-# Window Options 10: like in import_one_asset_pipeline_datasmith + Geometry, Materials & Textures, Lights, Cameras...
+## Window Options 10: like in import_one_asset_pipeline_datasmith + Geometry, Materials & Textures, Lights, Cameras...
 def import_asset_pipeline_datasmith_factory(fbx_path, glb_path, destination_dir, subobjects_path = '',
                                              include_only_on_disk_assets = False):
     if general.is_not_none_or_empty_lists([fbx_path, glb_path, destination_dir]):
@@ -434,7 +434,7 @@ def import_asset_pipeline_datasmith_factory(fbx_path, glb_path, destination_dir,
             prefix_suffix.correct_prefix_suffix_dirs([materials_dest_dir_path])
 
 
-# Window Options 10: like in import_one_asset_pipeline_datasmith + Geometry, Materials & Textures, Lights, Cameras...
+## Window Options 10: like in import_one_asset_pipeline_datasmith + Geometry, Materials & Textures, Lights, Cameras...
 def import_assets_pipeline_datasmith_factory(fbx_paths, glb_paths, destination_dirs, subobjects_paths = '',
                                              include_only_on_disk_assets = False):
     if general.is_not_none_or_empty_lists([fbx_paths, glb_paths, destination_dirs, subobjects_paths]):
@@ -539,7 +539,7 @@ def import_asset_pipeline_hybrid(fbx_path, glb_path, destination_dir, subobjects
             prefix_suffix.correct_prefix_suffix_dirs([material_instances_dest_dir_path])'''
 
 
-# Window Options 10: like in import_one_asset_pipeline_datasmith + Geometry, Materials & Textures, Lights, Cameras...
+## Window Options 10: like in import_one_asset_pipeline_datasmith + Geometry, Materials & Textures, Lights, Cameras...
 def import_assets_pipeline_hybrid(fbx_paths, glb_paths, destination_dirs, subobjects_paths = '',
                                   is_automated = False, to_recompile = True, to_import_fbx_material_instance_file = False):
     if general.is_not_none_or_empty_lists([fbx_paths, glb_paths, destination_dirs, subobjects_paths]):
