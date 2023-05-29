@@ -1,7 +1,7 @@
 import unreal
 
-#import unreal_scripts.tasks.import_pipeline_ini as import_pipeline_ini
-#import unreal_scripts.src.set_material as set_material
+#import unreal_engine_python_scripts.tasks.import_pipeline_ini as import_pipeline_ini
+#import unreal_engine_python_scripts.src.set_material as set_material
 
 #import importlib
 #importlib.reload(config)

@@ -6,18 +6,18 @@ sys.path.append(os.path.abspath(PARENT_DIR))
 
 import unreal
 
-import unreal_scripts.service.log as log
-import unreal_scripts.src.import_pipeline as import_pipeline
-import unreal_scripts.tasks.import_pipeline_tasks_ini as import_pipeline_tasks_ini
+import unreal_engine_python_scripts.service.log as log
+import unreal_engine_python_scripts.src.import_pipeline as import_pipeline
+import unreal_engine_python_scripts.tasks.import_pipeline_tasks_ini as import_pipeline_tasks_ini
 
-#import unreal_scripts.config as config
-#import unreal_scripts.service.general as general
-#import unreal_scripts.src.get_asset as get_asset
-#import unreal_scripts.src.asset_library as asset_library
-#import unreal_scripts.src.material_library as material_library
-#import unreal_scripts.src.prefix_suffix as prefix_suffix
-#import unreal_scripts.src.set_material as set_material
-#import unreal_scripts.src.get_static_mesh as get_static_mesh
+#import unreal_engine_python_scripts.config as config
+#import unreal_engine_python_scripts.service.general as general
+#import unreal_engine_python_scripts.src.get_asset as get_asset
+#import unreal_engine_python_scripts.src.asset_library as asset_library
+#import unreal_engine_python_scripts.src.material_library as material_library
+#import unreal_engine_python_scripts.src.prefix_suffix as prefix_suffix
+#import unreal_engine_python_scripts.src.set_material as set_material
+#import unreal_engine_python_scripts.src.get_static_mesh as get_static_mesh
 
 import importlib
 importlib.reload(log)
@@ -33,7 +33,7 @@ importlib.reload(import_pipeline_tasks_ini)
 #importlib.reload(set_material)
 #importlib.reload(get_static_mesh)
 
-from unreal_scripts.tasks.import_pipeline_tasks_ini import *
+from unreal_engine_python_scripts.tasks.import_pipeline_tasks_ini import *
 
 ## Modes of import pipeline: Hybrid, glTF_Importer, Datasmith_glTF_Importer, Datasmith_glTF_Importer_Factory, Code4Game
 # It is recommend to use only Hybrid pipeline

@@ -6,14 +6,14 @@ sys.path.append(os.path.abspath(PARENT_DIR))
 
 import unreal
 
-#import unreal_scripts.config as config
-import unreal_scripts.service.general as general
-import unreal_scripts.src.get_asset as get_asset
-import unreal_scripts.src.set_asset as set_asset
-import unreal_scripts.src.asset_library as asset_library
-import unreal_scripts.src.material_library as material_library
-import unreal_scripts.src.prefix_suffix as prefix_suffix
-import unreal_scripts.src.set_material as set_material
+#import unreal_engine_python_scripts.config as config
+import unreal_engine_python_scripts.service.general as general
+import unreal_engine_python_scripts.src.get_asset as get_asset
+import unreal_engine_python_scripts.src.set_asset as set_asset
+import unreal_engine_python_scripts.src.asset_library as asset_library
+import unreal_engine_python_scripts.src.material_library as material_library
+import unreal_engine_python_scripts.src.prefix_suffix as prefix_suffix
+import unreal_engine_python_scripts.src.set_material as set_material
 
 import importlib
 #importlib.reload(config)
@@ -499,7 +499,7 @@ def import_asset_pipeline_hybrid(fbx_path, glb_path, destination_dir, subobjects
             set_asset.consolidate_assets_by_dir(temp_glb_materials_dir_path, glb_materials_subdir_path)
             set_asset.delete_all_in_dir(glb_materials_subdir_path)
             # Can Freeze, because of material compilation. F.e. transparent material
-            '''asset_library.move_assets_in_dir(temp_glb_materials_dir_path, glb_materials_subdir_path)
+            asset_library.move_assets_in_dir(temp_glb_materials_dir_path, glb_materials_subdir_path)
 
             # Create Textures dir From Temp to Glb Folder
             textures_dest_dir_path = unreal.Paths.combine([destination_dir, textures_dir_name])
@@ -536,7 +536,7 @@ def import_asset_pipeline_hybrid(fbx_path, glb_path, destination_dir, subobjects
             # Delete M_ prefix before material instances. Add MI_ prefix
             materials_instances_data = get_asset.get_assets_by_dir(material_instances_dest_dir_path, is_recursive = False)
             prefix_suffix.delete_prefix_suffix_datas(materials_instances_data, 'M_')
-            prefix_suffix.correct_prefix_suffix_dirs([material_instances_dest_dir_path])'''
+            prefix_suffix.correct_prefix_suffix_dirs([material_instances_dest_dir_path])
 
 
 ## Window Options 10: like in import_one_asset_pipeline_datasmith + Geometry, Materials & Textures, Lights, Cameras...

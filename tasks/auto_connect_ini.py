@@ -1,5 +1,5 @@
 #import unreal
-import unreal_scripts.config as config
+import unreal_engine_python_scripts.config as config
 
 import importlib
 importlib.reload(config)

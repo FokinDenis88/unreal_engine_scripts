@@ -1,12 +1,12 @@
 import unreal
 
-import unreal_scripts.config as config
-import unreal_scripts.service.general as general
-import unreal_scripts.src.get_asset as get_asset
-import unreal_scripts.asset.material_node as material_node
-import unreal_scripts.src.get_material as get_material
-import unreal_scripts.src.set_material as set_material
-import unreal_scripts.src.prefix_suffix as prefix_suffix
+import unreal_engine_python_scripts.config as config
+import unreal_engine_python_scripts.service.general as general
+import unreal_engine_python_scripts.src.get_asset as get_asset
+import unreal_engine_python_scripts.asset.material_node as material_node
+import unreal_engine_python_scripts.src.get_material as get_material
+import unreal_engine_python_scripts.src.set_material as set_material
+import unreal_engine_python_scripts.src.prefix_suffix as prefix_suffix
 
 import importlib
 importlib.reload(config)

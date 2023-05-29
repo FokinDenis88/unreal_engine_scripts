@@ -2,7 +2,7 @@ from enum import Enum
 
 import unreal
 
-from unreal_scripts.src.get_asset import get_asset_by_object_path
+from unreal_engine_python_scripts.src.get_asset import get_asset_by_object_path
 
 
 class ImportSizeMode(Enum):

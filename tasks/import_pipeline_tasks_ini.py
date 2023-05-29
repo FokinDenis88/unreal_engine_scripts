@@ -8,8 +8,9 @@ IMPORT_METHOD = 'Hybrid'
 # IMPORT_DIRS, FBX_FILE_NAMES, GLTF_FILE_NAMES, SUBOBJECTS_NAMES - lists must be equal length
 # FBX_FILE_NAMES: Name of fbx file without extension
 
-IMPORT_DIRS = [r'K:\!Development K\Projects\3D Models\!!Assets For Commercial\3D\!!3D Models For Commercial\Military\!Weapon\Modern\Ranged\!Firearms\Handgun, Pistol\!Makarov\Makarov PM___sketchfab\export']
-FBX_FILE_NAMES = ['SM']
+#IMPORT_DIRS = [r'K:\!Development K\Projects\3D Models\!!Assets For Commercial\3D\!!3D Models For Commercial\Military\!Weapon\Modern\Ranged\!Firearms\Handgun, Pistol\!Makarov\Makarov PM___sketchfab\export']
+IMPORT_DIRS = [r'K:\!Development K\Projects\3D Models\!!Assets For Commercial\3D\!!3D Models For Commercial\Military\!Weapon\Modern\Ranged\!Firearms\Rifle\Assault Rifle, Auto\!AK\!AK-47\AK-47 (3)___sketchfab\export']
+FBX_FILE_NAMES = ['SM_AK-47']
 SUBOBJECTS_NAMES = ['']
 #SUBOBJECTS_NAMES = ['SM']
 GLTF_FILE_NAMES = ['gltf']

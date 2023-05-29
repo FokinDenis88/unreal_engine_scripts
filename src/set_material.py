@@ -1,12 +1,12 @@
 import re
 import unreal
 
-import unreal_scripts.config as config
-import unreal_scripts.service.general as general
-import unreal_scripts.service.log as log
-import unreal_scripts.src.get_asset as get_asset
-import unreal_scripts.src.set_asset as set_asset
-import unreal_scripts.src.get_material as get_material
+import unreal_engine_python_scripts.config as config
+import unreal_engine_python_scripts.service.general as general
+import unreal_engine_python_scripts.service.log as log
+import unreal_engine_python_scripts.src.get_asset as get_asset
+import unreal_engine_python_scripts.src.set_asset as set_asset
+import unreal_engine_python_scripts.src.get_material as get_material
 
 import importlib
 importlib.reload(config)
