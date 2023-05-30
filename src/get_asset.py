@@ -219,7 +219,7 @@ def get_assets_data_by_dirs_n_classes(dir_paths, class_names, is_recursive_searc
         if has_log: unreal.log(get_assets_data_by_dirs_n_classes.__name__ + ': Starts Searching')
         assets_data = asset_registry.get_assets(ue_filter)
 
-        if has_log and general.is_not_none_or_empty(assets_data):
+        if has_log and (not general.is_not_none_or_empty(assets_data)):
             unreal.log(get_assets_data_by_dirs_n_classes.__name__ + ': did not find any asset')
         return assets_data
     else:

@@ -2,6 +2,13 @@ from enum import Enum
 
 import unreal
 
+import unreal_engine_python_scripts.service.general as general
+import unreal_engine_python_scripts.src.get_asset as get_asset
+
+import importlib
+importlib.reload(general)
+importlib.reload(get_asset)
+
 from unreal_engine_python_scripts.src.get_asset import get_asset_by_object_path
 
 
@@ -12,33 +19,32 @@ class ImportSizeMode(Enum):
 
 ## Get texture imported size
 # if is_axis_x = True return import texture size of x axis
-def get_texture_imported_size(object_path, include_only_on_disk_assets=False, mode = ImportSizeMode.X):
+def get_texture_imported_size(texture, include_only_on_disk_assets = False, mode = ImportSizeMode.X):
     imported_size_x, imported_size_y = 0.0, 0.0
     with unreal.ScopedEditorTransaction('get_texture_imported_size()') as ue_transaction:
-        asset = get_asset_by_object_path(object_path, include_only_on_disk_assets).get_asset()
-        origin_max_texture_size = asset.get_editor_property('max_texture_size')
-        origin_downscale = asset.get_editor_property('downscale')
+        origin_max_texture_size = texture.get_editor_property('max_texture_size')
+        origin_downscale = texture.get_editor_property('downscale')
         origin_downscale_default = origin_downscale.get_editor_property('default')
         origin_downscale_per_platform = origin_downscale.get_editor_property('per_platform').copy()
-        origin_power_of_two = asset.get_editor_property('power_of_two_mode')
+        origin_power_of_two = texture.get_editor_property('power_of_two_mode')
 
-        asset.set_editor_property('max_texture_size', 0.0)
-        asset.set_editor_property('downscale', unreal.PerPlatformFloat())
-        asset.set_editor_property('power_of_two_mode', unreal.TexturePowerOfTwoSetting.NONE)
+        texture.set_editor_property('max_texture_size', 0.0)
+        texture.set_editor_property('downscale', unreal.PerPlatformFloat())
+        texture.set_editor_property('power_of_two_mode', unreal.TexturePowerOfTwoSetting.NONE)
 
         if mode == ImportSizeMode.X:
-            imported_size_x = asset.blueprint_get_size_x()
+            imported_size_x = texture.blueprint_get_size_x()
         elif mode == ImportSizeMode.Y:
-            imported_size_y = asset.blueprint_get_size_y()
+            imported_size_y = texture.blueprint_get_size_y()
         elif mode == ImportSizeMode.XY:
-            imported_size_x = asset.blueprint_get_size_x()
-            imported_size_y = asset.blueprint_get_size_y()
+            imported_size_x = texture.blueprint_get_size_x()
+            imported_size_y = texture.blueprint_get_size_y()
 
-        asset.set_editor_property('power_of_two_mode', origin_power_of_two)
-        asset.set_editor_property('downscale', origin_downscale)
+        texture.set_editor_property('power_of_two_mode', origin_power_of_two)
+        texture.set_editor_property('downscale', origin_downscale)
         origin_downscale.set_editor_property('default', origin_downscale_default)
         origin_downscale.set_editor_property('per_platform', origin_downscale_per_platform)
-        asset.set_editor_property('max_texture_size', origin_max_texture_size)
+        texture.set_editor_property('max_texture_size', origin_max_texture_size)
 
     if mode == ImportSizeMode.X:
         return imported_size_x
@@ -49,12 +55,52 @@ def get_texture_imported_size(object_path, include_only_on_disk_assets=False, mo
 
     return
 
+def get_texture_imported_size_by_path(object_path, include_only_on_disk_assets = False, mode = ImportSizeMode.X):
+    texture = get_asset_by_object_path(object_path, include_only_on_disk_assets)
+    get_texture_imported_size(texture, include_only_on_disk_assets, mode)
 
-def get_texture_imported_size_x(object_path, include_only_on_disk_assets=False):
+def get_texture_imported_size_x(object_path, include_only_on_disk_assets = False):
     return get_texture_imported_size(object_path, include_only_on_disk_assets, ImportSizeMode.X)
 
-def get_texture_imported_size_y(object_path, include_only_on_disk_assets=False):
+def get_texture_imported_size_y(object_path, include_only_on_disk_assets = False):
     return get_texture_imported_size(object_path, include_only_on_disk_assets, ImportSizeMode.Y)
 
-def get_texture_imported_size_x_y(object_path, include_only_on_disk_assets=False):
+def get_texture_imported_size_x_y(object_path, include_only_on_disk_assets = False):
     return get_texture_imported_size(object_path, include_only_on_disk_assets, ImportSizeMode.XY)
+
+## Find textures in directory by imported size
+# Useful for optimization. To find, what texture needs to be reimport with lesser size
+def find_textures_by_imported_size(dir_path, search_texture_size, is_bigger_or_equal = True,
+                                   is_recursive_search = False, only_on_disk_assets = False):
+    found_textures = []
+    if general.is_not_none_or_empty(dir_path):
+        textures_data = get_asset.get_textures_data_by_dir(dir_path, is_recursive_search, only_on_disk_assets)
+        if textures_data is not None:
+            for texture_data in textures_data:
+                texture_imported_size = get_texture_imported_size(texture_data.get_asset(), only_on_disk_assets)
+                if is_bigger_or_equal and texture_imported_size >= search_texture_size:
+                    found_textures.append(texture_data.get_asset())
+                elif (not is_bigger_or_equal) and texture_imported_size <= search_texture_size:
+                    found_textures.append(texture_data.get_asset())
+
+        else:
+            unreal.log(find_textures_by_imported_size.__name__ + ': there is no textures in dir')
+    else:
+        unreal.log_error(find_textures_by_imported_size.__name__ + ': dir_path must not be Empty or None')
+
+    return found_textures
+
+
+def set_maximum_texture_size(texture, value):
+    texture.set_editor_property('max_texture_size', value)
+
+def set_maximum_textures_size_in_dir(dir_path, value):
+    if general.is_not_none_or_empty(dir_path):
+        textures_data = get_asset.get_textures_data_by_dir(dir_path)
+        if textures_data is not None:
+            for texture_data in textures_data:
+                set_maximum_texture_size(texture_data.get_asset(), value)
+        else:
+            unreal.log(set_maximum_textures_size_in_dir.__name__ + ': there is no textures in dir')
+    else:
+        unreal.log_error(set_maximum_textures_size_in_dir.__name__ + ': dir_path must not be Empty or None')
