@@ -88,6 +88,7 @@ TextureTypesConvention = {
 
 ## Maybe Upper case is not important in prefix search
 # May Differ from Convention variant. Added more types.
+# All checks for suffix are case insensitive
 TextureTypesCustom = {
     ## General Simple Types
     #'General':              ('T_', ['']),
@@ -127,4 +128,12 @@ TextureTypesCustom = {
     'TextureLightProfile':	('TLP_', [''])
 
     ## By Channel
+}
+
+## Common suffix find in downloaded gltf textures files
+GLTF_SuffixConvention = {
+    'BaseColor':                    '_baseColor',
+    'Normal':                       '_normal',
+    'OcclusionRoughnessMetallic':   '_metallicRoughness',
+    'Emissive':                     '_emissive'
 }

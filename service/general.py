@@ -29,6 +29,15 @@ def is_not_none_or_empty_lists(list_objects, is_conjuction = True):
         else:
             return False
 
+def is_not_none_lists(list_objects):
+    if is_not_none_or_empty(list_objects):
+        for object in list_objects:
+            if object is None:
+                return False
+        return True
+    else:
+        return False
+
 
 def Name_to_str(name_text):
     return unreal.StringLibrary.build_string_name('', '', name_text, '')

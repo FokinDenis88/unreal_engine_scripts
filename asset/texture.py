@@ -11,7 +11,7 @@ importlib.reload(get_asset)
 
 from unreal_engine_python_scripts.src.get_asset import get_asset_by_object_path
 
-
+## X = Width. Y = Height
 class ImportSizeMode(Enum):
     X = 0
     Y = 1
