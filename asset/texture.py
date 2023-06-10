@@ -2,14 +2,14 @@ from enum import Enum
 
 import unreal
 
-import unreal_engine_python_scripts.service.general as general
-import unreal_engine_python_scripts.src.get_asset as get_asset
+import unreal_engine_scripts.service.general as general
+import unreal_engine_scripts.src.get_asset as get_asset
 
 import importlib
 importlib.reload(general)
 importlib.reload(get_asset)
 
-from unreal_engine_python_scripts.src.get_asset import get_asset_by_object_path
+from unreal_engine_scripts.src.get_asset import get_asset_by_object_path
 
 ## X = Width. Y = Height
 class ImportSizeMode(Enum):

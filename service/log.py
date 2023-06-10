@@ -1,8 +1,8 @@
 import unreal
 
-import unreal_engine_python_scripts.config as config
-import unreal_engine_python_scripts.service.general as general
-import unreal_engine_python_scripts.service.file as file
+import unreal_engine_scripts.config as config
+import unreal_engine_scripts.service.general as general
+import unreal_engine_scripts.service.file as file
 
 import importlib
 importlib.reload(config)

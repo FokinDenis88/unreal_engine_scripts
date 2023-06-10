@@ -2,22 +2,22 @@ import os
 import sys
 WORKING_DIR = os.path.dirname(os.path.abspath(__file__))
 PARENT_DIR = os.path.join(os.path.join(WORKING_DIR, os.pardir), os.pardir)
-# Folder, that stores unreal_engine_python_scripts package
+# Folder, that stores unreal_engine_scripts package
 sys.path.append(os.path.abspath(PARENT_DIR))
 
 import unreal
 
 import importlib
-import unreal_engine_python_scripts.tasks.admin_tasks_ini as admin_tasks_ini
+import unreal_engine_scripts.tasks.admin_tasks_ini as admin_tasks_ini
 importlib.reload(admin_tasks_ini)
 
-import unreal_engine_python_scripts.src.get_asset as get_asset
-import unreal_engine_python_scripts.src.set_asset as set_asset
-import unreal_engine_python_scripts.src.set_material as set_material
-import unreal_engine_python_scripts.src.lod as lod
-import unreal_engine_python_scripts.src.collision as collision
-import unreal_engine_python_scripts.src.material_library as material_library
-import unreal_engine_python_scripts.service.log as log
+import unreal_engine_scripts.src.get_asset as get_asset
+import unreal_engine_scripts.src.set_asset as set_asset
+import unreal_engine_scripts.src.set_material as set_material
+import unreal_engine_scripts.src.lod as lod
+import unreal_engine_scripts.src.collision as collision
+import unreal_engine_scripts.src.material_library as material_library
+import unreal_engine_scripts.service.log as log
 
 # To apply changes in modules
 
@@ -29,7 +29,7 @@ importlib.reload(collision)
 importlib.reload(material_library)
 importlib.reload(log)
 
-from unreal_engine_python_scripts.tasks.admin_tasks_ini import *
+from unreal_engine_scripts.tasks.admin_tasks_ini import *
 
 ## Can call one of functions: lod.find_no_mipmap_textures_log, lod.find_no_lods_meshes_log,
 # get_asset.find_assets_data_log, set_asset.set_assets_properties_in_folder_log,

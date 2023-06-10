@@ -2,20 +2,20 @@ import os
 import sys
 WORKING_DIR = os.path.dirname(os.path.abspath(__file__))
 PARENT_DIR = os.path.join(os.path.join(WORKING_DIR, os.pardir), os.pardir)
-# Folder, that stores unreal_engine_python_scripts package
+# Folder, that stores unreal_engine_scripts package
 sys.path.append(os.path.abspath(PARENT_DIR))
 
 
-#import unreal_engine_python_scripts.config as config
-import unreal_engine_python_scripts.src.prefix_suffix as prefix_suffix
-import unreal_engine_python_scripts.tasks.prefix_suffix_tasks_ini as prefix_suffix_tasks_ini
+#import unreal_engine_scripts.config as config
+import unreal_engine_scripts.src.prefix_suffix as prefix_suffix
+import unreal_engine_scripts.tasks.prefix_suffix_tasks_ini as prefix_suffix_tasks_ini
 
 import importlib
 #importlib.reload(config)
 importlib.reload(prefix_suffix)
 importlib.reload(prefix_suffix_tasks_ini)
 
-from unreal_engine_python_scripts.tasks.prefix_suffix_tasks_ini import *
+from unreal_engine_scripts.tasks.prefix_suffix_tasks_ini import *
 
 ## Can call one of functions: prefix_suffix.add_prefix_suffix_folder,
 # prefix_suffix.delete_prefix_suffix_folder, prefix_suffix.replace_prefix_suffix_folder

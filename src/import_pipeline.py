@@ -6,14 +6,14 @@ sys.path.append(os.path.abspath(PARENT_DIR))
 
 import unreal
 
-#import unreal_engine_python_scripts.config as config
-import unreal_engine_python_scripts.service.general as general
-import unreal_engine_python_scripts.src.get_asset as get_asset
-import unreal_engine_python_scripts.src.set_asset as set_asset
-import unreal_engine_python_scripts.src.asset_library as asset_library
-import unreal_engine_python_scripts.src.material_library as material_library
-import unreal_engine_python_scripts.src.prefix_suffix as prefix_suffix
-import unreal_engine_python_scripts.src.set_material as set_material
+#import unreal_engine_scripts.config as config
+import unreal_engine_scripts.service.general as general
+import unreal_engine_scripts.src.get_asset as get_asset
+import unreal_engine_scripts.src.set_asset as set_asset
+import unreal_engine_scripts.src.asset_library as asset_library
+import unreal_engine_scripts.src.material_library as material_library
+import unreal_engine_scripts.src.prefix_suffix as prefix_suffix
+import unreal_engine_scripts.src.set_material as set_material
 
 import importlib
 #importlib.reload(config)

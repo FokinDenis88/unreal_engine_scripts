@@ -9,13 +9,13 @@ sys.path.append(os.path.abspath(PARENT_DIR))
 
 import unreal
 
-import unreal_engine_python_scripts.config as config
-#import unreal_engine_python_scripts.src.get_asset as get_asset
-import unreal_engine_python_scripts.src.get_material as get_material
-#import unreal_engine_python_scripts.src.prefix_suffix as prefix_suffix
-import unreal_engine_python_scripts.src.material_library as material_library
-import unreal_engine_python_scripts.tasks.auto_connect_ini as auto_connect_ini
-#import unreal_engine_python_scripts.asset.material_node as material_node
+import unreal_engine_scripts.config as config
+#import unreal_engine_scripts.src.get_asset as get_asset
+import unreal_engine_scripts.src.get_material as get_material
+#import unreal_engine_scripts.src.prefix_suffix as prefix_suffix
+import unreal_engine_scripts.src.material_library as material_library
+import unreal_engine_scripts.tasks.auto_connect_ini as auto_connect_ini
+#import unreal_engine_scripts.asset.material_node as material_node
 
 import importlib
 importlib.reload(config)
@@ -26,7 +26,7 @@ importlib.reload(material_library)
 importlib.reload(auto_connect_ini)
 #importlib.reload(material_node)
 
-from unreal_engine_python_scripts.tasks.auto_connect_ini import *
+from unreal_engine_scripts.tasks.auto_connect_ini import *
 
 ## Can call one of functions: material_library.connect_by_association_texture_file_dirs,
 # material_library.connect_texture_files_packs, material_library.connect_textures_files_to_materials

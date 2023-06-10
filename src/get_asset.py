@@ -2,9 +2,9 @@ import os
 
 import unreal
 
-import unreal_engine_python_scripts.config as config
-import unreal_engine_python_scripts.service.general as general
-import unreal_engine_python_scripts.service.log as log
+import unreal_engine_scripts.config as config
+import unreal_engine_scripts.service.general as general
+import unreal_engine_scripts.service.log as log
 
 import importlib
 importlib.reload(config)

@@ -11,7 +11,7 @@
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
-    <Name>unreal_engine_python_scripts</Name>
+    <Name>unreal_engine_scripts</Name>
     <RootNamespace>unreal_scripts</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">

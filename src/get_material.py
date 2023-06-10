@@ -1,9 +1,9 @@
 import unreal
 
-#import unreal_engine_python_scripts.config as config
-import unreal_engine_python_scripts.service.general as general
-import unreal_engine_python_scripts.src.get_asset as get_asset
-import unreal_engine_python_scripts.src.prefix_suffix as prefix_suffix
+#import unreal_engine_scripts.config as config
+import unreal_engine_scripts.service.general as general
+import unreal_engine_scripts.src.get_asset as get_asset
+import unreal_engine_scripts.src.prefix_suffix as prefix_suffix
 
 import importlib
 #importlib.reload(config)
