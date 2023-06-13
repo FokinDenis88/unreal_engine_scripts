@@ -281,10 +281,10 @@ def correct_normal_map_map_in_dir(dir_path):
 
 def set_materials_two_sided(target_paths, new_value = False, is_recursive_search = True, only_on_disk_assets = False,
                             search_properties_values = [], is_disjunction = True):
-    set_asset.set_assets_properties_in_folder_log(log.LOG_PATH_SET_PROPERTIES, 'set_materials_two_sided',
-                                                    target_paths, is_recursive_search,
-                                                    only_on_disk_assets, [config.CLASS_NAME_MATERIAL],
-                                                    search_properties_values, [('two_sided', new_value)], is_disjunction)
+    set_asset.set_assets_properties_in_dir(target_paths, [('two_sided', new_value)], is_recursive_search,
+                                           only_on_disk_assets, [config.CLASS_NAME_MATERIAL],
+                                           search_properties_values, is_disjunction,
+                                           log.LOG_PATH_SET_PROPERTIES, 'set_materials_two_sided')
 
 
 ## Recompile all materials in dir_paths after changes in material

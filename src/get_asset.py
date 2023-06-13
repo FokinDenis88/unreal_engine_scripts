@@ -322,76 +322,56 @@ def filter_assets_by_properties(assets_data, properties_values, is_disjunction):
 # is_disjunction_p (^) = True will find asset,  if one of the property_value pair has been found. Disjunction is OR.
 # is_disjunction_p (v) = False will find asset, if all of the property_value pair has been found. Conjunction is AND.
 # If old value is None, all values will be valid and included in find results
+# If there is no parameters, will find ALL assets. Needs more checks for parameters before call.
 def find_assets_data(package_paths = [], package_names = [], object_paths = [], class_names = [], recursive_classes_exclusion_set = [],
                      recursive_paths = True, recursive_classes = False, include_only_on_disk_assets = False,
-                     properties_values = [], is_disjunction = True):
-    asset_registry = unreal.AssetRegistryHelpers.get_asset_registry()
-    ue_filter = unreal.ARFilter(package_names = package_names, package_paths = package_paths, object_paths = object_paths,
-                                class_names = class_names, recursive_classes_exclusion_set = recursive_classes_exclusion_set,
-                                recursive_paths = recursive_paths, recursive_classes = recursive_classes,
-                                include_only_on_disk_assets = include_only_on_disk_assets)
-    unreal.log(find_assets_data.__name__ + ': Start searching assets')
-    assets_data = asset_registry.get_assets(ue_filter)
-    if general.is_not_none_or_empty(assets_data):
-        unreal.log(find_assets_data.__name__ + ': Assets without property filter count: ' + str(len(assets_data)) )
-        if general.is_not_none_or_empty(properties_values):
-            filter_assets_by_properties(assets_data, properties_values, is_disjunction)
-            unreal.log(find_assets_data.__name__ + ': Property Filtered Assets count: ' + str(len(assets_data)) )
+                     properties_values = [], is_disjunction = True, log_path = '', log_title = ''):
+    assets_data = []
+    if general.is_not_none_lists([package_paths, package_names, object_paths, class_names, recursive_classes_exclusion_set,
+                                  recursive_paths, recursive_classes, include_only_on_disk_assets, properties_values, is_disjunction]):
+        asset_registry = unreal.AssetRegistryHelpers.get_asset_registry()
+        ue_filter = unreal.ARFilter(package_names = package_names, package_paths = package_paths, object_paths = object_paths,
+                                    class_names = class_names, recursive_classes_exclusion_set = recursive_classes_exclusion_set,
+                                    recursive_paths = recursive_paths, recursive_classes = recursive_classes,
+                                    include_only_on_disk_assets = include_only_on_disk_assets)
+        unreal.log(find_assets_data.__name__ + '(): Start searching assets')
+        assets_data = asset_registry.get_assets(ue_filter)
+        if general.is_not_none_or_empty(assets_data):
+            unreal.log(find_assets_data.__name__ + '(): Assets without property filter count: ' + str(len(assets_data)) )
+            if general.is_not_none_or_empty(properties_values):
+                filter_assets_by_properties(assets_data, properties_values, is_disjunction)
+                unreal.log(find_assets_data.__name__ + '(): Property Filtered Assets count: ' + str(len(assets_data)) )
+            else:
+                unreal.log(find_assets_data.__name__ + '(): There is no properties_values for applying to filter assets.')
         else:
-            unreal.log(find_assets_data.__name__ + ': There is no properties_values for applying to filter assets.')
-        #if general.is_not_none_or_empty(assets_data):
-
+            unreal.log_error(find_assets_data.__name__ + '(): assets_data ' + config.IS_EMPTY_OR_NONE_TEXT)
     else:
-        unreal.log_error('assets_data ' + config.IS_EMPTY_OR_NONE_TEXT)
+        unreal.log_error(find_assets_data.__name__ + '(): input data must not be None')
+    if log_path is not None and log_path != '':
+        log.write_assets_data_log(assets_data, log_path, log_title)
     return assets_data
 
 def find_assets(package_paths = [], package_names = [], object_paths = [], class_names = [], recursive_classes_exclusion_set = [],
                 recursive_paths = True, recursive_classes = False, include_only_on_disk_assets = False,
-                properties_values = [], is_disjunction = True):
+                properties_values = [], is_disjunction = True, log_path = '', log_title = ''):
     assets_data = find_assets_data(package_paths, package_names, object_paths, class_names, recursive_classes_exclusion_set,
-                                   recursive_paths, recursive_classes, include_only_on_disk_assets, properties_values, is_disjunction)
-    return get_assets_from_assets_data(assets_data)
-
-## Find all filtered assets and write log about found results
-# If old value is None, all values will be valid and included in find results
-def find_assets_data_log(log_path, log_title = '', package_names = [], package_paths = [], object_paths = [],
-                         class_names = [], recursive_classes_exclusion_set = [],
-                         recursive_paths = True, recursive_classes = False, include_only_on_disk_assets = False,
-                         properties_values = [], is_disjunction = True):
-    unreal.log(log_title + ' Started')
-    log.log_print_n_write_file(log_path, log_title + ': ', 'w')
-    assets_data = find_assets_data(package_paths, package_names, object_paths, class_names,
-                                   recursive_classes_exclusion_set,
-                                   recursive_paths, recursive_classes, include_only_on_disk_assets,
-                                   properties_values, is_disjunction)
-
-    if general.is_not_none_or_empty(assets_data):
-        unreal.log(log.FINAL_RESULTS)
-        for asset_data in assets_data :
-            object_path = asset_data.get_editor_property('object_path')
-            log.log_print_n_write_file(log_path, object_path)
-    else:
-        unreal.log_error(find_assets_data_log.__name__ + ': assets_data ' + config.IS_EMPTY_OR_NONE_TEXT)
-    unreal.log(log_title + ' Finished')
-
-def find_assets_log(log_path, log_title = '', package_names = [], package_paths = [], object_paths = [],
-                    class_names = [], recursive_classes_exclusion_set = [],
-                    recursive_paths = True, recursive_classes = False, include_only_on_disk_assets = False,
-                    properties_values = [], is_disjunction = True):
-    assets_data = find_assets_data_log(log_path, log_title, package_paths, package_names, object_paths, class_names,
-                                       recursive_classes_exclusion_set, recursive_paths, recursive_classes,
-                                       include_only_on_disk_assets, properties_values, is_disjunction)
+                                   recursive_paths, recursive_classes, include_only_on_disk_assets, properties_values,
+                                   is_disjunction, log_path, log_title)
     return get_assets_from_assets_data(assets_data)
 
 
 def get_textures_data_by_dirs(dir_paths, is_recursive_search = False, only_on_disk_assets = False, has_log = False):
-    return get_assets_data_by_dirs_n_classes(dir_paths, [config.CLASS_NAME_TEXTURE_TWO_D], is_recursive_search, only_on_disk_assets, has_log)
+    return get_assets_data_by_dirs_n_classes(dir_paths, [config.CLASS_NAME_TEXTURE, config.CLASS_NAME_TEXTURE_TWO_D],
+                                             is_recursive_search, only_on_disk_assets, has_log)
 def get_textures_data_by_dir(dir_path, is_recursive_search = False, only_on_disk_assets = False, has_log = False):
-    return get_assets_data_by_dir_n_classes(dir_path, [config.CLASS_NAME_TEXTURE_TWO_D], is_recursive_search, only_on_disk_assets, has_log)
+    return get_assets_data_by_dir_n_classes(dir_path, [config.CLASS_NAME_TEXTURE, config.CLASS_NAME_TEXTURE_TWO_D],
+                                            is_recursive_search, only_on_disk_assets, has_log)
 def get_textures_by_dirs(dir_paths, is_recursive_search = False, only_on_disk_assets = False, has_log = False):
-    return get_assets_by_dirs_n_classes(dir_paths, [config.CLASS_NAME_TEXTURE_TWO_D], is_recursive_search, only_on_disk_assets, has_log)
+    return get_assets_by_dirs_n_classes(dir_paths, [config.CLASS_NAME_TEXTURE, config.CLASS_NAME_TEXTURE_TWO_D],
+                                        is_recursive_search, only_on_disk_assets, has_log)
 def get_textures_by_dir(dir_path, is_recursive_search = False, only_on_disk_assets = False, has_log = False):
-    return get_assets_by_dir_n_classes(dir_path, [config.CLASS_NAME_TEXTURE_TWO_D], is_recursive_search, only_on_disk_assets, has_log)
+    return get_assets_by_dir_n_classes(dir_path, [config.CLASS_NAME_TEXTURE, config.CLASS_NAME_TEXTURE_TWO_D],
+                                       is_recursive_search, only_on_disk_assets, has_log)
 
 
 def get_materials_data_by_dirs(dir_paths, is_recursive_search = False, only_on_disk_assets = False, has_log = False):
@@ -461,11 +441,13 @@ def get_materials_data_two_sided(target_dirs, is_two_sided = False, is_recursive
                                       properties_values = [('two_sided', is_two_sided)])
     return materials_data
 
-def get_materials_data_two_sided_log(log_path, log_title, target_dirs, is_two_sided = False, is_recursive_search = True, only_on_disk_assets = False):
-    materials_data = find_assets_data_log(log_path, log_title, package_paths = target_dirs, class_names = [config.CLASS_NAME_MATERIAL],
-                                          recursive_paths = is_recursive_search,
-                                          include_only_on_disk_assets = only_on_disk_assets,
-                                          properties_values = [('two_sided', is_two_sided)])
+def get_materials_data_two_sided_log(log_path, log_title, target_dirs, is_two_sided = False, is_recursive_search = True,
+                                     only_on_disk_assets = False):
+    materials_data = find_assets_data(package_paths = target_dirs, class_names = [config.CLASS_NAME_MATERIAL],
+                                        recursive_paths = is_recursive_search,
+                                        include_only_on_disk_assets = only_on_disk_assets,
+                                        properties_values = [('two_sided', is_two_sided)],
+                                        log_path = log_path, log_title = log_title)
     return materials_data
 
 def get_paths_of_materials_data_two_sided(target_dirs, is_two_sided = False, is_recursive_search = True, only_on_disk_assets = False):

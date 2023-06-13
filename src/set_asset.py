@@ -11,51 +11,89 @@ importlib.reload(general)
 importlib.reload(get_asset)
 importlib.reload(log)
 
-## Set asset properties by values.
-def set_assets_properties_in_folder(target_paths, is_recursive_search = True, only_on_disk_assets = False, class_names = [],
-                                    search_properties_values = [], new_properties_values = [], is_disjunction = True):
-    unreal.log('set_assets_properties_in_folder() Started')
 
-    if general.is_not_none_or_empty(new_properties_values):
-        assets_data = get_asset.find_assets_data(package_paths = target_paths, class_names = class_names,
-                                                 recursive_paths = is_recursive_search,
-                                                 include_only_on_disk_assets = only_on_disk_assets,
-                                                 properties_values = search_properties_values, is_disjunction = is_disjunction)
-        if general.is_not_none_or_empty(assets_data):
-            process_text = 'Set assets properties in folder'
-            with unreal.ScopedEditorTransaction(process_text) as ue_transaction:
-                with unreal.ScopedSlowTask(len(assets_data), process_text) as slow_task:
-                    slow_task.make_dialog(True)
-                    for asset_data in assets_data :
-                        if slow_task.should_cancel():
-                            break
-                        asset = asset_data.get_asset()
-                        for new_property_value in new_properties_values:
-                            if new_property_value[0] and new_property_value[1] is not None:
-                                asset.set_editor_property(new_property_value[0], new_property_value[1])
-                        slow_task.enter_progress_frame(1)
+def set_assets_properties_in_assets_data(assets_data, new_properties_values = [],
+                                         log_path = '', log_title = ''):
+    unreal.log(set_assets_properties_in_assets_data.__name__ + '() Started')
+    if general.is_not_none_or_empty_lists([assets_data, new_properties_values]):
+        process_text = 'Set assets properties in assets_data'
+        with unreal.ScopedEditorTransaction(process_text) as ue_transaction:
+            with unreal.ScopedSlowTask(len(assets_data), process_text) as slow_task:
+                slow_task.make_dialog(True)
+                for asset_data in assets_data :
+                    if slow_task.should_cancel():
+                        break
+                    asset = asset_data.get_asset()
+                    for new_property_value in new_properties_values:
+                        if new_property_value[0] and new_property_value[1] is not None:
+                            asset.set_editor_property(new_property_value[0], new_property_value[1])
+                    slow_task.enter_progress_frame(1)
     else:
-        unreal.log_error('set_assets_properties_in_folder: new_properties_values list ' + config.IS_EMPTY_OR_NONE_TEXT)
+        unreal.log_error(set_assets_properties_in_assets_data.__name__ +
+                         '(): assets_data, new_properties_values list must not be None or Empty')
 
-    unreal.log('set_assets_properties_in_folder() Finished')
+    if log_path is not None and log_path != '':
+        log.write_assets_data_log(assets_data, log_path, log_title)
+    unreal.log(set_assets_properties_in_assets_data.__name__ + '() Finished')
     return assets_data
 
-## Set asset properties by values. Write log of operation to file and console
-def set_assets_properties_in_folder_log(log_path, log_title, target_paths, is_recursive_search = True,
-                                        only_on_disk_assets = False, class_names = [],
-                                        search_properties_values = [], new_properties_values = [], is_disjunction = True):
-    log.log_print_n_write_file(log_path, log_title + ': ', 'w')
-    assets_data = set_assets_properties_in_folder(target_paths, is_recursive_search,only_on_disk_assets, class_names,
-                                                  search_properties_values, new_properties_values, is_disjunction)
-
-    if general.is_not_none_or_empty(assets_data):
-        unreal.log(log.FINAL_RESULTS)
-        for asset_data in assets_data :
-            object_path = asset_data.get_editor_property('object_path')
-            log.log_print_n_write_file(log_path, object_path)
+## First Finds assets by parameters, then sets new_properties_values
+# If there is no parameters, will find ALL assets. Needs more checks for parameters before call.
+def set_assets_properties(new_properties_values, package_paths = [], package_names = [], object_paths = [],
+                            class_names = [], recursive_classes_exclusion_set = [],
+                            recursive_paths = True, recursive_classes = False, include_only_on_disk_assets = False,
+                            properties_values = [], is_disjunction = True,
+                            log_path = '', log_title = ''):
+    assets_data = []
+    if general.is_not_none_or_empty(new_properties_values):
+        assets_data = get_asset.find_assets_data(package_paths, package_names, object_paths,
+                                class_names, recursive_classes_exclusion_set,
+                                recursive_paths, recursive_classes, include_only_on_disk_assets,
+                                properties_values, is_disjunction)
+        assets_data = set_assets_properties_in_assets_data(assets_data, new_properties_values)
+        if log_path is not None and log_path != '':
+            log.write_assets_data_log(assets_data, log_path, log_title)
     else:
-        unreal.log_error('set_assets_properties_in_folder_log: assets_data ' + config.IS_EMPTY_OR_NONE_TEXT)
+        unreal.log_error(set_assets_properties.__name__ + '(): new_properties_values must not be None or Empty')
+    return assets_data
 
+## Set asset properties by values.
+def set_assets_properties_in_dir(dir_paths, new_properties_values = [], is_recursive_search = True,
+                                 only_on_disk_assets = False, class_names = [],
+                                 search_properties_values = [], is_disjunction = True,
+                                 log_path = '', log_title = ''):
+    assets_data = []
+    if general.is_not_none_or_empty_lists(dir_paths):
+        assets_data = get_asset.find_assets_data(package_paths = dir_paths, class_names = class_names,
+                                                recursive_paths = is_recursive_search,
+                                                include_only_on_disk_assets = only_on_disk_assets,
+                                                properties_values = search_properties_values, is_disjunction = is_disjunction)
+        assets_data = set_assets_properties_in_assets_data(assets_data, new_properties_values)
+        if log_path is not None and log_path != '':
+            log.write_assets_data_log(assets_data, log_path, log_title)
+    else:
+        unreal.log_error(set_assets_properties_in_dir.__name__ + '(): dir_paths must not be None or Empty')
+    return assets_data
+
+def set_assets_properties_in_object_paths(object_paths, new_properties_values = [], is_recursive_search = True,
+                                          only_on_disk_assets = False, class_names = [],
+                                          search_properties_values = [], is_disjunction = True,
+                                          log_path = '', log_title = ''):
+    assets_data = []
+    if general.is_not_none_or_empty_lists(object_paths):
+        assets_data = get_asset.find_assets_data(object_paths = object_paths, class_names = class_names,
+                                                recursive_paths = is_recursive_search,
+                                                include_only_on_disk_assets = only_on_disk_assets,
+                                                properties_values = search_properties_values, is_disjunction = is_disjunction)
+        assets_data = set_assets_properties_in_assets_data(assets_data, new_properties_values)
+        if log_path is not None and log_path != '':
+            log.write_assets_data_log(assets_data, log_path, log_title)
+    else:
+        unreal.log_error(set_assets_properties_in_object_paths.__name__ + '(): dir_paths must not be None or Empty')
+    return assets_data
+
+
+#====================================Logs=======================================================
 
 ## Consolidate assets with the same name, stored in different dirs
 # @param dir_path_assets_to_consolidate_to  - target
