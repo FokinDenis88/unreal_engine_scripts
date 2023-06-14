@@ -1,4 +1,7 @@
+#import math
+
 import unreal_engine_scripts.config as config
+import unreal_engine_scripts.service.general as general
 import unreal_engine_scripts.src.get_asset as get_asset
 import unreal_engine_scripts.src.set_asset as set_asset
 import unreal_engine_scripts.service.log as log
@@ -8,6 +11,7 @@ import unreal
 # To apply changes in modules
 import importlib
 importlib.reload(config)
+importlib.reload(general)
 importlib.reload(get_asset)
 importlib.reload(set_asset)
 importlib.reload(log)
@@ -110,11 +114,95 @@ def set_mipmaps_n_lod_group_to_no_lods_dirs(dirs_paths,
     assets_data_no_mipmaps = set_textures_with_no_mipmap_gen_settings_dirs(dirs_paths, new_value_mipmaps,
                                                                         is_recursive_search, only_on_disk_assets,
                                                                         search_properties_values, is_disjunction)
-    unreal.log('')
+    unreal.log('_')
     assets_data_no_lods = set_meshes_with_no_lods_group_dirs(dirs_paths, new_value_lod_group,
                                                             is_recursive_search, only_on_disk_assets,
                                                             search_properties_values, is_disjunction)
-    unreal.log('')
+    unreal.log('_')
     return assets_data_no_mipmaps, assets_data_no_lods
 
-# Set lod count
+#========================================================================================
+
+def is_lod_number_ok(number_of_lod):
+    if number_of_lod in range(1,9):
+        return True
+    else:
+        return False
+
+
+def get_lod_count(static_mesh):
+    if static_mesh is not None:
+        return static_mesh.get_num_lods()
+    else:
+        unreal.log_error(get_lod_count.__name__ + '(): static_mesh must not be None')
+    return 0
+
+def is_input_ok_set_number_of_lod(assets_data, number_of_lod):
+    if general.is_not_none_or_empty(assets_data):
+        if is_lod_number_ok(number_of_lod):
+            return True
+        else:
+            unreal.log_error(is_input_ok_set_number_of_lod.__name__ + '(): number_of_lod must be in range [1, 8]')
+    else:
+        unreal.log_error(is_input_ok_set_number_of_lod.__name__ + '(): assets_data must not be None or Empty')
+    return False
+
+def get_editor_reduction_setting_for_lod(static_mesh, lod_indx, screen_sizes = None):
+    if screen_sizes is None:
+        screen_sizes = unreal.EditorStaticMeshLibrary.get_lod_screen_sizes(static_mesh)
+    mesh_reduction_settings = unreal.EditorStaticMeshLibrary.get_lod_reduction_settings(static_mesh, lod_indx)
+    percent_triangles = mesh_reduction_settings.get_editor_property('percent_triangles')
+    editor_reduction_setting = unreal.EditorScriptingMeshReductionSettings(percent_triangles, screen_sizes[lod_indx])
+    return editor_reduction_setting
+
+## Set lod count
+# @param number_of_lod must be in range [1, 8]
+# Error: For the last lods making problems with texture maps. Better to use editor functions
+def change_number_of_lod(assets_data, new_number_of_lod = 1, auto_compute_lod_screen_size = True):
+    if is_input_ok_set_number_of_lod(assets_data, new_number_of_lod):
+        static_meshes = get_asset.get_assets_from_assets_data(assets_data)
+        for static_mesh in static_meshes:
+            lod_count = get_lod_count(static_mesh)
+            if is_lod_number_ok(lod_count):
+                editor_reduction_settings = []
+                screen_sizes = unreal.EditorStaticMeshLibrary.get_lod_screen_sizes(static_mesh)
+                # Creates list of reduction settings
+                if new_number_of_lod > lod_count:
+                    for lod_indx in range(lod_count):
+                        editor_reduction_settings.append(get_editor_reduction_setting_for_lod(static_mesh, lod_indx, screen_sizes))
+                    last_lod_reduction_settings = get_editor_reduction_setting_for_lod(static_mesh, lod_count - 1, screen_sizes)
+                    last_lod_percent_triangles = 0
+                    if lod_count != 1:
+                        last_lod_percent_triangles = last_lod_reduction_settings.get_editor_property('percent_triangles')
+                    else:
+                        last_lod_percent_triangles = 0.5
+                    screen_size = last_lod_reduction_settings.get_editor_property('screen_size')
+                    for lod_indx in range(lod_count, new_number_of_lod):
+                        if lod_indx > 1:
+                            last_lod_percent_triangles = last_lod_percent_triangles * 0.5
+                        new_reduction_setting = unreal.EditorScriptingMeshReductionSettings(last_lod_percent_triangles, screen_size)
+                        editor_reduction_settings.append(new_reduction_setting)
+                elif new_number_of_lod <= lod_count:
+                    for lod_indx in range(new_number_of_lod):
+                        editor_reduction_settings.append(get_editor_reduction_setting_for_lod(static_mesh, lod_indx, screen_sizes))
+
+                reduction_options = unreal.EditorScriptingMeshReductionOptions(auto_compute_lod_screen_size = True,
+                                                                               reduction_settings = editor_reduction_settings)
+                reduction_options.set_editor_property('auto_compute_lod_screen_size', True)
+                lods_created = unreal.EditorStaticMeshLibrary.set_lods_with_notification(static_mesh, reduction_options, apply_changes = True)
+                unreal.log('Lods_created: ' + str(lods_created))
+            else:
+                unreal.error_log(change_number_of_lod.__name__ + '(): lod_count is out of bound [1, 8]')
+
+
+## Changes lod count
+# @param number_of_lod must be in range [1, 8]
+def change_number_of_lod_in_dirs(dirs_paths, new_number_of_lod = 1,
+                                 is_recursive_search = True, only_on_disk_assets = False,
+                                 search_properties_values = [], is_disjunction = True, auto_compute_lod_screen_size = True):
+    assets_data = get_asset.find_assets_data(package_paths = dirs_paths,
+                                             class_names = [config.CLASS_NAME_STATIC_MESH],
+                                             recursive_paths = is_recursive_search,
+                                             include_only_on_disk_assets = only_on_disk_assets,
+                                             properties_values = search_properties_values)
+    change_number_of_lod(assets_data, new_number_of_lod, auto_compute_lod_screen_size)

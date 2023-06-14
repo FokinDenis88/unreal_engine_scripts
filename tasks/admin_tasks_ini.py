@@ -8,13 +8,14 @@ importlib.reload(config)
 # Commands: NoMipMap, NoLods, Find, SetProperties, set_textures_mipmap_gen,
 # set_meshes_lod_group, NoCollision, MaterialTwoSided, GetMaterialTwoSided, LayoutMaterialNodes
 # set_textures_with_no_mipmap_gen_settings_dirs, set_meshes_with_no_lods_group_dirs, set_mipmaps_n_lod_group_to_no_lods_dirs
-COMMAND = 'set_mipmaps_n_lod_group_to_no_lods_dirs'
+# change_number_of_lod_in_dirs
+COMMAND = 'change_number_of_lod_in_dirs'
 
 # No '/' in the end of the path
 #TARGET_PATHS = ['/Game/ThirdPerson/Military/Vehicle/Modern/Land/Tank/T-90_02/Materials']
 #TARGET_PATHS = ['/Game/ThirdPerson/Military/Weapon/Modern/Ranged/Firearms/1/Pack_1']
-#TARGET_PATHS = ['/Game/Test']
-TARGET_PATHS = ['/Game/ThirdPerson']
+TARGET_PATHS = ['/Game/Test/Lod']
+#TARGET_PATHS = ['/Game/ThirdPerson']
 
 # Assets will be find in all sub dirs
 IS_RECURSIVE_SEARCH = True
@@ -39,4 +40,6 @@ MATERIAL_TWO_SIDED = True
 
 MIPMAPS_SETTING = config.SETTING_DEFAULT_MIPMAPS
 LOD_GROUP_SETTING = config.SETTING_DEFAULT_LOD_GROUP
+
+NUMBER_OF_LOD = 8
 #==============================================================================================

@@ -78,6 +78,9 @@ def main():
     elif COMMAND == 'set_mipmaps_n_lod_group_to_no_lods_dirs':
         lod.set_mipmaps_n_lod_group_to_no_lods_dirs(TARGET_PATHS, MIPMAPS_SETTING, LOD_GROUP_SETTING, IS_RECURSIVE_SEARCH,
                                                     ONLY_ON_DISK_ASSETS, SEARCH_PROPERTIES_VALUES, IS_DISJUNCTION)
+    elif COMMAND == 'change_number_of_lod_in_dirs':
+        lod.change_number_of_lod_in_dirs(TARGET_PATHS, NUMBER_OF_LOD, IS_RECURSIVE_SEARCH,
+                                         ONLY_ON_DISK_ASSETS, SEARCH_PROPERTIES_VALUES, IS_DISJUNCTION)
 
 
 
