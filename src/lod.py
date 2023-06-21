@@ -129,7 +129,6 @@ def is_lod_number_ok(number_of_lod):
     else:
         return False
 
-
 def get_lod_count(static_mesh):
     if static_mesh is not None:
         return static_mesh.get_num_lods()
@@ -157,7 +156,7 @@ def get_editor_reduction_setting_for_lod(static_mesh, lod_indx, screen_sizes = N
 
 ## Set lod count
 # @param number_of_lod must be in range [1, 8]
-# Error: For the last lods making problems with texture maps. Better to use editor functions
+# Error: For 6-8 Lod making wrong mesh sections.This leads to problems with texture maps. Better to use editor functions
 def change_number_of_lod(assets_data, new_number_of_lod = 1, auto_compute_lod_screen_size = True):
     if is_input_ok_set_number_of_lod(assets_data, new_number_of_lod):
         static_meshes = get_asset.get_assets_from_assets_data(assets_data)
@@ -190,10 +189,15 @@ def change_number_of_lod(assets_data, new_number_of_lod = 1, auto_compute_lod_sc
                                                                                reduction_settings = editor_reduction_settings)
                 reduction_options.set_editor_property('auto_compute_lod_screen_size', True)
                 lods_created = unreal.EditorStaticMeshLibrary.set_lods_with_notification(static_mesh, reduction_options, apply_changes = True)
+
+                '''mesh_reduction_settings = []
+                for lod_indx in range(new_number_of_lod):
+                    mesh_reduction_settings = unreal.EditorStaticMeshLibrary.get_lod_reduction_settings(static_mesh, lod_indx)
+                    unreal.EditorStaticMeshLibrary.set_lod_reduction_settings(static_mesh, lod_indx, mesh_reduction_settings)'''
+
                 unreal.log('Lods_created: ' + str(lods_created))
             else:
                 unreal.error_log(change_number_of_lod.__name__ + '(): lod_count is out of bound [1, 8]')
-
 
 ## Changes lod count
 # @param number_of_lod must be in range [1, 8]

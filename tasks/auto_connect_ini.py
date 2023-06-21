@@ -17,14 +17,15 @@ importlib.reload(config)
 #====================================Ini Section===================================================================
 
 # ConnectByAssociation, ConnectTexturePacks, ConnectTextureFiles, ConnectFreeNodes, AutoAlign, ReplaceTextureSamples
-COMMAND = 'ConnectFreeNodes'
+# delete_all_nodes_in_materials_dirs
+COMMAND = 'ConnectByAssociation'
 # TODO: AutoFill
 
 # For connect_by_association_texture_file_dirs()
 # No '/' in the end of the path
-MATERIAL_ASSOCIATION_DIRS = ['/Game/Test/Auto/Materials']
+MATERIAL_ASSOCIATION_DIRS = ['/Game/ThirdPerson/Character/Races/Ork/Materials']
 # No '/' in the end of the path
-TEXTURE_ASSOCIATION_DIRS = ['/Game/Test/Auto/Textures']
+TEXTURE_ASSOCIATION_DIRS = ['/Game/ThirdPerson/Character/Races/Ork/Textures']
 
 # For connect_texture_files_packs()
 # No '/' in the end of the path
@@ -43,7 +44,7 @@ TEXTURE_FILES = ['/Game/Test/Auto/Textures/T_EnglishLavender_Bump.T_EnglishLaven
 
 # replace_texture_sample_to_parameters_by_dirs()
 # No '/' in the end of the path
-MATERIAL_REPLACE_DIRS = ['/Game/Test/Auto/Materials/Replace']
+MATERIAL_REPLACE_DIRS = ['/Game/ThirdPerson/Character/Races/Ork/Materials']
 
 # After all operations done call unreal.MaterialEditingLibrary.recompile_material()
 RECOMPILE = False
@@ -52,6 +53,6 @@ AUTO_ALIGN = True
 
 LINK_VERSION_BUMP_TEXTURE = 1
 
-MATERIALS_DIRS_FREE_NODES = ['/Game/ThirdPerson/Military/Weapon/Modern/Ranged/Firearms/MachineGun/Submachine/Scorpion_61/Materials']
+MATERIALS_DIRS_FREE_NODES = ['']
 
 #======================================================================================

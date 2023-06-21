@@ -303,3 +303,31 @@ def recompile_material_in_dirs(dirs_paths):
 
 def recompile_material_in_dir(dir_path):
     recompile_material_in_dirs([dir_path])
+
+
+## Delete all nodes in material
+def delete_all_nodes_in_materials_data(materials_data):
+    if general.is_not_none_or_empty(materials_data):
+        with unreal.ScopedEditorTransaction(recompile_material_in_dirs.__name__ + '()') as ue_transaction:
+            progress_bar_text = delete_all_nodes_in_materials_data.__name__ + config.IS_WORKING_TEXT
+            with unreal.ScopedSlowTask(len(materials_data), progress_bar_text) as slow_task:
+                slow_task.make_dialog(True)
+
+                for material_data in materials_data:
+                    if slow_task.should_cancel():
+                        break
+
+                    unreal.MaterialEditingLibrary.delete_all_material_expressions(material_data.get_asset())
+
+                    slow_task.enter_progress_frame(1)
+    else:
+        unreal.log(delete_all_nodes_in_materials_data.__name__ + '(): materials_data must not be None or Empty')
+
+## Delete all nodes in material
+def delete_all_nodes_in_material_data(material_data):
+    delete_all_nodes_in_materials_data([material_data])
+
+## Delete all nodes in material
+def delete_all_nodes_in_materials_dirs(dir_paths, recursive = False, include_only_on_disk_assets = False):
+    materials_data = get_asset.get_materials_data_by_dirs(dir_paths, recursive, include_only_on_disk_assets)
+    delete_all_nodes_in_materials_data(materials_data)

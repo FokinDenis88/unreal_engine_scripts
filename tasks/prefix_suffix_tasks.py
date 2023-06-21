@@ -22,16 +22,16 @@ from unreal_engine_scripts.tasks.prefix_suffix_tasks_ini import *
 # prefix_suffix.correct_prefix_suffix_folder, prefix_suffix.delete_glb_texture_prefix_folder
 def main():
     if COMMAND == 'Add':
-        prefix_suffix.add_prefix_suffix_folder(TARGET_PATHS, PREFIX, SUFFIX, IS_RECURSIVE_SEARCH, ONLY_ON_DISK_ASSETS)
+        prefix_suffix.add_prefix_suffix_dirs(TARGET_PATHS, PREFIX, SUFFIX, IS_RECURSIVE_SEARCH, ONLY_ON_DISK_ASSETS)
     elif COMMAND == 'Delete':
-        prefix_suffix.delete_prefix_suffix_folder(TARGET_PATHS, PREFIX, SUFFIX, IS_RECURSIVE_SEARCH, ONLY_ON_DISK_ASSETS)
+        prefix_suffix.delete_prefix_suffix_dirs(TARGET_PATHS, PREFIX, SUFFIX, IS_RECURSIVE_SEARCH, ONLY_ON_DISK_ASSETS)
     elif COMMAND == 'Replace':
-        prefix_suffix.replace_prefix_suffix_folder(TARGET_PATHS, PREFIX, SUFFIX, NEW_PREFIX, NEW_SUFFIX,
+        prefix_suffix.replace_prefix_suffix_dirs(TARGET_PATHS, PREFIX, SUFFIX, NEW_PREFIX, NEW_SUFFIX,
                                                    IS_RECURSIVE_SEARCH, ONLY_ON_DISK_ASSETS)
-    elif COMMAND == 'Correct':
-        prefix_suffix.correct_prefix_suffix_folder(TARGET_PATHS, IS_RECURSIVE_SEARCH, ONLY_ON_DISK_ASSETS)
+    elif COMMAND == 'CorrectAndStandardize':
+        prefix_suffix.correct_n_standardize_texture_suffix_dirs(TARGET_PATHS, IS_RECURSIVE_SEARCH, ONLY_ON_DISK_ASSETS)
     elif COMMAND == 'DeleteGLBIndex':
-        prefix_suffix.delete_glb_texture_prefix_folder(TARGET_PATHS, IS_RECURSIVE_SEARCH, ONLY_ON_DISK_ASSETS)
+        prefix_suffix.delete_glb_texture_prefix_in_dirs(TARGET_PATHS, IS_RECURSIVE_SEARCH, ONLY_ON_DISK_ASSETS)
 
 
 main()

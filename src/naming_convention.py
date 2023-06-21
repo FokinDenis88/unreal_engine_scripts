@@ -1,4 +1,17 @@
-# TODO: Correct all class names
+import os
+import sys
+WORKING_DIR = os.path.dirname(os.path.abspath(__file__))
+PARENT_DIR = os.path.join(os.path.join(WORKING_DIR, os.pardir), os.pardir)
+# Folder, that stores unreal_engine_scripts package
+sys.path.append(os.path.abspath(PARENT_DIR))
+
+import unreal
+
+import unreal_engine_scripts.service.general as general
+
+# To apply changes in modules
+import importlib
+importlib.reload(general)
 
 AssetsPrefixConventionTable = {
     ##General
@@ -89,30 +102,31 @@ TextureTypesConvention = {
 ## Maybe Upper case is not important in prefix search
 # May Differ from Convention variant. Added more types.
 # All checks for suffix are case insensitive
+# Standard default suffix for texture is in zero position in list. F.e. for BaseColor it is _Diff
 TextureTypesCustom = {
     ## General Simple Types
     #'General':              ('T_', ['']),
-    'BaseColor':	        ('T_', ['', '_BC', '_BaseColor', '_Diff', '_Diffuse', '_Base_Color', '_Color', '_Base']),
-    'Albedo':	            ('T_', ['_ALB', '_Albedo']),
+    'BaseColor':	        ('T_', ['_Diff', '', '_BC', '_BaseColor', '_Diffuse', '_Base_Color', '_Color', '_Base']),
+    'Albedo':	            ('T_', ['_Albedo', '_ALB']),
     'AmbientOcclusion':     ('T_', ['_AO', '_AmbientOcclusion', '_Ambient', '_Occlusion', '_Occl', '_Occ', '_Occlus']),
-    'Roughness':	        ('T_', ['_R', '_Roughness', '_Rough', '_Roughn']),
-    'Gloss':	            ('T_', ['_G', '_Gloss', '_Glossiness'] ),
-    'Specular':	            ('T_', ['_S', '_Specular', '_Spec', '_Reflection', '_Reflect', '_Refl']),
-    'Metallic':	            ('T_', ['_M', '_Metallic', '_Metal']),
-    'Normal':	            ('T_', ['_N', '_Normal', '_Norm']),
-    'Height':	            ('T_', ['_H', '_Height']),
-    'Bump':	                ('T_', ['_B', '_Bump']),
-    'Displacement':	        ('T_', ['_D', '_Displacement', '_Disp', '_Displ', '_Displace', '_Displac']),
-    'Emissive':	            ('T_', ['_E', '_Emissive', '_Emis', '_Emiss', '_Illumination', '_Illum', '_Illumin']),
-    'Alpha/Opacity':	    ('T_', ['_A', '_Alpha', '_Opacity', '_Opac']),
-    'OpacityMask':	        ('T_', ['_Mask', '_OpacMask', '_OpacityMask']),
-    'LightMap':	            ('T_', ['_L', '_LightMap', '_Light']),
+    'Roughness':	        ('T_', ['_Rough', '_R', '_Roughness', '_Roughn']),
+    'Gloss':	            ('T_', ['_Gloss', '_G', '_Glossiness'] ),
+    'Specular':	            ('T_', ['_Spec', '_S', '_Specular', '_Reflection', '_Reflect', '_Refl']),
+    'Metallic':	            ('T_', ['_Metal', '_M', '_Metallic', '_Metalness']),
+    'Normal':	            ('T_', ['_Normal', '_N', '_Norm']),
+    'Height':	            ('T_', ['_Height', '_H']),
+    'Bump':	                ('T_', ['_Bump', '_B']),
+    'Displacement':	        ('T_', ['_Displace', '_D', '_Displacement', '_Disp', '_Displ', '_Displac']),
+    'Emissive':	            ('T_', ['_Emissive', '_E', '_Emis', '_Emiss', '_Illumination', '_Illum', '_Illumin']),
+    'Alpha/Opacity':	    ('T_', ['_Opacity', '_A', '_Alpha', '_Opac']),
+    'OpacityMask':	        ('T_', ['_OpacityMask', '_Mask', '_OpacMask']),
+    'LightMap':	            ('T_', ['_LightMap', '_L', '_Light']),
 
     ## Combo, Mix Types
-    'OcclusionRoughnessMetallic':     ('T_', ['_ORM', '_RoughnessMetallic', '_RoughnMetal', '_RoughMetal',
-                                               '_MetallicRoughness', '_MetalRoughn', '_MetalRough', '_MetalRoughness'
+    'OcclusionRoughnessMetallic':     ('T_', ['_MetalRough', '_ORM', '_RoughnessMetallic', '_RoughnMetal', '_RoughMetal',
+                                               '_MetallicRoughness', '_MetalRoughn', '_MetalRoughness'
                                                '_occlusionRoughnessMetallic', '_occlusionRoughnessMetal', '_occlRoughnMetal']),
-    'SpecularGlossiness':              ('T_', ['_SpecularGlossiness', '_SpecularGloss', '_SpecGloss', '_SpecGlossiness']),
+    'SpecularGlossiness':              ('T_', ['_SpecGloss', '_SpecularGlossiness', '_SpecularGloss', '_SpecGlossiness']),
 
     ## Unique Types
     'Convex/Concave':	    ('T_', ['_ConvexConcave', '_ConvConc', '_Convex', '_Conv', '_Concave', '_Conc']),
@@ -129,6 +143,74 @@ TextureTypesCustom = {
 
     ## By Channel
 }
+
+## Finds in TextureTypesCustom prefix by texture_type
+# @param texture_type (str) key to dictionary TextureTypesCustom
+# @return tuple (prefix, [suffixes]). Returns None if key texture_type not found
+def get_TextureTypesCustom_prefix_suffix_list(texture_type):
+    prefix_suffix_list = None
+    if general.is_not_none_or_empty(texture_type):
+        prefix_suffix_list = TextureTypesCustom.get(texture_type)
+    else:
+        unreal.log(get_TextureTypesCustom_prefix_suffix_list.__name__ + '(): texture_type must not be None or Empty')
+
+    return prefix_suffix_list
+
+## Finds in TextureTypesCustom prefix by texture_type
+# @param texture_type (str) key to dictionary TextureTypesCustom
+# @return tuple (prefix, [suffixes]). Returns None if key texture_type not found
+def get_TextureTypesCustom_prefix(texture_type):
+    prefix_suffix_list = get_TextureTypesCustom_prefix_suffix_list(texture_type)
+    if prefix_suffix_list is not None:
+        return get_TextureTypesCustom_prefix_suffix_list(texture_type)[0]
+    else:
+        return None
+
+## Finds in TextureTypesCustom suffix by texture_type
+# @param texture_type (str) key to dictionary TextureTypesCustom
+# @return tuple (prefix, [suffixes]). Returns None if key texture_type not found
+def get_TextureTypesCustom_suffix_list(texture_type):
+    prefix_suffix_list = get_TextureTypesCustom_prefix_suffix_list(texture_type)
+    if prefix_suffix_list is not None:
+        return get_TextureTypesCustom_prefix_suffix_list(texture_type)[1]
+    else:
+        return None
+
+## Finds in TextureTypesCustom standard suffix by texture_type
+# @param texture_type (str) key to dictionary TextureTypesCustom
+# @return tuple (prefix, [suffixes]). Returns None if key texture_type not found
+def get_TextureTypesCustom_standard_suffix(texture_type):
+    suffix_list = get_TextureTypesCustom_suffix_list(texture_type)
+    if suffix_list is not None:
+        return get_TextureTypesCustom_prefix_suffix_list(texture_type)[1][0]
+    else:
+        return None
+
+## All conventional prefixes of Unreal Engine
+assets_prefix_convention_table_prefixes = set()
+## All custom texture suffixes
+texture_types_custom_suffixes = set()
+
+def set_AssetsPrefixConventionTable_prefixes():
+    if len(assets_prefix_convention_table_prefixes) == 0:
+        for key in AssetsPrefixConventionTable:
+            prefix = AssetsPrefixConventionTable[key]
+            assets_prefix_convention_table_prefixes.add(prefix)
+
+def get_AssetsPrefixConventionTable_prefixes():
+    set_AssetsPrefixConventionTable_prefixes()
+    return assets_prefix_convention_table_prefixes
+
+def set_TextureTypesCustom_suffixes():
+    if len(texture_types_custom_suffixes) == 0:
+        for key in TextureTypesCustom:
+            suffix_list = TextureTypesCustom[key][1]
+            for suffix in suffix_list:
+                texture_types_custom_suffixes.add(suffix)
+
+def get_TextureTypesCustom_suffixes():
+    set_TextureTypesCustom_suffixes()
+    return texture_types_custom_suffixes
 
 ## Common suffix find in downloaded gltf textures files
 GLTF_SuffixConvention = {

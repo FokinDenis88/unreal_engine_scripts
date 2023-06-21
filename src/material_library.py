@@ -367,7 +367,7 @@ def connect_free_texture_nodes_in_materials(materials):
             unreal.log(connect_free_texture_nodes_in_materials.__name__ + ' is Started')
             for material in materials:
                 free_texture_nodes = get_material.find_unlinked_texture_nodes(material)
-                #unreal.log(free_texture_nodes)
+                #unreal.log('free_texture_nodes');     unreal.log(free_texture_nodes)
                 if general.is_not_none_or_empty(free_texture_nodes):
                     link_textures_nodes_to_result_node(material, free_texture_nodes, None, True)
                 else:
@@ -499,11 +499,13 @@ def associate_textures_with_materials(materials_data, textures_data):
         for material_data in materials_data:
             material_names_no_prefix_suffix.append(prefix_suffix.get_asset_name_without_prefix_suffix_data(material_data))
             associated_textures_paths_packs.append([])
+        #unreal.log(material_names_no_prefix_suffix)
 
         for texture_data in textures_data:
-            texture_name = prefix_suffix.get_asset_name_without_prefix_suffix_data(texture_data)
-            if material_names_no_prefix_suffix.count(texture_name) > 0:
-                material_index = material_names_no_prefix_suffix.index(texture_name)
+            texture_name_no_prefix_suffix = prefix_suffix.get_asset_name_without_prefix_suffix_data(texture_data)
+            #unreal.log(texture_name_no_prefix_suffix)
+            if material_names_no_prefix_suffix.count(texture_name_no_prefix_suffix) > 0:
+                material_index = material_names_no_prefix_suffix.index(texture_name_no_prefix_suffix)
                 associated_textures_paths_packs[material_index].append(get_asset.get_asset_data_object_path(texture_data))
 
     else:
@@ -525,9 +527,10 @@ def connect_by_association_texture_file_dirs(materials_dirs, textures_dirs, to_r
                     textures_data = get_asset.get_textures_data_by_dir(textures_dirs[i])
                     materials_data = get_asset.get_materials_data_by_dir(materials_dirs[i])
                     if general.is_not_none_or_empty_lists([textures_data, materials_data]):
+                        unreal.log('materials_data: ');    unreal.log(materials_data);  unreal.log('_');
                         # [[textures], [textures], [textures]] each list is associated with element of materials_data
                         associated_textures_paths_packs = associate_textures_with_materials(materials_data, textures_data)
-                        #unreal.log(associated_textures_paths_packs)
+                        unreal.log('associated_textures_paths_packs: ');    unreal.log(associated_textures_paths_packs)
                         for i in range(len(materials_data)):
                             material_path = get_asset.get_asset_data_object_path(materials_data[i])
                             unreal.log(connect_by_association_texture_file_dirs.__name__ + '(): Is working with material: ' + material_path)
@@ -542,7 +545,9 @@ def connect_by_association_texture_file_dirs(materials_dirs, textures_dirs, to_r
                             if to_recompile_material:
                                 # To fix problems with not actual material data
                                 unreal.MaterialEditingLibrary.recompile_material(materials_data[i].get_asset())
-                            connect_free_texture_nodes_in_materials_data([materials_data[i]])
+                            # TODO: fix. connect_free_texture_nodes_in_materials_data finding some fantom free nodes and trying to connect them
+                            # Works correctly separately
+                            #connect_free_texture_nodes_in_materials_data([materials_data[i]])
                             if to_align:
                                 auto_align_material_node_data(materials_data[i])
                             if to_recompile_material:

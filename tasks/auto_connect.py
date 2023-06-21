@@ -12,6 +12,7 @@ import unreal
 import unreal_engine_scripts.config as config
 #import unreal_engine_scripts.src.get_asset as get_asset
 import unreal_engine_scripts.src.get_material as get_material
+import unreal_engine_scripts.src.set_material as set_material
 #import unreal_engine_scripts.src.prefix_suffix as prefix_suffix
 import unreal_engine_scripts.src.material_library as material_library
 import unreal_engine_scripts.tasks.auto_connect_ini as auto_connect_ini
@@ -21,6 +22,7 @@ import importlib
 importlib.reload(config)
 #importlib.reload(get_asset)
 importlib.reload(get_material)
+importlib.reload(set_material)
 #importlib.reload(prefix_suffix)
 importlib.reload(material_library)
 importlib.reload(auto_connect_ini)
@@ -46,6 +48,8 @@ def main():
         material_library.auto_align_material_nodes_path(MATERIAL_FILES)
     elif COMMAND == 'ReplaceTextureSamples':
         material_library.replace_texture_sample_to_parameters_by_dirs(MATERIAL_REPLACE_DIRS)
+    elif COMMAND == 'delete_all_nodes_in_materials_dirs':
+        set_material.delete_all_nodes_in_materials_dirs(MATERIAL_REPLACE_DIRS)
 
 
 main()

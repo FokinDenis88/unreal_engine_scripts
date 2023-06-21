@@ -62,14 +62,39 @@ def get_paths_from_assets_data(assets_data):
         unreal.log_error(get_paths_from_objects.__name__ + ': assets_data must not be Empty or None')
         return []
 
+def get_path_from_asset_data(asset_data):
+    get_paths_from_assets_data([asset_data])
+
+def get_object_path_from_asset_data(asset_data):
+    return general.Name_to_str(asset_data.get_editor_property('object_path'))
+
+def get_objects_paths_from_assets_data(assets_data):
+    if general.is_not_none_or_empty(assets_data):
+        paths = []
+        for asset_data in assets_data:
+            paths.append(get_object_path_from_asset_data(asset_data))
+        return paths
+    else:
+        unreal.log_error(get_objects_paths_from_assets_data.__name__ + ': assets_data must not be Empty or None')
+        return []
+
+
 # @param object_path    type = Name
 # @return_type str
-# Deprecated
 def get_asset_name_no_extension(object_path):
     if object_path is not None:
         return unreal.Paths.get_base_filename(object_path)
     else:
         unreal.log_error(get_asset_name_no_extension.__name__ + ': object_path must not be None')
+        return ''
+
+# @param object_path    type = Name
+# @return_type str
+def get_asset_name_no_extension_in_data_asset(data_asset):
+    if data_asset is not None:
+        return get_asset_name_no_extension(get_object_path_from_asset_data(data_asset))
+    else:
+        unreal.log_error(get_asset_name_no_extension_in_data_asset.__name__ + ': data_asset must not be None')
         return ''
 
 # @param object_path    type = Name

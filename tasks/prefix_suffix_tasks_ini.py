@@ -5,11 +5,11 @@ import importlib
 importlib.reload(config)
 
 #====================================Ini Section=======================================
-# Commands: Add, Delete, Replace, Correct, DeleteGLBIndex
-COMMAND = 'Correct'
+# Commands: Add, Delete, Replace, CorrectAndStandardize, DeleteGLBIndex
+COMMAND = 'CorrectAndStandardize'
 
 # No '/' in the end of the path
-TARGET_PATHS = ['/Game/ThirdPerson/Military/Vehicle/Modern/Land/Tank/T-90_02/Textures/Test']
+TARGET_PATHS = ['/Game/ThirdPerson/Character/Races/Ork/Textures']
 #TARGET_PATHS = ['/Game/ThirdPerson/Military/Vehicle/Modern/Land/Tank/T-90_02/Textures']
 #TARGET_PATHS = ['/Game/ThirdPerson']
 

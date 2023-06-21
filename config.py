@@ -5,7 +5,8 @@ import unreal
 WORKING_DIR = os.path.dirname(os.path.abspath(__file__))
 PATH_ASSETS_START = '/Game/'
 
-IS_EMPTY_OR_NONE_TEXT = 'is empty or None'
+IS_EMPTY_OR_NONE_TEXT = 'is Empty or None'
+IS_WORKING_TEXT = ' is Working.'
 
 
 #================= Assets class names===================================

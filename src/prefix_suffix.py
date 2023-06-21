@@ -13,8 +13,6 @@ importlib.reload(general)
 importlib.reload(get_asset)
 importlib.reload(convention)
 
-IS_WORKING_TEXT = ' is Working.'
-
 
 # \/:*?"<>|+
 WINDOWS_RESTRICTED_CHARS = '\\/:*?\"<>|+'
@@ -60,18 +58,38 @@ def get_suffix(text):
         return ''
 
 ## @return (str) name of asset without prefix and suffix, without extension.
-def get_asset_name_without_prefix_suffix(object_path):
+# [Deprecated]
+def get_asset_name_without_prefix_suffix_v2(object_path):
     if general.is_not_none_or_empty(object_path):
         file_name_no_extension = unreal.Paths.get_base_filename(object_path)
         # (?<=^[^_]+_).+(?=_[^_]+)
         #regex_pattern = '(?<=^[^_]+_).+(?=_[^_]+)'  # '\\Z'
-        regex_pattern = '^[^_]+_(?P<name>.+)_[^_]+'     # \\Z
+        regex_pattern = '^[^_]+_(?P<name>.+)(_[^_]+)?\\Z'     # \\Z
         match_object = re.search(regex_pattern, file_name_no_extension)
         if match_object is not None:
             return match_object.group('name')
         else:
             unreal.log(get_asset_name_without_prefix_suffix.__name__ + ': regex did not find any name without prefix or suffix')
             return file_name_no_extension
+    else:
+        unreal.log_error(get_asset_name_without_prefix_suffix.__name__ + ': object_path must not be None or empty')
+        return ''
+
+## @return (str) name of asset without prefix and suffix, without extension.
+def get_asset_name_without_prefix_suffix(object_path):
+    if general.is_not_none_or_empty(object_path):
+        file_name_no_extension = unreal.Paths.get_base_filename(object_path)
+        file_name_no_prefix_suffix = file_name_no_extension
+        prefix = get_prefix(file_name_no_extension)
+        #unreal.log('prefix'); unreal.log(prefix)
+        if prefix in convention.get_AssetsPrefixConventionTable_prefixes():
+            file_name_no_prefix_suffix = file_name_no_prefix_suffix[len(prefix):]
+
+        suffix = get_suffix(file_name_no_extension)
+        #unreal.log('suffix'); unreal.log(suffix)
+        if suffix in convention.get_TextureTypesCustom_suffixes():
+            file_name_no_prefix_suffix = file_name_no_prefix_suffix[:-len(suffix)]
+        return file_name_no_prefix_suffix
     else:
         unreal.log_error(get_asset_name_without_prefix_suffix.__name__ + ': object_path must not be None or empty')
         return ''
@@ -103,6 +121,15 @@ def get_asset_prefix_suffix_by_name(file_name_no_extension):
 
 def get_asset_prefix_suffix_by_path(object_path):
     return get_asset_prefix_suffix_by_name(get_asset.get_asset_name_no_extension(object_path))
+
+def get_asset_prefix_suffix_by_asset_data(asset_data):
+    if asset_data is not None:
+        asset_name_no_extension = get_asset.get_asset_name_no_extension_in_data_asset(asset_data)
+        return get_asset_prefix_suffix_by_name(asset_name_no_extension)
+    else:
+        unreal.log(get_asset_prefix_suffix_by_asset_data.__name__ + '(): asset_data must not be None')
+        return '', ''
+
 
 ## @param file_name File name without extension, without path
 def has_file_name_prefix(file_name,  prefix, has_logs = False):
@@ -306,13 +333,24 @@ def replace_prefix_suffix(object_path, prefix = '', suffix = '', new_prefix = ''
     else:
         unreal.log_error(replace_prefix_suffix.__name__ + '(): object_path is empty')
 
+def replace_prefix_suffix_assets_data(assets_data, prefix = '', suffix = '', new_prefix = '', new_suffix = ''):
+    if general.is_not_none_or_empty(assets_data):
+        objects_paths = get_asset.get_objects_paths_from_assets_data(assets_data)
+        for object_path in objects_paths:
+            replace_prefix_suffix(object_path, prefix, suffix, new_prefix, new_suffix)
+    else:
+        unreal.log_error(replace_prefix_suffix_assets_data.__name__ + '(): assets_data must not be Empty or None')
 
-def add_prefix_suffix_folder(folder_paths, prefix = '', suffix = '',
+def replace_prefix_suffix_asset_data(asset_data, prefix = '', suffix = '', new_prefix = '', new_suffix = ''):
+    replace_prefix_suffix_assets_data([asset_data], prefix, suffix, new_prefix, new_suffix)
+
+
+def add_prefix_suffix_dirs(folder_paths, prefix = '', suffix = '',
                              recursive = False, include_only_on_disk_assets = False):
-    with unreal.ScopedEditorTransaction(add_prefix_suffix_folder.__name__) as ue_transaction:
+    with unreal.ScopedEditorTransaction(add_prefix_suffix_dirs.__name__) as ue_transaction:
         assets_data = get_asset.get_assets_by_dirs(folder_paths, recursive, include_only_on_disk_assets)
 
-        progress_bar_text = add_prefix_suffix_folder.__name__ + IS_WORKING_TEXT
+        progress_bar_text = add_prefix_suffix_dirs.__name__ + config.IS_WORKING_TEXT
         with unreal.ScopedSlowTask(len(assets_data), progress_bar_text) as slow_task:
             slow_task.make_dialog(True)
 
@@ -326,12 +364,12 @@ def add_prefix_suffix_folder(folder_paths, prefix = '', suffix = '',
 
 
 ## @param is_folder_operation    indicates if it is adding prefix_suffix for many files in folder
-def delete_prefix_suffix_folder(folder_paths, prefix = '', suffix = '',
+def delete_prefix_suffix_dirs(folder_paths, prefix = '', suffix = '',
                                 recursive = False, include_only_on_disk_assets = False):
-    with unreal.ScopedEditorTransaction(delete_prefix_suffix_folder.__name__) as ue_transaction:
+    with unreal.ScopedEditorTransaction(delete_prefix_suffix_dirs.__name__) as ue_transaction:
         assets_data = get_asset.get_assets_by_dirs(folder_paths, recursive, include_only_on_disk_assets)
 
-        progress_bar_text = delete_prefix_suffix_folder.__name__ + IS_WORKING_TEXT
+        progress_bar_text = delete_prefix_suffix_dirs.__name__ + config.IS_WORKING_TEXT
         with unreal.ScopedSlowTask(len(assets_data), progress_bar_text) as slow_task:
             slow_task.make_dialog(True)
 
@@ -344,12 +382,12 @@ def delete_prefix_suffix_folder(folder_paths, prefix = '', suffix = '',
             slow_task.enter_progress_frame(1)
 
 ## @param is_folder_operation    indicates if it is adding prefix_suffix for many files in folder
-def replace_prefix_suffix_folder(folder_paths, prefix = '', suffix = '', new_prefix = '', new_suffix = '',
+def replace_prefix_suffix_dirs(folder_paths, prefix = '', suffix = '', new_prefix = '', new_suffix = '',
                                  recursive = False, include_only_on_disk_assets = False):
-    with unreal.ScopedEditorTransaction(replace_prefix_suffix_folder.__name__) as ue_transaction:
+    with unreal.ScopedEditorTransaction(replace_prefix_suffix_dirs.__name__) as ue_transaction:
         assets_data = get_asset.get_assets_by_dirs(folder_paths, recursive, include_only_on_disk_assets)
 
-        progress_bar_text = replace_prefix_suffix_folder.__name__ + IS_WORKING_TEXT
+        progress_bar_text = replace_prefix_suffix_dirs.__name__ + config.IS_WORKING_TEXT
         with unreal.ScopedSlowTask(len(assets_data), progress_bar_text) as slow_task:
             slow_task.make_dialog(True)
 
@@ -358,48 +396,6 @@ def replace_prefix_suffix_folder(folder_paths, prefix = '', suffix = '', new_pre
                     break
                 object_path = asset_data.get_editor_property('object_path')
                 replace_prefix_suffix(object_path, prefix, suffix, new_prefix, new_suffix, True, include_only_on_disk_assets)
-
-            slow_task.enter_progress_frame(1)
-
-
-def correct_prefix_suffix(object_path, is_folder_operation = False, asset_data = None,
-                          include_only_on_disk_assets = False):
-    if asset_data == None:
-        asset_data = get_asset.get_asset_data_by_object_path(object_path, include_only_on_disk_assets)
-
-    if asset_data != None:
-        asset_class = general.Name_to_str(asset_data.get_editor_property('asset_class'))
-        #unreal.log(asset_class)
-        prefix_for_class = convention.AssetsPrefixConventionTable[asset_class]
-        if prefix_for_class != None and prefix_for_class != '':
-            if is_folder_operation:
-                # If function was called by correct_prefix_suffix_folder, it has one transaction with all assets in folder
-                add_prefix_suffix(object_path, prefix = prefix_for_class, is_folder_operation = False,
-                                  include_only_on_disk_assets = include_only_on_disk_assets)
-            else:
-                with unreal.ScopedEditorTransaction(correct_prefix_suffix.__name__) as ue_transaction:
-                    add_prefix_suffix(object_path, prefix = prefix_for_class, is_folder_operation = False,
-                                      include_only_on_disk_assets = include_only_on_disk_assets)
-
-        else:
-            unreal.log_error(correct_prefix_suffix.__name__ + '(): Did not find prefix for asset class - ' + asset_class)
-    else:
-        unreal.log_error(correct_prefix_suffix.__name__ + '(): Did not find asset_data from object_path')
-
-## Add correct prefix and suffix. Depends on asset type.
-def correct_prefix_suffix_dirs(dir_paths, recursive = False, include_only_on_disk_assets = False):
-    with unreal.ScopedEditorTransaction(correct_prefix_suffix_dirs.__name__) as ue_transaction:
-        assets_data = get_asset.get_assets_by_dirs(dir_paths, recursive, include_only_on_disk_assets)
-
-        progress_bar_text = correct_prefix_suffix_dirs.__name__ + IS_WORKING_TEXT
-        with unreal.ScopedSlowTask(len(assets_data), progress_bar_text) as slow_task:
-            slow_task.make_dialog(True)
-
-            for asset_data in assets_data:
-                if slow_task.should_cancel():
-                    break
-                object_path = asset_data.get_editor_property('object_path')
-                correct_prefix_suffix(object_path, True, asset_data, include_only_on_disk_assets)
 
             slow_task.enter_progress_frame(1)
 
@@ -423,7 +419,7 @@ def delete_glb_texture_prefix_in_dirs(dir_paths, recursive = False, include_only
     with unreal.ScopedEditorTransaction(delete_glb_texture_prefix_in_dirs.__name__) as ue_transaction:
         assets_data = get_asset.get_assets_by_dirs(dir_paths, recursive, include_only_on_disk_assets)
         if general.is_not_none_or_empty(assets_data):
-            progress_bar_text = delete_glb_texture_prefix_in_dirs.__name__ + IS_WORKING_TEXT
+            progress_bar_text = delete_glb_texture_prefix_in_dirs.__name__ + config.IS_WORKING_TEXT
             with unreal.ScopedSlowTask(len(assets_data), progress_bar_text) as slow_task:
                 slow_task.make_dialog(True)
 
@@ -440,9 +436,10 @@ def delete_glb_texture_prefix_in_dirs(dir_paths, recursive = False, include_only
 def delete_glb_texture_prefix_in_dir(dir_path, recursive = False, include_only_on_disk_assets = False):
     delete_glb_texture_prefix_in_dirs([dir_path], recursive, include_only_on_disk_assets)
 
+
 ## Reads prefix and suffix of texture asset and returns type of texture by convention
 # Converts all text to lower case
-def get_texture_type_by_prefix_suffix(object_path, include_only_on_disk_assets = False):
+def get_texture_type_by_prefix_suffix(object_path):
     prefix = get_asset_prefix_suffix_by_path(object_path)
     suffix = prefix[1]
     prefix = prefix[0]
@@ -469,6 +466,96 @@ def get_texture_type_by_prefix_suffix(object_path, include_only_on_disk_assets =
         key = NO_TEXTURE_TYPE
     return key
 
-def get_texture_type_by_prefix_suffix_d(asset_data, include_only_on_disk_assets = False):
+def get_texture_type_by_prefix_suffix_in_data(asset_data):
     object_path = asset_data.get_editor_property('object_path')
-    return get_texture_type_by_prefix_suffix(object_path, include_only_on_disk_assets)
+    return get_texture_type_by_prefix_suffix(object_path)
+
+
+## Correct prefix by unreal engine asset type (Texture, Material, Static Mesh).
+# Adds prefix, if there is no prefix
+def correct_prefix_by_uclass(object_path, asset_data = None,
+                          include_only_on_disk_assets = False):
+    if asset_data == None:
+        asset_data = get_asset.get_asset_data_by_object_path(object_path, include_only_on_disk_assets)
+
+    if asset_data != None:
+        asset_class = general.Name_to_str(asset_data.get_editor_property('asset_class'))
+        prefix_for_class = convention.AssetsPrefixConventionTable[asset_class]
+        #unreal.log('prefix_for_class');   unreal.log(prefix_for_class)
+        if prefix_for_class != None and prefix_for_class != '':
+            # If function was called by correct_prefix_by_uclass_dirs, it has one transaction with all assets in folder
+            with unreal.ScopedEditorTransaction(correct_prefix_by_uclass.__name__) as ue_transaction:
+                add_prefix_suffix(object_path, prefix = prefix_for_class, is_folder_operation = False,
+                                    include_only_on_disk_assets = include_only_on_disk_assets)
+
+        else:
+            unreal.log_error(correct_prefix_by_uclass.__name__ + '(): Did not find prefix for asset class - ' + asset_class)
+    else:
+        unreal.log_error(correct_prefix_by_uclass.__name__ + '(): Did not find asset_data from object_path')
+
+## Correct prefix by unreal engine asset type (Texture, Material, Static Mesh).
+# Adds prefix, if there is no prefix
+def correct_prefix_by_uclass_dirs(dir_paths, recursive = False, include_only_on_disk_assets = False):
+    with unreal.ScopedEditorTransaction(correct_prefix_by_uclass_dirs.__name__) as ue_transaction:
+        assets_data = get_asset.get_assets_by_dirs(dir_paths, recursive, include_only_on_disk_assets)
+
+        progress_bar_text = correct_prefix_by_uclass_dirs.__name__ + config.IS_WORKING_TEXT
+        with unreal.ScopedSlowTask(len(assets_data), progress_bar_text) as slow_task:
+            slow_task.make_dialog(True)
+
+            for asset_data in assets_data:
+                if slow_task.should_cancel():
+                    break
+                object_path = asset_data.get_editor_property('object_path')
+                correct_prefix_by_uclass(object_path, asset_data, include_only_on_disk_assets)
+
+                slow_task.enter_progress_frame(1)
+
+
+## Rename texture asset suffix to default variation.
+# Default variation is zero in list of TextureTypesCustom suffixes
+# F.e. From _BaseColor to _Diff
+def standardize_texture_suffix_asset_data(texture_asset_data):
+    if texture_asset_data is not None:
+        texture_type = get_texture_type_by_prefix_suffix_in_data(texture_asset_data)
+        if texture_type != NO_TEXTURE_TYPE:
+            texture_name_no_extension = get_asset.get_asset_name_no_extension_in_data_asset(texture_asset_data)
+            prefix, suffix = get_asset_prefix_suffix_by_name(texture_name_no_extension)
+            standard_suffix = convention.get_TextureTypesCustom_standard_suffix(texture_type)
+            if suffix != standard_suffix:
+                replace_prefix_suffix_asset_data(texture_asset_data, prefix = '', suffix = suffix,
+                                                 new_prefix = '', new_suffix = standard_suffix)
+        else:
+            unreal.log_error(standardize_texture_suffix_asset_data.__name__ + '(): did not find texture type')
+    else:
+        unreal.log_error(standardize_texture_suffix_asset_data.__name__ + '(): no asset_data in input')
+
+## Rename texture asset suffix to default variation.
+# Default variation is zero in list of TextureTypesCustom suffixes
+# F.e. From _BaseColor to _Diff
+def standardize_texture_suffix_assets_data(textures_assets_data):
+    if general.is_not_none_or_empty(textures_assets_data):
+        progress_bar_text = standardize_texture_suffix_assets_data.__name__ + config.IS_WORKING_TEXT
+        with unreal.ScopedSlowTask(len(textures_assets_data), progress_bar_text) as slow_task:
+            slow_task.make_dialog(True)
+
+            for asset_data in textures_assets_data:
+                if slow_task.should_cancel():
+                    break
+                standardize_texture_suffix_asset_data(asset_data)
+
+                slow_task.enter_progress_frame(1)
+    else:
+        unreal.log(standardize_texture_suffix_assets_data.__name__ + '(): no assets_data in input')
+
+## Rename texture asset suffix to default variation.
+# Default variation is zero in list of TextureTypesCustom suffixes
+# F.e. From _BaseColor to _Diff
+def standardize_texture_suffix_dirs(dir_paths, recursive = False, include_only_on_disk_assets = False):
+     with unreal.ScopedEditorTransaction(correct_prefix_by_uclass_dirs.__name__) as ue_transaction:
+        assets_data = get_asset.get_textures_data_by_dirs(dir_paths, recursive, include_only_on_disk_assets)
+        standardize_texture_suffix_assets_data(assets_data)
+
+def correct_n_standardize_texture_suffix_dirs(dir_paths, recursive = False, include_only_on_disk_assets = False):
+    correct_prefix_by_uclass_dirs(dir_paths, recursive, include_only_on_disk_assets)
+    standardize_texture_suffix_dirs(dir_paths, recursive, include_only_on_disk_assets)
