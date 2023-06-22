@@ -7,16 +7,16 @@ sys.path.append(os.path.abspath(PARENT_DIR))
 
 import unreal
 
-import unreal_engine_scripts.service.general as general
+import unreal_engine_scripts.service.general_ue as general_ue
 
 # To apply changes in modules
 import importlib
-importlib.reload(general)
+importlib.reload(general_ue)
 
 
 ## https://docs.unrealengine.com/4.27/en-US/ProductionPipelines/AssetNaming/
 AssetsPrefixConventionTable = {
-    ##General
+    ##general
     'HDRI' :                    'HDR_',
     'Material' :	            'M_',
     'MaterialInstanceConstant':	'MI_',
@@ -106,7 +106,7 @@ TextureTypesConvention = {
 # All checks for suffix are case insensitive
 # Standard default suffix for texture is in zero position in list. F.e. for BaseColor it is _Diff
 TextureTypesCustom = {
-    ## General Simple Types
+    ## general Simple Types
     #'General':              ('T_', ['']),
     'BaseColor':	        ('T_', ['_Diff', '', '_BC', '_BaseColor', '_Diffuse', '_Base_Color', '_Color', '_Base']),
     'Albedo':	            ('T_', ['_Albedo', '_ALB']),
@@ -151,7 +151,7 @@ TextureTypesCustom = {
 # @return tuple (prefix, [suffixes]). Returns None if key texture_type not found
 def get_TextureTypesCustom_prefix_suffix_list(texture_type):
     prefix_suffix_list = None
-    if general.is_not_none_or_empty(texture_type):
+    if general_ue.is_not_none_or_empty(texture_type):
         prefix_suffix_list = TextureTypesCustom.get(texture_type)
     else:
         unreal.log(get_TextureTypesCustom_prefix_suffix_list.__name__ + '(): texture_type must not be None or Empty')

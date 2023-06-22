@@ -1,12 +1,12 @@
 import unreal
 
 import unreal_engine_scripts.config as config
-import unreal_engine_scripts.service.general as general
-import unreal_engine_scripts.service.file as file
+import unreal_engine_scripts.service.general_ue as general_ue
+import unreal_engine_scripts.external.python_library.src.file as file
 
 import importlib
 importlib.reload(config)
-importlib.reload(general)
+importlib.reload(general_ue)
 importlib.reload(file)
 
 
@@ -27,14 +27,14 @@ LOG_PATH_NO_COLLISION = config.WORKING_DIR + LOGS_DIR + LOG_NAME_NO_COLLISION
 
 
 def log_print_n_write_file(path, text, open_mode = 'a'):
-    if general.is_not_none_lists([path, text]):
+    if general_ue.is_not_none_lists([path, text]):
         unreal.log(text)
         file.write_text_file(path, str(text) + '\n', open_mode)
     else:
         unreal.log_error(log_print_n_write_file.__name__ + '(): path, text must not be None')
 
 def log_list(list_of_objects):
-    if general.is_not_none_or_empty(list_of_objects):
+    if general_ue.is_not_none_or_empty(list_of_objects):
         for object in list_of_objects:
             unreal.log(object)
     else:
@@ -42,7 +42,7 @@ def log_list(list_of_objects):
 
 
 def write_assets_data_log(assets_data, log_path, log_title = 'Assets Data: ', file_open_mode = 'w'):
-    if general.is_not_none_or_empty_lists([assets_data, log_path]):
+    if general_ue.is_not_none_or_empty_lists([assets_data, log_path]):
         log_print_n_write_file(log_path, log_title + ': ', file_open_mode)
         for asset_data in assets_data :
             object_path = asset_data.get_editor_property('object_path')

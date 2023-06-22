@@ -1,13 +1,13 @@
 import unreal
 
 import unreal_engine_scripts.config as config
-import unreal_engine_scripts.service.general as general
+import unreal_engine_scripts.service.general_ue as general_ue
 import unreal_engine_scripts.src.get_asset as get_asset
 import unreal_engine_scripts.service.log as log
 
 import importlib
 importlib.reload(config)
-importlib.reload(general)
+importlib.reload(general_ue)
 importlib.reload(get_asset)
 importlib.reload(log)
 
@@ -18,15 +18,15 @@ def has_simple_collision(asset_data):
     body_setup = asset.get_editor_property('body_setup')
     geometry = body_setup.get_editor_property('agg_geom')
 
-    if general.is_not_none_or_empty(geometry.get_editor_property('box_elems')):
+    if general_ue.is_not_none_or_empty(geometry.get_editor_property('box_elems')):
         return True
-    if general.is_not_none_or_empty(geometry.get_editor_property('convex_elems')):
+    if general_ue.is_not_none_or_empty(geometry.get_editor_property('convex_elems')):
         return True
-    if general.is_not_none_or_empty(geometry.get_editor_property('sphere_elems')):
+    if general_ue.is_not_none_or_empty(geometry.get_editor_property('sphere_elems')):
         return True
-    if general.is_not_none_or_empty(geometry.get_editor_property('sphyl_elems')):
+    if general_ue.is_not_none_or_empty(geometry.get_editor_property('sphyl_elems')):
         return True
-    if general.is_not_none_or_empty(geometry.get_editor_property('tapered_capsule_elems')):
+    if general_ue.is_not_none_or_empty(geometry.get_editor_property('tapered_capsule_elems')):
         return True
 
     return False
@@ -39,7 +39,7 @@ def find_no_collision_assets(folder_paths, log_path = log.LOG_PATH_NO_COLLISION,
     assets_data = get_asset.find_assets_data(package_paths = folder_paths,
                                              class_names = [config.ClassName.STATIC_MESH], recursive_paths = recursive_paths,
                                              include_only_on_disk_assets = include_only_on_disk_assets)
-    if general.is_not_none_or_empty(assets_data):
+    if general_ue.is_not_none_or_empty(assets_data):
         unreal.log(log.FINAL_RESULTS)
         for asset_data in assets_data:
             if not has_simple_collision(asset_data):
@@ -71,7 +71,7 @@ def find_no_collision_assets_v2(folder_paths, log_path = log.LOG_PATH_NO_COLLISI
     assets_data = get_asset.find_assets_data(package_paths = folder_paths,
                                              class_names = [config.ClassName.STATIC_MESH], recursive_paths = recursive_paths,
                                              include_only_on_disk_assets = include_only_on_disk_assets)
-    if general.is_not_none_or_empty(assets_data):
+    if general_ue.is_not_none_or_empty(assets_data):
         unreal.log(log.FINAL_RESULTS)
         for asset_data in assets_data:
             if get_simple_collision_count_by_data(asset_data) == 0:

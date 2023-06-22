@@ -5,7 +5,7 @@ import unreal
 
 #import importlib
 #importlib.reload(config)
-#importlib.reload(general)
+#importlib.reload(general_ue)
 
 def get_static_mesh_triangles_count(static_mesh, lod_index = 0):
     sections_count = static_mesh.get_num_sections(lod_index)

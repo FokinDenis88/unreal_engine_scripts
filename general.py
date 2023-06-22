@@ -1,5 +1,3 @@
-import unreal
-
 def are_list_objects_not_None(objects):
     for object in objects:
         if object is None:
@@ -42,9 +40,6 @@ def is_not_none_lists(list_objects):
         return False
 
 
-def Name_to_str(name_text):
-    return unreal.StringLibrary.build_string_name('', '', name_text, '')
-
 ## Checks if all input lists has equal dimension(length)
 def are_lists_equal_length(lists, has_log = False):
     if is_not_none_or_empty(lists):
@@ -54,11 +49,11 @@ def are_lists_equal_length(lists, has_log = False):
             while i < len(lists):
                 if len(lists[i]) != first_list_len:
                     if has_log:
-                        unreal.log(are_lists_equal_length.__name__ + '(): lists len are not equal. ' + lists[i])
+                        print(are_lists_equal_length.__name__ + '() Info: lists len are not equal. ' + lists[i])
                     return False
                 i += 1
     if has_log:
-        unreal.log(are_lists_equal_length.__name__ + '(): lists length are equal')
+        print(are_lists_equal_length.__name__ + '() Info: lists length are equal')
     return True
 
 ## @return bool value, indicates if there is one or more False values
@@ -69,12 +64,12 @@ def has_false_value(list_object):
                 if object == False:
                     return True
             else:
-                unreal.log_error(has_false_value.__name__ + 'values in list must be bool type')
+                print(has_false_value.__name__ + '() Error:values in list must be bool type')
                 return None
 
         return False
     else:
-        unreal.log_error(has_false_value.__name__ + 'list_object must not be empty or None')
+        print(has_false_value.__name__ + '() Error:list_object must not be empty or None')
         return None
 
 ## Checks if input object type is in list of types
@@ -89,7 +84,7 @@ def is_in_types(object, types_list):
             i += 1
         return not type_is_not_found
     else:
-        unreal.log_error(is_in_types.__name__ + ': object and types_list must not be None or empty')
+        print(is_in_types.__name__ + '() Error: object and types_list must not be None or empty')
         return False
 
 ## Checks if input object type is in list of types
@@ -103,7 +98,7 @@ def is_in_subclasses(object, types_list):
             i += 1
         return not type_is_not_found
     else:
-        unreal.log_error(is_in_types.__name__ + ': object and types_list must not be None or empty')
+        print(is_in_types.__name__ + '() Error: object and types_list must not be None or empty')
         return False
 
 ## Logical OR
@@ -115,7 +110,7 @@ def disjunction_of_conditions(condition_list):
         else:
             return False
     else:
-        unreal.log_error(disjunction_of_conditions.__name__ + ': condition_list must not be None or empty')
+        print(disjunction_of_conditions.__name__ + '() Error: condition_list must not be None or empty')
         return None
 
 ## Logical AND
@@ -127,5 +122,5 @@ def conjunction_of_conditions(condition_list):
         else:
             return False
     else:
-        unreal.log_error(conjunction_of_conditions.__name__ + ': condition_list must not be None or empty')
+        print(conjunction_of_conditions.__name__ + '() Error: condition_list must not be None or empty')
         return None

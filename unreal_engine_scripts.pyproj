@@ -24,6 +24,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="asset\" />
+    <Folder Include="external\" />
+    <Folder Include="external\python_library\" />
+    <Folder Include="external\python_library\src\" />
     <Folder Include="tasks\" />
     <Folder Include="src\" />
     <Folder Include="service\" />
@@ -32,10 +35,15 @@
     <Compile Include="asset\material_node.py" />
     <Compile Include="asset\texture.py" />
     <Compile Include="asset\__init__.py" />
+    <Compile Include="external\python_library\src\file.py" />
+    <Compile Include="external\python_library\src\general.py" />
+    <Compile Include="external\python_library\src\ini.py" />
+    <Compile Include="external\python_library\src\path_ext.py" />
+    <Compile Include="external\python_library\src\prefix_suffix.py" />
+    <Compile Include="external\python_library\src\__init__.py" />
+    <Compile Include="external\__init__.py" />
     <Compile Include="service\error_handle.py" />
-    <Compile Include="service\file.py" />
-    <Compile Include="service\general.py" />
-    <Compile Include="service\ini.py" />
+    <Compile Include="service\general_ue.py" />
     <Compile Include="service\log.py" />
     <Compile Include="service\__init__.py" />
     <Compile Include="src\asset_library.py" />

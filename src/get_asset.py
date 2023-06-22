@@ -3,16 +3,16 @@ import os
 import unreal
 
 import unreal_engine_scripts.config as config
-import unreal_engine_scripts.service.general as general
+import unreal_engine_scripts.service.general_ue as general_ue
 import unreal_engine_scripts.service.log as log
 
 import importlib
 importlib.reload(config)
-importlib.reload(general)
+importlib.reload(general_ue)
 importlib.reload(log)
 
 def load_asset(object_path):
-    if general.is_not_none_or_empty(object_path):
+    if general_ue.is_not_none_or_empty(object_path):
         if unreal.EditorAssetLibrary.does_asset_exist(object_path):
             return unreal.EditorAssetLibrary.load_asset(object_path)
         else:
@@ -24,7 +24,7 @@ def load_asset(object_path):
 
 def get_asset_data_str_property(asset_data, property_name):
     if asset_data is not None and property_name is not '':
-        return general.Name_to_str(asset_data.get_editor_property(property_name))
+        return general_ue.Name_to_str(asset_data.get_editor_property(property_name))
     else:
         unreal.log_error(get_asset_data_str_property.__name__ + '(): asset_data and property_name must not be None or Empty')
         return None
@@ -43,7 +43,7 @@ def get_path_from_object(object):
         return ''
 
 def get_paths_from_objects(objects_list):
-    if general.is_not_none_or_empty(objects_list):
+    if general_ue.is_not_none_or_empty(objects_list):
         paths = []
         for object in objects_list:
             paths.append(get_path_from_object(object))
@@ -53,7 +53,7 @@ def get_paths_from_objects(objects_list):
         return []
 
 def get_paths_from_assets_data(assets_data):
-    if general.is_not_none_or_empty(assets_data):
+    if general_ue.is_not_none_or_empty(assets_data):
         paths = []
         for asset_data in assets_data:
             paths.append(get_path_from_object(asset_data.get_asset()))
@@ -66,10 +66,10 @@ def get_path_from_asset_data(asset_data):
     get_paths_from_assets_data([asset_data])
 
 def get_object_path_from_asset_data(asset_data):
-    return general.Name_to_str(asset_data.get_editor_property('object_path'))
+    return general_ue.Name_to_str(asset_data.get_editor_property('object_path'))
 
 def get_objects_paths_from_assets_data(assets_data):
-    if general.is_not_none_or_empty(assets_data):
+    if general_ue.is_not_none_or_empty(assets_data):
         paths = []
         for asset_data in assets_data:
             paths.append(get_object_path_from_asset_data(asset_data))
@@ -102,7 +102,7 @@ def get_asset_name_no_extension_in_data_asset(data_asset):
 # Deprecated
 def get_asset_name_no_extension_n(object_path):
     if object_path != None and object_path != unreal.Name(''):
-        path_str = general.Name_to_str(object_path)
+        path_str = general_ue.Name_to_str(object_path)
         base_name = os.path.basename(path_str)
         asset_name_no_extension = os.path.splitext(base_name)[0]
         return asset_name_no_extension
@@ -113,13 +113,13 @@ def get_asset_name_no_extension_n(object_path):
 ## @return object path to asset, from asset_data.
 def get_asset_data_object_path(asset_data):
     if asset_data is not None:
-        return general.Name_to_str(asset_data.get_editor_property('object_path'))
+        return general_ue.Name_to_str(asset_data.get_editor_property('object_path'))
     else:
         return ''
 
 def get_assets_data_object_paths(assets_data):
     paths = []
-    if general.is_not_none_or_empty(assets_data):
+    if general_ue.is_not_none_or_empty(assets_data):
         for asset_data in assets_data:
             paths.append(get_asset_data_object_path(asset_data))
     else:
@@ -131,7 +131,7 @@ def get_assets_data_object_paths(assets_data):
 # @return_type Name
 def get_asset_path_with_new_name(object_path, new_name):
     if object_path != None and object_path != unreal.Name('') and new_name != '':
-        path_str = general.Name_to_str(object_path)
+        path_str = general_ue.Name_to_str(object_path)
         dir_name = os.path.dirname(path_str)
         new_name_extension = new_name + '.' + new_name
         new_path_str = os.path.join(dir_name, new_name_extension)
@@ -146,7 +146,7 @@ def get_asset_class_name_str(asset):
 
 ## Getting asset data by object path
 def get_asset_data_by_object_path(object_path, include_only_on_disk_assets = False):
-    if general.is_not_none_or_empty(object_path):
+    if general_ue.is_not_none_or_empty(object_path):
         if unreal.EditorAssetLibrary.does_asset_exist(object_path):
             asset_registry = unreal.AssetRegistryHelpers.get_asset_registry()
             assets_data = asset_registry.get_asset_by_object_path(object_path, include_only_on_disk_assets)
@@ -184,7 +184,7 @@ def get_object_paths_by_data(data_assets):
 
 def get_assets_from_assets_data(assets_data):
     assets = []
-    if general.is_not_none_or_empty(assets_data):
+    if general_ue.is_not_none_or_empty(assets_data):
         for asset_data in assets_data:
             assets.append(asset_data.get_asset())
     else:
@@ -225,7 +225,7 @@ def get_assets_data_by_dirs_n_classes(dir_paths, class_names, is_recursive_searc
                                        only_on_disk_assets = False, has_log = False):
     if has_log: unreal.log(dir_paths); unreal.log(class_names)
 
-    if general.is_not_none_or_empty(dir_paths) and general.is_not_none_or_empty(class_names):
+    if general_ue.is_not_none_or_empty(dir_paths) and general_ue.is_not_none_or_empty(class_names):
         for dir_path in dir_paths:
             if not dir_path.startswith(config.PATH_ASSETS_START):
                 unreal.log_error(get_assets_data_by_dirs_n_classes.__name__ + ': path must be started from: /Game/')
@@ -244,7 +244,7 @@ def get_assets_data_by_dirs_n_classes(dir_paths, class_names, is_recursive_searc
         if has_log: unreal.log(get_assets_data_by_dirs_n_classes.__name__ + ': Starts Searching')
         assets_data = asset_registry.get_assets(ue_filter)
 
-        if has_log and (not general.is_not_none_or_empty(assets_data)):
+        if has_log and (not general_ue.is_not_none_or_empty(assets_data)):
             unreal.log(get_assets_data_by_dirs_n_classes.__name__ + ': did not find any asset')
         return assets_data
     else:
@@ -272,7 +272,7 @@ def filter_assets_by_properties_conj(assets_data, properties_values, asset_data_
     i = 0
     while all_properies_are_valid and i < len(properties_values):
         # if value is None, any value of property is valid
-        if general.is_not_none_or_empty(properties_values[i]):
+        if general_ue.is_not_none_or_empty(properties_values[i]):
             if (properties_values[i][1] is not None) and (asset.get_editor_property(properties_values[i][0]) != properties_values[i][1]):
                 all_properies_are_valid = False
         else:
@@ -295,7 +295,7 @@ def filter_assets_by_properties_disj(assets_data, properties_values, asset_data_
     i = 0
     while no_one_properties_are_valid and i < len(properties_values):
         # if value is None, any value of property is valid
-        if general.is_not_none_or_empty(properties_values[i]):
+        if general_ue.is_not_none_or_empty(properties_values[i]):
             if properties_values[i][1] is None or asset.get_editor_property(properties_values[i][0]) == properties_values[i][1]:
                 no_one_properties_are_valid = False
         else:
@@ -327,7 +327,7 @@ def filter_assets_by_properties_disj_r(assets_data, properties_values):
 ## Trim asset from list if not all of property_value pairs are True
 # No return value
 def filter_assets_by_properties(assets_data, properties_values, is_disjunction):
-    if general.is_not_none_or_empty(assets_data) and general.is_not_none_or_empty(properties_values):
+    if general_ue.is_not_none_or_empty(assets_data) and general_ue.is_not_none_or_empty(properties_values):
         with unreal.ScopedSlowTask(len(assets_data), 'Applying filter by property values disjunction to assets') as slow_task:
             slow_task.make_dialog(True)
             asset_data_index = 0
@@ -352,7 +352,7 @@ def find_assets_data(package_paths = [], package_names = [], object_paths = [], 
                      recursive_paths = True, recursive_classes = False, include_only_on_disk_assets = False,
                      properties_values = [], is_disjunction = True, log_path = '', log_title = ''):
     assets_data = []
-    if general.is_not_none_lists([package_paths, package_names, object_paths, class_names, recursive_classes_exclusion_set,
+    if general_ue.is_not_none_lists([package_paths, package_names, object_paths, class_names, recursive_classes_exclusion_set,
                                   recursive_paths, recursive_classes, include_only_on_disk_assets, properties_values, is_disjunction]):
         asset_registry = unreal.AssetRegistryHelpers.get_asset_registry()
         ue_filter = unreal.ARFilter(package_names = package_names, package_paths = package_paths, object_paths = object_paths,
@@ -361,9 +361,9 @@ def find_assets_data(package_paths = [], package_names = [], object_paths = [], 
                                     include_only_on_disk_assets = include_only_on_disk_assets)
         unreal.log(find_assets_data.__name__ + '(): Start searching assets')
         assets_data = asset_registry.get_assets(ue_filter)
-        if general.is_not_none_or_empty(assets_data):
+        if general_ue.is_not_none_or_empty(assets_data):
             unreal.log(find_assets_data.__name__ + '(): Assets without property filter count: ' + str(len(assets_data)) )
-            if general.is_not_none_or_empty(properties_values):
+            if general_ue.is_not_none_or_empty(properties_values):
                 filter_assets_by_properties(assets_data, properties_values, is_disjunction)
                 unreal.log(find_assets_data.__name__ + '(): Property Filtered Assets count: ' + str(len(assets_data)) )
             else:

@@ -1,7 +1,7 @@
 #import math
 
 import unreal_engine_scripts.config as config
-import unreal_engine_scripts.service.general as general
+import unreal_engine_scripts.service.general_ue as general_ue
 import unreal_engine_scripts.src.get_asset as get_asset
 import unreal_engine_scripts.src.set_asset as set_asset
 import unreal_engine_scripts.service.log as log
@@ -11,7 +11,7 @@ import unreal
 # To apply changes in modules
 import importlib
 importlib.reload(config)
-importlib.reload(general)
+importlib.reload(general_ue)
 importlib.reload(get_asset)
 importlib.reload(set_asset)
 importlib.reload(log)
@@ -137,7 +137,7 @@ def get_lod_count(static_mesh):
     return 0
 
 def is_input_ok_set_number_of_lod(assets_data, number_of_lod):
-    if general.is_not_none_or_empty(assets_data):
+    if general_ue.is_not_none_or_empty(assets_data):
         if is_lod_number_ok(number_of_lod):
             return True
         else:

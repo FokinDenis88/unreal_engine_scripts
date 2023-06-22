@@ -7,7 +7,7 @@ sys.path.append(os.path.abspath(PARENT_DIR))
 import unreal
 
 #import unreal_engine_scripts.config as config
-import unreal_engine_scripts.service.general as general
+import unreal_engine_scripts.service.general_ue as general_ue
 import unreal_engine_scripts.src.get_asset as get_asset
 import unreal_engine_scripts.src.set_asset as set_asset
 import unreal_engine_scripts.src.asset_library as asset_library
@@ -17,7 +17,7 @@ import unreal_engine_scripts.src.set_material as set_material
 
 import importlib
 #importlib.reload(config)
-importlib.reload(general)
+importlib.reload(general_ue)
 importlib.reload(get_asset)
 importlib.reload(set_asset)
 importlib.reload(asset_library)
@@ -194,12 +194,12 @@ def exec_import_asset_tasks(import_asset_tasks, asset_tools = None):
 
 ## Checks if there is some objects in import result
 def are_import_tasks_succeed(import_asset_tasks, import_fail_help_info = 'did not imported file'):
-    if general.is_not_none_or_empty(import_asset_tasks):
+    if general_ue.is_not_none_or_empty(import_asset_tasks):
         failed_tasks = []
         for import_asset_task in import_asset_tasks:
             destination_dir = import_asset_task.get_editor_property('destination_path')
             imported_assets_data = get_asset.get_material_texture_mesh_data_by_dir(destination_dir, is_recursive_search = True)
-            if not general.is_not_none_or_empty(imported_assets_data):
+            if not general_ue.is_not_none_or_empty(imported_assets_data):
                 failed_tasks.append(import_asset_task)
             #if not unreal.EditorAssetLibrary.does_directory_have_assets(destination_dir, recursive = True):
                 #failed_tasks.append(import_asset_task)
@@ -249,7 +249,7 @@ def import_fbx_with_gltf_materials(fbx_path, destination_dir, glb_materials_dir_
         import_fbx_default(fbx_path, glb_materials_dir_path, automated = is_automated)
 
         fbx_assets = get_asset.get_static_skeletal_meshes_data_by_dir(glb_materials_dir_path)
-        if general.is_not_none_or_empty(fbx_assets):
+        if general_ue.is_not_none_or_empty(fbx_assets):
             asset_library.move_assets(fbx_assets, destination_dir)
         else:
             unreal.log_error(import_fbx_with_gltf_materials.__name__ + ': No assets are imported by fbx file')
@@ -267,7 +267,7 @@ def import_fbx_subobjects_with_gltf_materials(subobjects_path, destination_dir, 
             return
 
         fbx_subobjects_assets = get_asset.get_static_skeletal_meshes_data_by_dir(glb_materials_dir_path)
-        if general.is_not_none_or_empty(fbx_subobjects_assets):
+        if general_ue.is_not_none_or_empty(fbx_subobjects_assets):
             subobjects_dir_path = unreal.Paths.combine([destination_dir, 'Subobjects'])
             unreal.EditorAssetLibrary.make_directory(subobjects_dir_path)
             asset_library.move_assets(fbx_subobjects_assets, subobjects_dir_path)
@@ -289,7 +289,7 @@ def import_fbx_scene_n_subobjects(fbx_path, destination_dir, subobjects_path, gl
 # Window Two Options, when import: Generate Lightmap UVs, Import uniform Scale
 def import_one_asset_pipeline_datasmith(fbx_path, glb_path, destination_dir, subobjects_path = '',
                                         include_only_on_disk_assets = False):
-    if general.is_not_none_or_empty_lists([fbx_path, glb_path, destination_dir]):
+    if general_ue.is_not_none_or_empty_lists([fbx_path, glb_path, destination_dir]):
         with unreal.ScopedEditorTransaction(import_one_asset_pipeline_datasmith.__name__ + '()') as ue_transaction:
             textures_dir_name = 'Textures'
             materials_dir_name = 'Materials'
@@ -328,7 +328,7 @@ def import_one_asset_pipeline_datasmith(fbx_path, glb_path, destination_dir, sub
 def import_assets_pipeline_datasmith(fbx_paths, glb_paths, destination_dirs, subobjects_paths = [],
                                      include_only_on_disk_assets = False):
     unreal.log(import_assets_pipeline_datasmith.__name__ + '() has Started')
-    if general.are_lists_equal_length([fbx_paths, glb_paths, subobjects_paths, destination_dirs], True):
+    if general_ue.are_lists_equal_length([fbx_paths, glb_paths, subobjects_paths, destination_dirs], True):
         for i in range(len(destination_dirs)):
             import_one_asset_pipeline_datasmith(fbx_paths[i], glb_paths[i], destination_dirs[i],
                                                 subobjects_paths[i], include_only_on_disk_assets)
@@ -343,7 +343,7 @@ def import_assets_pipeline_datasmith(fbx_paths, glb_paths, destination_dirs, sub
 # Window 4 Options, when import: Merge Meshes, Apply World Transform, Import Materials, Import in New Folder
 def import_one_asset_pipeline(fbx_path, gltf_path, destination_dir, subobjects_path = '',
                               include_only_on_disk_assets = False, to_replace_texture_samples = False):
-    if general.is_not_none_or_empty_lists([fbx_path, gltf_path, destination_dir]):
+    if general_ue.is_not_none_or_empty_lists([fbx_path, gltf_path, destination_dir]):
         with unreal.ScopedEditorTransaction(import_one_asset_pipeline.__name__ + '()') as ue_transaction:
             if not unreal.EditorAssetLibrary.does_directory_exist(destination_dir):
                 unreal.EditorAssetLibrary.make_directory(destination_dir)
@@ -383,7 +383,7 @@ def import_one_asset_pipeline(fbx_path, gltf_path, destination_dir, subobjects_p
 def import_assets_pipeline(fbx_paths, gltf_paths, destination_dirs, subobjects_paths = [],
                            include_only_on_disk_assets = False, to_replace_texture_samples = False):
     unreal.log(import_assets_pipeline.__name__ + '() has Started')
-    if general.are_lists_equal_length([fbx_paths, gltf_paths, subobjects_paths, destination_dirs], True):
+    if general_ue.are_lists_equal_length([fbx_paths, gltf_paths, subobjects_paths, destination_dirs], True):
         for i in range(len(destination_dirs)):
             import_one_asset_pipeline(fbx_paths[i], gltf_paths[i], destination_dirs[i],
                                       subobjects_paths[i], include_only_on_disk_assets, to_replace_texture_samples)
@@ -394,7 +394,7 @@ def import_assets_pipeline(fbx_paths, gltf_paths, destination_dirs, subobjects_p
 ## Window Options 10: like in import_one_asset_pipeline_datasmith + Geometry, Materials & Textures, Lights, Cameras...
 def import_asset_pipeline_datasmith_factory(fbx_path, glb_path, destination_dir, subobjects_path = '',
                                              include_only_on_disk_assets = False):
-    if general.is_not_none_or_empty_lists([fbx_path, glb_path, destination_dir]):
+    if general_ue.is_not_none_or_empty_lists([fbx_path, glb_path, destination_dir]):
         with unreal.ScopedEditorTransaction(import_asset_pipeline_datasmith_factory.__name__ + '()') as ue_transaction:
             textures_dir_name = 'Textures'
             materials_dir_name = 'Materials'
@@ -437,8 +437,8 @@ def import_asset_pipeline_datasmith_factory(fbx_path, glb_path, destination_dir,
 ## Window Options 10: like in import_one_asset_pipeline_datasmith + Geometry, Materials & Textures, Lights, Cameras...
 def import_assets_pipeline_datasmith_factory(fbx_paths, glb_paths, destination_dirs, subobjects_paths = '',
                                              include_only_on_disk_assets = False):
-    if general.is_not_none_or_empty_lists([fbx_paths, glb_paths, destination_dirs, subobjects_paths]):
-        if general.are_lists_equal_length([fbx_paths, glb_paths, destination_dirs, subobjects_paths]):
+    if general_ue.is_not_none_or_empty_lists([fbx_paths, glb_paths, destination_dirs, subobjects_paths]):
+        if general_ue.are_lists_equal_length([fbx_paths, glb_paths, destination_dirs, subobjects_paths]):
             i = 0
             while i < len(fbx_paths):
                 import_asset_pipeline_datasmith_factory(fbx_paths[i], glb_paths[i], destination_dirs[i], subobjects_paths[i],
@@ -454,7 +454,7 @@ def import_assets_pipeline_datasmith_factory(fbx_paths, glb_paths, destination_d
 
 def import_asset_pipeline_hybrid(fbx_path, glb_path, destination_dir, subobjects_path = '',
                                  is_automated = False, to_recompile = True, to_import_fbx_material_instance_file = False):
-    if general.is_not_none_or_empty_lists([fbx_path, glb_path, destination_dir]):
+    if general_ue.is_not_none_or_empty_lists([fbx_path, glb_path, destination_dir]):
         with unreal.ScopedEditorTransaction(import_asset_pipeline_datasmith_factory.__name__ + '()') as ue_transaction:
             textures_dir_name = 'Textures'
             materials_dir_name = 'Materials'
@@ -493,6 +493,8 @@ def import_asset_pipeline_hybrid(fbx_path, glb_path, destination_dir, subobjects
             if not make_import_asset_task(glb_asset_task, asset_tools, 'did not imported glb file'):
                 return
 
+
+
             # Create Materials dir From Temp to Glb Folder
             temp_glb_materials_dir_path = unreal.Paths.combine([temp_dir_path, glb_file_name, materials_dir_name])
             # Materials in glb_materials_subdir_path will be replaced by redirectors
@@ -507,6 +509,9 @@ def import_asset_pipeline_hybrid(fbx_path, glb_path, destination_dir, subobjects
             unreal.EditorAssetLibrary.make_directory(textures_dest_dir_path)
             asset_library.move_assets_in_dir(temp_glb_textures_dir_path, textures_dest_dir_path)
             prefix_suffix.delete_glb_texture_prefix_in_dir(textures_dest_dir_path)
+
+
+
 
             # Move Materials & Material Instances From Glb Folder To Destination
             materials_dest_dir_path = unreal.Paths.combine([destination_dir, materials_dir_name])
@@ -542,8 +547,8 @@ def import_asset_pipeline_hybrid(fbx_path, glb_path, destination_dir, subobjects
 ## Window Options 10: like in import_one_asset_pipeline_datasmith + Geometry, Materials & Textures, Lights, Cameras...
 def import_assets_pipeline_hybrid(fbx_paths, glb_paths, destination_dirs, subobjects_paths = '',
                                   is_automated = False, to_recompile = True, to_import_fbx_material_instance_file = False):
-    if general.is_not_none_or_empty_lists([fbx_paths, glb_paths, destination_dirs, subobjects_paths]):
-        if general.are_lists_equal_length([fbx_paths, glb_paths, destination_dirs, subobjects_paths]):
+    if general_ue.is_not_none_or_empty_lists([fbx_paths, glb_paths, destination_dirs, subobjects_paths]):
+        if general_ue.are_lists_equal_length([fbx_paths, glb_paths, destination_dirs, subobjects_paths]):
             with unreal.ScopedEditorTransaction(import_assets_pipeline_hybrid.__name__ + '()') as ue_transaction:
                 i = 0
                 while i < len(fbx_paths):
@@ -563,8 +568,8 @@ def import_assets_pipeline_code4game(fbx_paths, gltf_paths, DESTINATION_DIRS, su
 
 
 def prepare_paths_gltf(import_dirs, fbx_file_names, gltf_file_names, subobjects_dir_name, subobjects_names):
-    if general.is_not_none_or_empty_lists([import_dirs, fbx_file_names, gltf_file_names, subobjects_names]):
-        if general.are_lists_equal_length([import_dirs, fbx_file_names, gltf_file_names, subobjects_names]):
+    if general_ue.is_not_none_or_empty_lists([import_dirs, fbx_file_names, gltf_file_names, subobjects_names]):
+        if general_ue.are_lists_equal_length([import_dirs, fbx_file_names, gltf_file_names, subobjects_names]):
             fbx_paths, gltf_paths, subobjects_paths = [], [], []
             i = 0
             while i < len(import_dirs):
@@ -588,8 +593,8 @@ def prepare_paths_gltf(import_dirs, fbx_file_names, gltf_file_names, subobjects_
         unreal.log_error(prepare_paths_gltf.__name__ + '(): import_dirs, fbx_file_names, gltf_file_names, subobjects_names must not be None or Empty')
 
 def prepare_paths_datasmith(import_dirs, fbx_file_names, glb_file_names, subobjects_dir_name, subobjects_names):
-    if general.is_not_none_or_empty_lists([import_dirs, fbx_file_names, glb_file_names, subobjects_names]):
-        if general.are_lists_equal_length([import_dirs, fbx_file_names, glb_file_names, subobjects_names]):
+    if general_ue.is_not_none_or_empty_lists([import_dirs, fbx_file_names, glb_file_names, subobjects_names]):
+        if general_ue.are_lists_equal_length([import_dirs, fbx_file_names, glb_file_names, subobjects_names]):
             fbx_paths, glb_paths, subobjects_paths = [], [], []
             i = 0
             while i < len(import_dirs):

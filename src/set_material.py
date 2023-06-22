@@ -2,7 +2,7 @@ import re
 import unreal
 
 import unreal_engine_scripts.config as config
-import unreal_engine_scripts.service.general as general
+import unreal_engine_scripts.service.general_ue as general_ue
 import unreal_engine_scripts.service.log as log
 import unreal_engine_scripts.src.get_asset as get_asset
 import unreal_engine_scripts.src.set_asset as set_asset
@@ -10,7 +10,7 @@ import unreal_engine_scripts.src.get_material as get_material
 
 import importlib
 importlib.reload(config)
-importlib.reload(general)
+importlib.reload(general_ue)
 importlib.reload(log)
 importlib.reload(get_asset)
 importlib.reload(set_asset)
@@ -65,7 +65,7 @@ def transfer_texture_node(texture_source_node, texture_target_node):
 ## Transfers connection between two nodes. Transfer all inputs and outputs of node_source to node_target.
 # node_target will be connected the same as node_source.
 def transfer_connections(material, node_source, node_target, all_nodes = None):
-    if general.are_list_objects_not_None([material, node_source, node_target]):
+    if general_ue.are_list_objects_not_None([material, node_source, node_target]):
         with unreal.ScopedEditorTransaction(transfer_connections.__name__ + '()') as ue_transaction:
             if all_nodes is None:
                 all_nodes = unreal.PythonMaterialLib.get_material_expressions(material)
@@ -118,7 +118,7 @@ def new_node_TextureSampleParameter2D(material, node_meta_data = None, node_pos_
         return None
 
 def new_node_TextureSampleParameter2D_path(material_path, node_data = None, node_pos_x=0, node_pos_y=0):
-    if general.is_not_none_or_empty(material_path):
+    if general_ue.is_not_none_or_empty(material_path):
         material = get_asset.get_asset_by_object_path(material_path)
         return new_node_TextureSampleParameter2D(material, node_data, node_pos_x, node_pos_y)
     else:
@@ -157,7 +157,7 @@ def new_node_BaseColorVector(material):
 
 ## Creates Base color vector useful for multiplying with diffuse map or albedo
 def new_node_ScalarParameter_texture_factor(material, texture_type):
-    if material is not None and general.is_not_none_or_empty(texture_type):
+    if material is not None and general_ue.is_not_none_or_empty(texture_type):
         node_scalar_texture_factor = unreal.MaterialEditingLibrary.create_material_expression(material, unreal.MaterialExpressionScalarParameter)
         node_scalar_texture_factor.set_editor_property('parameter_name', texture_type + '_Factor')
         node_scalar_texture_factor.set_editor_property('default_value', 1.0)
@@ -192,7 +192,7 @@ def delete_nodes_trash_suffix(material):
         with unreal.ScopedEditorTransaction(delete_nodes_trash_suffix.__name__ + '()') as ue_transaction:
             all_parameter_nodes = get_material.find_nodes_in_material(material, config.PARAMETER_NODE_TYPES)
             for node in all_parameter_nodes:
-                parameter_name = general.Name_to_str(node.get_editor_property('parameter_name'))
+                parameter_name = general_ue.Name_to_str(node.get_editor_property('parameter_name'))
                 node.set_editor_property('parameter_name', delete_trash_suffix(parameter_name))
 
             #material_path = get_asset.get_path_from_object(material)
@@ -202,7 +202,7 @@ def delete_nodes_trash_suffix(material):
         unreal.log_error(delete_nodes_trash_suffix.__name__ + ': material must not be None')
 
 def delete_nodes_trash_suffix_in_dir(dir_path):
-    if general.is_not_none_or_empty(dir_path):
+    if general_ue.is_not_none_or_empty(dir_path):
         materials_data = get_asset.get_materials_data_by_dir(dir_path)
         if materials_data is not None:
             with unreal.ScopedEditorTransaction(delete_nodes_trash_suffix_in_dir.__name__ + '()') as ue_transaction:
@@ -232,14 +232,14 @@ def replace_parameters_space_to_underscore(material):
         with unreal.ScopedEditorTransaction(replace_parameters_space_to_underscore.__name__ + '()') as ue_transaction:
             all_parameter_nodes = get_material.find_nodes_in_material(material, config.PARAMETER_NODE_TYPES)
             for node in all_parameter_nodes:
-                parameter_name = general.Name_to_str(node.get_editor_property('parameter_name'))
+                parameter_name = general_ue.Name_to_str(node.get_editor_property('parameter_name'))
                 #node.set_editor_property('parameter_name', replace_space_to_underscore(parameter_name))
                 node.set_editor_property('parameter_name', parameter_name.replace(' ', '_'))
     else:
         unreal.log_error(replace_parameters_space_to_underscore.__name__ + ': material must not be None')
 
 def replace_parameters_space_to_underscore_in_dir(dir_path):
-    if general.is_not_none_or_empty(dir_path):
+    if general_ue.is_not_none_or_empty(dir_path):
         materials_data = get_asset.get_materials_data_by_dir(dir_path)
         if materials_data is not None:
             with unreal.ScopedEditorTransaction(replace_parameters_space_to_underscore_in_dir.__name__ + '()') as ue_transaction:
@@ -258,7 +258,7 @@ def correct_normal_map_map(material):
         with unreal.ScopedEditorTransaction(replace_parameters_space_to_underscore.__name__ + '()') as ue_transaction:
             all_parameter_nodes = get_material.find_nodes_in_material(material, config.PARAMETER_NODE_TYPES)
             for node in all_parameter_nodes:
-                parameter_name = general.Name_to_str(node.get_editor_property('parameter_name'))
+                parameter_name = general_ue.Name_to_str(node.get_editor_property('parameter_name'))
                 suffix = '_Map'
                 if parameter_name.endswith(suffix + suffix):
                     new_parameter_name = parameter_name[:-len(suffix)]
@@ -267,7 +267,7 @@ def correct_normal_map_map(material):
         unreal.log_error(replace_parameters_space_to_underscore.__name__ + ': material must not be None')
 
 def correct_normal_map_map_in_dir(dir_path):
-    if general.is_not_none_or_empty(dir_path):
+    if general_ue.is_not_none_or_empty(dir_path):
         materials_data = get_asset.get_materials_data_by_dir(dir_path)
         if materials_data is not None:
             with unreal.ScopedEditorTransaction(correct_normal_map_map_in_dir.__name__ + '()') as ue_transaction:
@@ -289,7 +289,7 @@ def set_materials_two_sided(target_paths, new_value = False, is_recursive_search
 
 ## Recompile all materials in dir_paths after changes in material
 def recompile_material_in_dirs(dirs_paths):
-    if general.is_not_none_or_empty_lists(dirs_paths):
+    if general_ue.is_not_none_or_empty_lists(dirs_paths):
         materials_data = get_asset.get_materials_data_by_dirs(dirs_paths)
         if materials_data is not None:
             with unreal.ScopedEditorTransaction(recompile_material_in_dirs.__name__ + '()') as ue_transaction:
@@ -307,7 +307,7 @@ def recompile_material_in_dir(dir_path):
 
 ## Delete all nodes in material
 def delete_all_nodes_in_materials_data(materials_data):
-    if general.is_not_none_or_empty(materials_data):
+    if general_ue.is_not_none_or_empty(materials_data):
         with unreal.ScopedEditorTransaction(recompile_material_in_dirs.__name__ + '()') as ue_transaction:
             progress_bar_text = delete_all_nodes_in_materials_data.__name__ + config.IS_WORKING_TEXT
             with unreal.ScopedSlowTask(len(materials_data), progress_bar_text) as slow_task:

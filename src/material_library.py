@@ -1,7 +1,7 @@
 import unreal
 
 import unreal_engine_scripts.config as config
-import unreal_engine_scripts.service.general as general
+import unreal_engine_scripts.service.general_ue as general_ue
 import unreal_engine_scripts.src.get_asset as get_asset
 import unreal_engine_scripts.asset.material_node as material_node
 import unreal_engine_scripts.src.get_material as get_material
@@ -10,7 +10,7 @@ import unreal_engine_scripts.src.prefix_suffix as prefix_suffix
 
 import importlib
 importlib.reload(config)
-importlib.reload(general)
+importlib.reload(general_ue)
 importlib.reload(get_asset)
 importlib.reload(material_node)
 importlib.reload(get_material)
@@ -42,19 +42,19 @@ def auto_align_material_node_data(material_asset_data):
         unreal.log_error(auto_align_material_node_data.__name__ + ': material_asset_data must not be None')
 ## @param materials_asset_data list of asset data
 def auto_align_materials_node_data(materials_asset_data):
-    if general.is_not_none_or_empty(materials_asset_data):
+    if general_ue.is_not_none_or_empty(materials_asset_data):
         for material_asset_data in materials_asset_data:
             auto_align_material_nodes(material_asset_data.get_asset())
     else:
         unreal.log_error(auto_align_materials_node_data.__name__ + ': materials_asset_data must not be None')
 def auto_align_material_nodes_path(object_path):
-    if general.is_not_none_or_empty(object_path):
+    if general_ue.is_not_none_or_empty(object_path):
         material = get_asset.get_asset_by_object_path(object_path)
         auto_align_material_nodes(material)
     else:
         unreal.log_error(auto_align_material_nodes_path.__name__ + ': object_path must not be None or empty')
 def auto_align_materials_nodes_paths(objects_paths):
-    if general.is_not_none_or_empty(objects_paths):
+    if general_ue.is_not_none_or_empty(objects_paths):
         for object_path in objects_paths:
             material = get_asset.get_asset_by_object_path(object_path)
             auto_align_material_nodes(material)
@@ -64,14 +64,14 @@ def auto_align_materials_nodes_paths(objects_paths):
 
 ## Replaces all TextureSamples with TextureSamplesParameter2D
 def replace_texture_sample_to_parameters_in_materials(materials, to_delete_old_node = True):
-    if general.is_not_none_or_empty(materials):
+    if general_ue.is_not_none_or_empty(materials):
         with unreal.ScopedEditorTransaction(replace_texture_sample_to_parameters_in_materials.__name__ + '()') as ue_transaction:
             nodes_types = [unreal.MaterialExpressionTextureSample]
             for material in materials:
                 texture_sample_nodes = get_material.find_nodes_in_material(material, nodes_types, is_nodes_types_subclasses = False)
                 unreal.log(replace_texture_sample_to_parameters_in_materials.__name__ + '(): List of Texture Sample Nodes to be replaced:')
                 unreal.log(texture_sample_nodes)
-                if general.is_not_none_or_empty(texture_sample_nodes):
+                if general_ue.is_not_none_or_empty(texture_sample_nodes):
                     for node in texture_sample_nodes:
                         new_node = set_material.new_node_TextureSampleParameter2D_node(material, node)
                         set_material.set_texture_parameter_name(new_node)
@@ -107,7 +107,7 @@ def replace_texture_sample_to_parameters_by_paths(materials_paths):
 def replace_texture_sample_to_parameters_by_path(material_path):
     replace_texture_sample_to_parameters_by_paths([material_path])
 def replace_texture_sample_to_parameters_by_datas(materials_data):
-    if general.is_not_none_or_empty(materials_data):
+    if general_ue.is_not_none_or_empty(materials_data):
         materials = []
         for material_data in materials_data:
             materials.append(material_data.get_asset())
@@ -177,7 +177,7 @@ def generate_convex_concave_chain(material, convex_concave_node, connection_resu
     search_nodes = get_material.find_nodes_in_material(material, nodes_types = [unreal.MaterialExpressionTextureSampleParameter2D],
                                                              properties_values = [('parameter_name', 'BaseColor_Map')])
 
-    if general.is_not_none_or_empty(search_nodes):
+    if general_ue.is_not_none_or_empty(search_nodes):
         node_basecolor_map = search_nodes[0]
         connection_results.append(unreal.MaterialEditingLibrary.connect_material_expressions(node_basecolor_map, texture_node_output,
                                                                                              blend_overlay_node, 'Base'))
@@ -230,7 +230,7 @@ def generate_texture_displacement_chain(material, texture_node, texture_type, co
 ## Generate nodes, needed for texture type, and link them to material output
 # @param material is material Object. Is needed to change material properties like translucent
 def generate_support_nodes_n_link(material, texture_node, texture_type):
-    if material is not None and texture_node is not None and general.is_not_none_or_empty(texture_type):
+    if material is not None and texture_node is not None and general_ue.is_not_none_or_empty(texture_type):
         connection_results = []
         # Simple
         if texture_type == 'BaseColor' or texture_type == 'Albedo':
@@ -309,7 +309,7 @@ def generate_support_nodes_n_link(material, texture_node, texture_type):
             # MP_BASE_COLOR
             a = 0
 
-        if general.has_false_value(connection_results):
+        if general_ue.has_false_value(connection_results):
             unreal.log_error(generate_support_nodes_n_link.__name__ + '(): not all support nodes connection process succeed')
     else:
         unreal.log_error(generate_support_nodes_n_link.__name__ + ': material, texture_node and texture_type must not be None or empty')
@@ -331,8 +331,8 @@ def generate_support_nodes_n_link(material, texture_node, texture_type):
 ## Links texture node to result node/material output node. Depends on texture type. May add more support expressions/nodes
 # @param textures_types is the type of texture, f.e. Diffuse, Normal, Metallic. View in naming_convention.py
 def link_textures_nodes_to_result_node(material, textures_nodes, textures_types = None, to_align = False):
-    if general.is_not_none_or_empty(textures_nodes):
-        if (textures_types is None) or (textures_types is not None and general.are_lists_equal_length([textures_nodes, textures_types])):
+    if general_ue.is_not_none_or_empty(textures_nodes):
+        if (textures_types is None) or (textures_types is not None and general_ue.are_lists_equal_length([textures_nodes, textures_types])):
             with unreal.ScopedEditorTransaction(link_textures_nodes_to_result_node.__name__ + '()') as ue_transaction:
                 for i in range(len(textures_nodes)):
                     texture_path = get_material.get_texture_node_source_path(textures_nodes[i])
@@ -362,13 +362,13 @@ def link_texture_node_to_result_node(material, texture_node, texture_type = None
 ## Connect free unlinked texture_nodes in material with material output
 # You can add textures nodes inside material in material editor. Then autolink them all.
 def connect_free_texture_nodes_in_materials(materials):
-    if general.is_not_none_or_empty(materials):
+    if general_ue.is_not_none_or_empty(materials):
         with unreal.ScopedEditorTransaction(connect_free_texture_nodes_in_materials.__name__ + '()') as ue_transaction:
             unreal.log(connect_free_texture_nodes_in_materials.__name__ + ' is Started')
             for material in materials:
                 free_texture_nodes = get_material.find_unlinked_texture_nodes(material)
                 #unreal.log('free_texture_nodes');     unreal.log(free_texture_nodes)
-                if general.is_not_none_or_empty(free_texture_nodes):
+                if general_ue.is_not_none_or_empty(free_texture_nodes):
                     link_textures_nodes_to_result_node(material, free_texture_nodes, None, True)
                 else:
                     unreal.log(connect_free_texture_nodes_in_materials.__name__ + ': did not find any free nodes in material: ')
@@ -383,11 +383,11 @@ def connect_free_texture_nodes_in_material(material):
     connect_free_texture_nodes_in_materials([material])
 
 def connect_free_texture_nodes_in_materials_by_paths(materials_paths):
-    if general.is_not_none_or_empty(materials_paths):
+    if general_ue.is_not_none_or_empty(materials_paths):
         materials = []
         for material_path in materials_paths:
             materials.append(get_asset.load_asset(material_path))
-        if general.is_not_none_or_empty(materials):
+        if general_ue.is_not_none_or_empty(materials):
             connect_free_texture_nodes_in_materials(materials)
         else:
             unreal.log_error(connect_free_texture_nodes_in_materials_by_paths.__name__ + ': No materials are loaded')
@@ -403,7 +403,7 @@ def connect_free_texture_nodes_in_materials_data(materials_data):
         unreal.log_error(connect_free_texture_nodes_in_materials_data.__name__ + ': materials_data must not be empty or None')
 
 def connect_free_texture_nodes_in_materials_by_dirs(dirs_paths):
-    if general.is_not_none_or_empty_lists(dirs_paths):
+    if general_ue.is_not_none_or_empty_lists(dirs_paths):
         materials_data = get_asset.get_materials_data_by_dirs(dirs_paths)
         if materials_data is not None:
             with unreal.ScopedEditorTransaction(connect_free_texture_nodes_in_materials_by_dirs.__name__ + '()') as ue_transaction:
@@ -423,7 +423,7 @@ def connect_free_texture_nodes_in_materials_by_dir(dir_path):
 def connect_textures_files_to_materials(materials_paths, textures_paths,
                                         to_recompile_material = False, to_align = False,
                                         node_pos_x = 0, node_pos_y = 0):
-    if general.is_not_none_or_empty_lists([textures_paths, materials_paths]):
+    if general_ue.is_not_none_or_empty_lists([textures_paths, materials_paths]):
         with unreal.ScopedEditorTransaction(connect_textures_files_to_materials.__name__ + '()') as ue_transaction:
             for material_path in materials_paths:
                 material = get_asset.get_asset_by_object_path(material_path)
@@ -471,8 +471,8 @@ def connect_texture_file_to_material(material_path, texture_path,
 def connect_texture_files_packs(material_paths, texture_paths_packs,
                                 to_recompile_material = False, to_align = False,
                                 node_pos_x = 0, node_pos_y = 0):
-    if general.is_not_none_or_empty_lists([material_paths, texture_paths_packs]):
-        if general.are_lists_equal_length([material_paths, texture_paths_packs]):
+    if general_ue.is_not_none_or_empty_lists([material_paths, texture_paths_packs]):
+        if general_ue.are_lists_equal_length([material_paths, texture_paths_packs]):
             for i in range(len(material_paths)):
                 connect_textures_files_to_material(material_paths[i], texture_paths_packs[i],
                                                    to_recompile_material, to_align, node_pos_x, node_pos_y)
@@ -494,7 +494,7 @@ def connect_texture_files_pack(material_path, texture_paths_pack,
 # @return list of lists with textures. materials_data[i] is associated with associated_textures_paths[i]
 def associate_textures_with_materials(materials_data, textures_data):
     associated_textures_paths_packs = []
-    if general.is_not_none_or_empty_lists([materials_data, textures_data]):
+    if general_ue.is_not_none_or_empty_lists([materials_data, textures_data]):
         material_names_no_prefix_suffix = []
         for material_data in materials_data:
             material_names_no_prefix_suffix.append(prefix_suffix.get_asset_name_without_prefix_suffix_data(material_data))
@@ -520,13 +520,13 @@ def associate_textures_with_materials(materials_data, textures_data):
 # problem in unreal.MaterialEditingLibrary.get_used_textures(material) function
 def connect_by_association_texture_file_dirs(materials_dirs, textures_dirs, to_recompile_material = False, to_align = False):
     unreal.log(connect_by_association_texture_file_dirs.__name__ + ' Started')
-    if general.is_not_none_or_empty_lists([textures_dirs, materials_dirs]):
-        if general.are_lists_equal_length([textures_dirs, materials_dirs]):
+    if general_ue.is_not_none_or_empty_lists([textures_dirs, materials_dirs]):
+        if general_ue.are_lists_equal_length([textures_dirs, materials_dirs]):
             with unreal.ScopedEditorTransaction(connect_by_association_texture_file_dirs.__name__ + '()') as ue_transaction:
                 for i in range(len(textures_dirs)):
                     textures_data = get_asset.get_textures_data_by_dir(textures_dirs[i])
                     materials_data = get_asset.get_materials_data_by_dir(materials_dirs[i])
-                    if general.is_not_none_or_empty_lists([textures_data, materials_data]):
+                    if general_ue.is_not_none_or_empty_lists([textures_data, materials_data]):
                         unreal.log('materials_data: ');    unreal.log(materials_data);  unreal.log('_');
                         # [[textures], [textures], [textures]] each list is associated with element of materials_data
                         associated_textures_paths_packs = associate_textures_with_materials(materials_data, textures_data)

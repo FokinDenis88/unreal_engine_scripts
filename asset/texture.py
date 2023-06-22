@@ -2,11 +2,11 @@ from enum import Enum
 
 import unreal
 
-import unreal_engine_scripts.service.general as general
+import unreal_engine_scripts.service.general_ue as general_ue
 import unreal_engine_scripts.src.get_asset as get_asset
 
 import importlib
-importlib.reload(general)
+importlib.reload(general_ue)
 importlib.reload(get_asset)
 
 from unreal_engine_scripts.src.get_asset import get_asset_by_object_path
@@ -73,7 +73,7 @@ def get_texture_imported_size_x_y(object_path, include_only_on_disk_assets = Fal
 def find_textures_by_imported_size(dir_path, search_texture_size, is_bigger_or_equal = True,
                                    is_recursive_search = False, only_on_disk_assets = False):
     found_textures = []
-    if general.is_not_none_or_empty(dir_path):
+    if general_ue.is_not_none_or_empty(dir_path):
         textures_data = get_asset.get_textures_data_by_dir(dir_path, is_recursive_search, only_on_disk_assets)
         if textures_data is not None:
             for texture_data in textures_data:
@@ -95,7 +95,7 @@ def set_maximum_texture_size(texture, value):
     texture.set_editor_property('max_texture_size', value)
 
 def set_maximum_textures_size_in_dir(dir_path, value):
-    if general.is_not_none_or_empty(dir_path):
+    if general_ue.is_not_none_or_empty(dir_path):
         textures_data = get_asset.get_textures_data_by_dir(dir_path)
         if textures_data is not None:
             for texture_data in textures_data:

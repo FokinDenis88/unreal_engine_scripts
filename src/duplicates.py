@@ -20,8 +20,6 @@ def find_duplicates():
             if slow_task.should_cancel():  # True if the user has pressed Cancel in the UI
                 break
 
-            slow_task.enter_progress_frame(1)
-
             name = asset.asset_name
             texture = asset.get_asset()
             hashNum = helper.get_texture_hash(texture)
@@ -31,3 +29,5 @@ def find_duplicates():
             else:
                 print(f'Duplicate found. {asset.object_path} is the same as {record[hashNum].object_path}')
                 lib.consolidate_assets(record[hashNum].get_asset(), [texture])
+
+            slow_task.enter_progress_frame(1)

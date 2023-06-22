@@ -11,7 +11,7 @@ import unreal_engine_scripts.src.import_pipeline as import_pipeline
 import unreal_engine_scripts.tasks.import_pipeline_tasks_ini as import_pipeline_tasks_ini
 
 #import unreal_engine_scripts.config as config
-#import unreal_engine_scripts.service.general as general
+#import unreal_engine_scripts.service.general_ue as general_ue
 #import unreal_engine_scripts.src.get_asset as get_asset
 #import unreal_engine_scripts.src.asset_library as asset_library
 #import unreal_engine_scripts.src.material_library as material_library
@@ -25,7 +25,7 @@ importlib.reload(import_pipeline)
 importlib.reload(import_pipeline_tasks_ini)
 
 #importlib.reload(config)
-#importlib.reload(general)
+#importlib.reload(general_ue)
 #importlib.reload(get_asset)
 #importlib.reload(asset_library)
 #importlib.reload(material_library)

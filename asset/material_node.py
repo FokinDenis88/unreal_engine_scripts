@@ -1,13 +1,13 @@
 import unreal
 
 #import unreal_engine_scripts.config as config
-#import unreal_engine_scripts.service.general as general
+#import unreal_engine_scripts.service.general_ue as general_ue
 import unreal_engine_scripts.src.get_asset as get_asset
 import unreal_engine_scripts.src.prefix_suffix as prefix_suffix
 
 import importlib
 #importlib.reload(config)
-#importlib.reload(general)
+#importlib.reload(general_ue)
 importlib.reload(get_asset)
 importlib.reload(prefix_suffix)
 

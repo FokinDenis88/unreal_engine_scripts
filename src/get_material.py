@@ -1,13 +1,13 @@
 import unreal
 
 #import unreal_engine_scripts.config as config
-import unreal_engine_scripts.service.general as general
+import unreal_engine_scripts.service.general_ue as general_ue
 import unreal_engine_scripts.src.get_asset as get_asset
 import unreal_engine_scripts.src.prefix_suffix as prefix_suffix
 
 import importlib
 #importlib.reload(config)
-importlib.reload(general)
+importlib.reload(general_ue)
 importlib.reload(get_asset)
 importlib.reload(prefix_suffix)
 
@@ -29,7 +29,7 @@ def get_texture_node_source_path(node):
 ## Reads prefix and suffix of texture asset and returns type of texture by convention
 def get_texture_type_by_prefix_suffix_node(node):
     texture_path = get_texture_node_source_path(node)
-    if general.is_not_none_or_empty(texture_path):
+    if general_ue.is_not_none_or_empty(texture_path):
         return prefix_suffix.get_texture_type_by_prefix_suffix(texture_path)
     else:
         unreal.log(get_texture_type_by_prefix_suffix_node.__name__ + '(): did not find any texture source in node')
@@ -87,7 +87,7 @@ def get_material_all_nodes(material):
     return get_material_all_nodes_tapython(material)
 
 def get_material_all_nodes_by_path(material_object_path):
-    if general.is_not_none_or_empty(material_object_path):
+    if general_ue.is_not_none_or_empty(material_object_path):
         material = unreal.EditorAssetLibrary.load_asset(material_object_path)
         return get_material_all_nodes(material)
     else:
@@ -133,8 +133,8 @@ def find_connections_of_node(material, node, all_nodes = None, all_connections =
 def use_nodes_types_filter(filtered_nodes, nodes_types, is_nodes_types_subclasses):
     i = 0
     while i < len(filtered_nodes):
-        is_not_in_types = (not is_nodes_types_subclasses) and (not general.is_in_types(filtered_nodes[i], nodes_types))
-        is_not_in_subclasses = is_nodes_types_subclasses and (not general.is_in_subclasses(filtered_nodes[i], nodes_types))
+        is_not_in_types = (not is_nodes_types_subclasses) and (not general_ue.is_in_types(filtered_nodes[i], nodes_types))
+        is_not_in_subclasses = is_nodes_types_subclasses and (not general_ue.is_in_subclasses(filtered_nodes[i], nodes_types))
         if is_not_in_types or is_not_in_subclasses:
             filtered_nodes.pop(i)
         else:
@@ -153,11 +153,11 @@ def compare_properites_values(ue_object, properties_values):
 
 def is_node_in_properties_values(node, properties_values, is_disjunction):
     comparation_results = compare_properites_values(node, properties_values)
-    if general.is_not_none_or_empty(comparation_results):
+    if general_ue.is_not_none_or_empty(comparation_results):
         if is_disjunction:
-            return general.disjunction_of_conditions(comparation_results)
+            return general_ue.disjunction_of_conditions(comparation_results)
         else: # Conjunction
-            return general.conjunction_of_conditions(comparation_results)
+            return general_ue.conjunction_of_conditions(comparation_results)
     else:   # No properties found
         return False
 
@@ -205,13 +205,13 @@ def filter_nodes_of_material(material, nodes,
                              nodes_types = None, properties_values = None, is_linked_to_output = None,      # filters
                              is_disjunction = True, is_nodes_types_subclasses = False):                     # triggers
     unreal.log(filter_nodes_of_material.__name__ + ' Started')
-    if general.is_not_none_or_empty(nodes):
+    if general_ue.is_not_none_or_empty(nodes):
         filtered_nodes = nodes.copy()
         unreal.log('Nodes count before filtering : ' + str(len(filtered_nodes)))
         if nodes_types is not None:
             use_nodes_types_filter(filtered_nodes, nodes_types, is_nodes_types_subclasses)
             unreal.log('Nodes count after use_nodes_types_filter filtering: ' + str(len(filtered_nodes)))
-        if general.is_not_none_or_empty(properties_values):
+        if general_ue.is_not_none_or_empty(properties_values):
             use_properties_values_filter(filtered_nodes, properties_values, is_disjunction)
             unreal.log('Nodes count after use_properties_values_filter filtering: ' + str(len(filtered_nodes)))
         if is_linked_to_output is not None:
@@ -232,7 +232,7 @@ def find_nodes_in_material(material,
                            is_disjunction = True,  is_nodes_types_subclasses = False, all_nodes = None):
     if all_nodes is None:
        all_nodes = get_material_all_nodes(material)
-    if general.is_not_none_or_empty(all_nodes):
+    if general_ue.is_not_none_or_empty(all_nodes):
         return filter_nodes_of_material(material, all_nodes, nodes_types, properties_values, is_linked_to_output,
                                         is_disjunction, is_nodes_types_subclasses)
     else:
@@ -247,7 +247,7 @@ def find_nodes_in_material(material,
 def find_nodes_in_material_by_path(material_object_path,
                                    nodes_types = None, properties_values = [], is_linked_to_output = None,      # filters
                                    is_disjunction = True, is_nodes_types_subclasses = False, all_nodes = None):
-    if general.is_not_none_or_empty(material_object_path):
+    if general_ue.is_not_none_or_empty(material_object_path):
         material = get_asset.load_asset(material_object_path)
         find_results = find_nodes_in_material(material, nodes_types, properties_values, is_linked_to_output,
                                               is_disjunction, is_nodes_types_subclasses, all_nodes)
@@ -270,7 +270,7 @@ def get_material_connections(material):
 
 # @return list of material output properties that must be connected by adding texture of some type. T_Example_Diff -> unreal.MaterialProperty.MP_BASE_COLOR
 def get_material_outputs_by_texture_type(texture_type):
-    if general.is_not_none_or_empty(texture_type):
+    if general_ue.is_not_none_or_empty(texture_type):
         if texture_type == 'BaseColor':
             return [unreal.MaterialProperty.MP_BASE_COLOR]
         elif texture_type == 'Albedo':
