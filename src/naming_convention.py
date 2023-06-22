@@ -13,6 +13,8 @@ import unreal_engine_scripts.service.general as general
 import importlib
 importlib.reload(general)
 
+
+## https://docs.unrealengine.com/4.27/en-US/ProductionPipelines/AssetNaming/
 AssetsPrefixConventionTable = {
     ##General
     'HDRI' :                    'HDR_',

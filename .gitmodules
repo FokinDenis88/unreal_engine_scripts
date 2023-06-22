@@ -1,0 +1,4 @@
+[submodule "external/python_library"]
+	path = external/python_library
+	url = https://gitlab.com/FokinDenis88/python_library.git
+	branch = develop
