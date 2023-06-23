@@ -279,7 +279,8 @@ def import_fbx_subobjects_with_gltf_materials(subobjects_path, destination_dir, 
 ## @materials_dir_path directory, to which fbx files will be first import. Ditectory with proper materials(imported from glb)
 def import_fbx_scene_n_subobjects(fbx_path, destination_dir, subobjects_path, glb_materials_dir_path, is_automated = False):
     import_fbx_with_gltf_materials(fbx_path, destination_dir, glb_materials_dir_path, False)
-    import_fbx_subobjects_with_gltf_materials(subobjects_path, destination_dir, glb_materials_dir_path, False)
+    if subobjects_path != '':
+        import_fbx_subobjects_with_gltf_materials(subobjects_path, destination_dir, glb_materials_dir_path, False)
 
 
 ## Import asset mesh, animation from fbx file. Import materials settings and textures from gltf file. Only one path, not loop.

@@ -234,6 +234,9 @@ def get_path_replaced_by_prefix_suffix(object_path,  prefix = '', suffix = '',
     else:
         unreal.log_error(get_path_replaced_by_prefix_suffix.__name__ + '(): object_path is empty')
 
+## Write to console what old and new file name
+def log_rename_operation(old_path, new_path):
+    unreal.log(general_ue.Name_to_str(old_path) + ' -> ' + general_ue.Name_to_str(new_path))
 
 ## @param is_folder_operation    indicates if it is adding prefix_suffix for many files in folder
 def add_prefix_suffix(object_path, prefix = '', suffix = '', is_folder_operation = False,
@@ -246,9 +249,9 @@ def add_prefix_suffix(object_path, prefix = '', suffix = '', is_folder_operation
                     # When prefix suffix is applying to many files in folder, there mustn't be transaction on each file
                     if not is_folder_operation:
                         with unreal.ScopedEditorTransaction(add_prefix_suffix.__name__) as ue_transaction:
-                            unreal.EditorAssetLibrary.rename_asset(object_path, new_path)
+                            general_ue.rename_asset(object_path, new_path)
                     else:
-                        unreal.EditorAssetLibrary.rename_asset(object_path, new_path)
+                        general_ue.rename_asset(object_path, new_path)
 
                 else:
                     unreal.log(add_prefix_suffix.__name__ + '(): asset file already has prefix or suffix. ' + general_ue.Name_to_str(object_path))
@@ -269,9 +272,9 @@ def delete_prefix_suffix(object_path, prefix = '', suffix = '', is_folder_operat
                 # When prefix suffix is applying to many files in folder, there mustn't be transaction on each file
                 if not is_folder_operation:
                     with unreal.ScopedEditorTransaction(delete_prefix_suffix.__name__) as ue_transaction:
-                        unreal.EditorAssetLibrary.rename_asset(object_path, new_path)
+                        general_ue.rename_asset(object_path, new_path)
                 else:
-                    unreal.EditorAssetLibrary.rename_asset(object_path, new_path)
+                    general_ue.rename_asset(object_path, new_path)
 
             else:
                 unreal.log(delete_prefix_suffix.__name__ + '(): asset file already has no prefix or suffix. ' + general_ue.Name_to_str(object_path))
@@ -304,13 +307,12 @@ def replace_prefix_suffix(object_path, prefix = '', suffix = '', new_prefix = ''
                     # When prefix suffix is applying to many files in folder, there mustn't be transaction on each file
                     if not is_folder_operation:
                         with unreal.ScopedEditorTransaction(replace_prefix_suffix.__name__) as ue_transaction:
-                            unreal.EditorAssetLibrary.rename_asset(object_path, new_path)
+                            general_ue.rename_asset(object_path, new_path)
                     else:
-                        unreal.EditorAssetLibrary.rename_asset(object_path, new_path)
+                        general_ue.rename_asset(object_path, new_path)
 
                 else:
                     unreal.log(replace_prefix_suffix.__name__ + '(): asset file already has no prefix or suffix. ' + general_ue.Name_to_str(object_path))
-
             else:
                 unreal.log_error(replace_prefix_suffix.__name__ + '(): prefix, suffix, new_prefix or new_suffix has restricted chars')
         else:
@@ -392,7 +394,7 @@ def delete_glb_texture_prefix(object_path):
     if match_object:
         new_name = new_name[len(match_object[0]) :]
         new_path = get_asset.get_asset_path_with_new_name(object_path, new_name)
-        unreal.EditorAssetLibrary.rename_asset(object_path, new_path)
+        general_ue.rename_asset(object_path, new_path)
         return True
     else:
         unreal.log_error(delete_glb_texture_prefix.__name__ + '(): There is no glb texture prefix in: ' + general_ue.Name_to_str(object_path))

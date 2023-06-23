@@ -146,6 +146,14 @@ TextureTypesCustom = {
     ## By Channel
 }
 
+## Common suffix find in downloaded gltf textures files
+GLTF_SuffixConvention = {
+    'BaseColor':                    '_baseColor',
+    'Normal':                       '_normal',
+    'OcclusionRoughnessMetallic':   '_metallicRoughness',
+    'Emissive':                     '_emissive'
+}
+
 ## Finds in TextureTypesCustom prefix by texture_type
 # @param texture_type (str) key to dictionary TextureTypesCustom
 # @return tuple (prefix, [suffixes]). Returns None if key texture_type not found
@@ -213,11 +221,3 @@ def set_TextureTypesCustom_suffixes():
 def get_TextureTypesCustom_suffixes():
     set_TextureTypesCustom_suffixes()
     return texture_types_custom_suffixes
-
-## Common suffix find in downloaded gltf textures files
-GLTF_SuffixConvention = {
-    'BaseColor':                    '_baseColor',
-    'Normal':                       '_normal',
-    'OcclusionRoughnessMetallic':   '_metallicRoughness',
-    'Emissive':                     '_emissive'
-}

@@ -29,7 +29,7 @@ def move_assets(assets_data, destination_dir, is_save_dir_structure = False, sou
                 else:
                     asset_destination_path = unreal.Paths.combine([destination_dir, asset_name])
 
-                unreal.EditorAssetLibrary.rename_asset(asset_path, asset_destination_path)
+                general_ue.rename_asset(asset_path, asset_destination_path)
                 #unreal.log('asset_path: ' + asset_path)
                 #unreal.log('asset_destination_path: ' + asset_destination_path)
 

@@ -8,12 +8,12 @@ IMPORT_METHOD = 'Hybrid'
 # IMPORT_DIRS, FBX_FILE_NAMES, GLTF_FILE_NAMES, SUBOBJECTS_NAMES - lists must be equal length
 # FBX_FILE_NAMES: Name of fbx file without extension
 
-IMPORT_DIRS = [r'K:\!Development K\Projects\3D Models\!!Assets For Commercial\3D\!!3D Models For Commercial\Military\!Vehicle\Modern\Water\Ship\Samidare destroyer___sketchfab\export']
-FBX_FILE_NAMES = ['SM_SamidareDestroyer']
+IMPORT_DIRS = [r'K:\!Development K\Projects\3D Models\!!Assets For Commercial\3D\!!3D Models For Commercial\Engineering\!Spiral\Spiral  Spring___sketchfab\export']
+FBX_FILE_NAMES = ['SM_SpiralSpring']
 #FBX_FILE_NAMES = ['SM']
 
-#SUBOBJECTS_NAMES = ['']
-SUBOBJECTS_NAMES = ['SM']
+SUBOBJECTS_NAMES = ['']
+#SUBOBJECTS_NAMES = ['SM']
 GLTF_FILE_NAMES = ['gltf']
 
 
