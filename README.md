@@ -4,7 +4,8 @@ Can autoconnect free unconnected nodes(Material Expressions) of TextureSamplePar
 Can connect texture asset to material in form of TextureSampleParameter2D nodes chain with Factor ScalarParameter.
 
 ## Installation
-git clone --recurse-submodules https://gitlab.com/furious-dragon/unreal_engine_scripts.git
+1) git clone --recurse-submodules https://gitlab.com/furious-dragon/unreal_engine_scripts.git
+2) install TAPython plugin for Unreal Engine https://www.tacolor.xyz/pages/TAPython.html
 
 ## Functions of Project
 ### tasks: 
