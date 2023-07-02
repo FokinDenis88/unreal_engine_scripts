@@ -1,7 +1,7 @@
 # Unreal Engine Python Scripts
-Unreal Engine 4.27.2 Python optimization scripts. Use for searching assets data information. Searching weak parts of game project. Importing assets pipeline from Blender to Unreal.
-Can autoconnect free unconnected nodes(Material Expressions) of TextureSampleParameter2D in material. 
-Can connect texture asset to material in form of TextureSampleParameter2D nodes chain with Factor ScalarParameter.
+Unreal Engine 4.27.2 Python optimization scripts. Use for searching assets data information. Searching weak parts of game project. **Importing assets pipeline from Blender to Unreal**.
+**Can autoconnect free unconnected nodes(Material Expressions) of TextureSampleParameter2D in material.** 
+Can **connect texture asset to material** in form of TextureSampleParameter2D nodes chain with Factor ScalarParameter.
 
 ## Installation
 1) git clone --recurse-submodules https://gitlab.com/furious-dragon/unreal_engine_scripts.git
