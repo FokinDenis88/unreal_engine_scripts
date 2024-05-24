@@ -3,6 +3,11 @@ Unreal Engine 4.27.2 Python optimization scripts. Use for searching assets data 
 **Can autoconnect free unconnected nodes(Material Expressions) of TextureSampleParameter2D in material.** 
 Can **connect texture asset to material** in form of TextureSampleParameter2D nodes chain with Factor ScalarParameter.
 
+## Repository Web Pages
+[github](https://github.com/FokinDenis88/unreal_engine_scripts)  
+[gitlab (main)](https://gitlab.com/furious-dragon/unreal_engine_scripts)  
+[gitverse (Russia)](https://gitverse.ru/FokinDenis88/unreal_engine_scripts)
+
 ## Installation
 1) git clone --branch develop --recurse-submodules https://gitlab.com/furious-dragon/unreal_engine_scripts.git
 2) install TAPython plugin for Unreal Engine https://www.tacolor.xyz/pages/TAPython.html
@@ -125,6 +130,13 @@ Main launch scripts are in tasks folder
 **[texture](/asset/texture.py)**
 * get_texture_imported_size - Get texture imported size
 
+## Contact
+**Skype:** live:dragon8806  
+**Telegram:** https://t.me/Furious_Dragon_88  
+**VK (Russia):** https://vk.com/furious__dragon  
+**Discord:** ***ID:*** 1203018807162175522 fokin_denis_yurievich_  ***User Name:*** fokin_denis_yurievich_  
+**Email:** fokin-denis-88-code@ya.ru  
+**Gitter:** @fokindenis88_gitlab:gitter.im
 
 ## Support
 ### Bitcoin and other cryptocurrency:  
